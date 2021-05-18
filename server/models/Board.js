@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-import Card from "./Card";
 import Column from "./Column";
 import User from "./User";
 

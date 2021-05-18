@@ -1,4 +1,6 @@
-const User = require("../models/User");
+import Board from "../models/Board";
+import User from "../models/User";
+
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 
