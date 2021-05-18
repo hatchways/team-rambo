@@ -49,12 +49,12 @@ const NavBar = ({ loggedInUser }: Props): JSX.Element => {
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
             <Grid item>
-              <Button color="primary" size="large" startIcon={<CalendarTodayOutlinedIcon />}>
+              <Button size="large" color="secondary" startIcon={<CalendarTodayOutlinedIcon />}>
                 Dashboard
               </Button>
             </Grid>
             <Grid item>
-              <Button color="primary" size="large" startIcon={<DashboardOutlinedIcon />}>
+              <Button size="large" color="secondary" startIcon={<DashboardOutlinedIcon />}>
                 Calendar
               </Button>
             </Grid>
@@ -63,7 +63,7 @@ const NavBar = ({ loggedInUser }: Props): JSX.Element => {
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
             <Grid item>
-              <Button color="primary" variant="contained" size="large" startIcon={<AddOutlinedIcon />}>
+              <Button color="primary" variant="contained" size="large" startIcon={<AddOutlinedIcon />} disableElevation>
                 Create Board
               </Button>
             </Grid>
