@@ -1,6 +1,6 @@
-import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import React, { useState } from 'react';
 import { User } from '../../interface/User';
+import useStyles from './useStyles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -20,31 +20,10 @@ interface Props {
   handleDrawerToggle?: () => void;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-      maxWidth: '100%',
-      position: 'fixed',
-      overflow: 'hidden',
-      padding: '0',
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    statusBar: {
-      padding: '2% 2%',
-    },
-    title: {
-      flexGrow: 1,
-    },
-  }),
-);
-
 const NavBar = ({ loggedInUser }: Props): JSX.Element => {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [auth, setAuth] = useState(true);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
