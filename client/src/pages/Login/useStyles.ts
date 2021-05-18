@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: '100vh',
     '& .MuiInput-underline:before': {
@@ -9,9 +9,10 @@ const useStyles = makeStyles(() => ({
   },
   authWrapper: {
     display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'column',
+    textAlign: 'center',
     minHeight: '100vh',
     paddingTop: 23,
   },
@@ -21,6 +22,33 @@ const useStyles = makeStyles(() => ({
     color: '#000000',
     fontWeight: 700,
     fontFamily: "'Open Sans'",
+  },
+  image: {
+    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  registerFooter: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  divider: {
+    lineHeight: '20px',
+    background: 'black',
+    color: 'black',
+  },
+  haveAccount: {
+    marginTop: '30px',
+    fontWeight: 'bold',
+  },
+  create: {
+    fontWeight: 'bold',
+    color: '#759CFC',
+    cursor: 'pointer',
+    width: 'fit-content',
   },
 }));
 

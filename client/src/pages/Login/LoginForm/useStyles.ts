@@ -11,9 +11,18 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: '5px',
   },
   inputs: {
-    marginTop: '.8rem',
+    marginTop: '1px',
     height: '2rem',
     padding: '5px',
+    background: 'white',
+    textAlign: 'center',
+    borderRadius: '5px',
+    boxShadow: '1px 1px 4px rgb(0,0,0,.3)',
+    '&::placeholder': {
+      color: 'black',
+      fontWeight: 'bold',
+      opacity: 1,
+    },
   },
   forgot: {
     paddingRight: 10,
@@ -27,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.shape.borderRadius,
     marginTop: 49,
     fontSize: 16,
-    backgroundColor: '#3a8dff',
+    backgroundColor: '#759CFC',
+    color: 'white',
     fontWeight: 'bold',
   },
 }));
