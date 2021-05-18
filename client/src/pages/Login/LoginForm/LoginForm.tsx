@@ -5,6 +5,8 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import useStyles from './useStyles';
 import { CircularProgress } from '@material-ui/core';
+import login from '../../../helpers/APICalls/login';
+import { useAuth } from '../../../context/useAuthContext';
 
 interface Props {
   handleSubmit: (
@@ -26,7 +28,18 @@ interface Props {
 }
 
 export default function Login({ handleSubmit }: Props): JSX.Element {
+  const { updateLoginContext } = useAuth();
   const classes = useStyles();
+
+  const demoUser = () => {
+    login('demo@user.ca', 'demouser').then((data) => {
+      if (data.success) {
+        updateLoginContext(data.success);
+      } else {
+        console.error({ data });
+      }
+    });
+  };
 
   return (
     <Formik
@@ -87,8 +100,8 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             <Button type="submit" size="large" variant="contained" className={classes.submit}>
               {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Login'}
             </Button>
-            <Button size="large" variant="contained" className={classes.submit} onClick={() => console.log('clicked!')}>
-              {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Demo'}
+            <Button size="large" variant="contained" className={classes.submit} onClick={demoUser}>
+              Demo
             </Button>
           </Box>
           <div style={{ height: 95 }} />

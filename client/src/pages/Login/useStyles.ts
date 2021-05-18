@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     width: 'fit-content',
   },
+  submit: {
+    color: 'blue',
+  },
 }));
 
 export default useStyles;
