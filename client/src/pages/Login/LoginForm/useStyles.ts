@@ -28,11 +28,18 @@ const useStyles = makeStyles((theme) => ({
     width: 160,
     height: 56,
     borderRadius: theme.shape.borderRadius,
-    marginTop: 30,
+    marginTop: 5,
+    marginBottom: 5,
     fontSize: 16,
     backgroundColor: '#759CFC',
     color: 'white',
     fontWeight: 'bold',
+  },
+  buttonBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: 25,
   },
 }));
 
