@@ -3,7 +3,6 @@ import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
 import { CircularProgress } from '@material-ui/core';
 
@@ -51,6 +50,26 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
     >
       {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
+          <TextField
+            id="username"
+            placeholder="Enter username"
+            fullWidth
+            margin="dense"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            InputProps={{
+              classes: { input: classes.inputs },
+            }}
+            name="username"
+            autoComplete="username"
+            autoFocus
+            helperText={touched.username ? errors.username : ''}
+            error={touched.username && Boolean(errors.username)}
+            value={values.username}
+            onChange={handleChange}
+            variant="filled"
+          />
           <TextField
             id="email"
             placeholder="Enter email"
