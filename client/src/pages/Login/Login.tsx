@@ -3,12 +3,12 @@ import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
+import Link from '@material-ui/core/Link';
 import { FormikHelpers } from 'formik';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
 import login from '../../helpers/APICalls/login';
 import LoginForm from './LoginForm/LoginForm';
-import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 
@@ -56,7 +56,9 @@ export default function Login(): JSX.Element {
           <Box width="100%" className={classes.registerFooter}>
             <Divider className={classes.divider} />
             <Typography className={classes.haveAccount}>Don&apos;t have an account?</Typography>
-            <Typography className={classes.create}>Create</Typography>
+            <Link href="/signup">
+              <Typography className={classes.create}>Create</Typography>
+            </Link>
           </Box>
         </Box>
       </Grid>
