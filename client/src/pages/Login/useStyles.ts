@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     height: '80vh',
+    width: '100%',
     alignContent: 'center',
     justifyContent: 'center',
   },
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     marginBottom: '5vh',
+    width: '100%',
   },
   divider: {
     width: '100%',

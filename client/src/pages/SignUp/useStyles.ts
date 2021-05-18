@@ -50,12 +50,14 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '5vh',
     textAlign: 'center',
     alignContent: 'center',
+    width: '100%',
   },
   registerForm: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     height: '80vh',
+    width: '100%',
   },
 }));
 
