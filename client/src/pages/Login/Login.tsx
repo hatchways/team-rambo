@@ -43,7 +43,7 @@ export default function Login(): JSX.Element {
       <Grid item xs={false} sm={6} md={6} className={classes.image} />
       <Grid item xs={12} sm={6} md={6} elevation={6} component={Paper} square>
         <Box className={classes.authWrapper}>
-          <Box width="100%" maxWidth={450} p={3} alignSelf="center">
+          <Box width="100%" maxWidth={450} p={3} alignSelf="center" className={classes.login}>
             <Grid container>
               <Grid item xs>
                 <Typography className={classes.welcome} component="h1" variant="h5">
@@ -54,7 +54,7 @@ export default function Login(): JSX.Element {
             <LoginForm handleSubmit={handleSubmit} />
           </Box>
           <Box width="100%" className={classes.registerFooter}>
-            <Divider />
+            <Divider className={classes.divider} />
             <Typography className={classes.haveAccount}>Don&apos;t have an account?</Typography>
             <Typography className={classes.create}>Create</Typography>
           </Box>

@@ -50,7 +50,7 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             id="email"
             fullWidth
             placeholder="Enter email"
-            margin="normal"
+            margin="dense"
             InputLabelProps={{
               shrink: true,
             }}
@@ -70,7 +70,7 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             id="password"
             fullWidth
             placeholder="Enter Password"
-            margin="normal"
+            margin="dense"
             InputLabelProps={{
               shrink: true,
             }}

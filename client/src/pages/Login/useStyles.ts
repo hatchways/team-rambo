@@ -16,6 +16,13 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100vh',
     paddingTop: 23,
   },
+  login: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '80vh',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
   welcome: {
     fontSize: 26,
     paddingBottom: 20,
@@ -34,11 +41,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    marginBottom: '5vh',
   },
   divider: {
-    lineHeight: '20px',
-    background: 'black',
-    color: 'black',
+    width: '100%',
   },
   haveAccount: {
     marginTop: '30px',
