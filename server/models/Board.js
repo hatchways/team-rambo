@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const columnSchema = require("./Column");
-const { userSchema } = require("./User");
 
 const boardSchema = new mongoose.Schema({
   name: {
@@ -12,7 +11,7 @@ const boardSchema = new mongoose.Schema({
     required: false,
   },
   user: {
-    type: userSchema,
+    type: mongoose.Types.ObjectId,
     required: true,
   },
   createdAt: {

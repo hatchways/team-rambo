@@ -40,7 +40,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
           createdAt: Date.now(),
         },
       ],
-      user: user,
+      user: user._id,
     });
 
     res.cookie("token", token, {
