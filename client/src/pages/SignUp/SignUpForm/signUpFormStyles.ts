@@ -8,12 +8,20 @@ const useStyles = makeStyles((theme) => ({
   label: {
     fontSize: 19,
     color: 'rgb(0,0,0,0.4)',
-    paddingLeft: '5px',
+    paddingLeft: 5,
   },
   inputs: {
-    marginTop: '.8rem',
-    height: '2rem',
-    padding: '5px',
+    height: '3rem',
+    padding: 5,
+    background: 'white',
+    textAlign: 'center',
+    borderRadius: 5,
+    boxShadow: '1px 1px 4px rgb(0,0,0,.3)',
+    '&::placeholder': {
+      color: 'black',
+      fontWeight: 'bold',
+      opacity: 1,
+    },
   },
   forgot: {
     paddingRight: 10,
@@ -25,9 +33,10 @@ const useStyles = makeStyles((theme) => ({
     width: 160,
     height: 56,
     borderRadius: theme.shape.borderRadius,
-    marginTop: 49,
+    marginTop: 30,
     fontSize: 16,
-    backgroundColor: '#3a8dff',
+    backgroundColor: '#759CFC',
+    color: 'white',
     fontWeight: 'bold',
   },
 }));
