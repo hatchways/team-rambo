@@ -1,6 +1,16 @@
 const mongoose = require("mongoose");
 const columnSchema = require("./Column");
-const { userSchema } = require("./User");
+
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+});
 
 const boardSchema = new mongoose.Schema({
   name: {
