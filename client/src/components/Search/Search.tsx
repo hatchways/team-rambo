@@ -1,5 +1,5 @@
 import { ChangeEvent, useState, useEffect, SyntheticEvent } from 'react';
-import useStyles from './useStyles';
+import useStyles from './searchStyles';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import Autocomplete from '@material-ui/lab/Autocomplete';
