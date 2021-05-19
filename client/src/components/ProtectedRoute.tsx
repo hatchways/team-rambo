@@ -7,23 +7,12 @@ interface ProtectedRouteProps extends RouteProps {
 }
 
 const ProtectedRoute = (props: ProtectedRouteProps) => {
-  const { component: Component, path, ...rest } = props;
-  const loggedInUser = useAuth();
+  const { component: Component, ...rest } = props;
+  const { loggedInUser } = useAuth();
   return (
     <Route
       {...rest}
-      render={(routeProps) =>
-        loggedInUser ? (
-          <Component {...routeProps} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: path,
-              state: { from: routeProps.location },
-            }}
-          />
-        )
-      }
+      render={(routeProps) => (loggedInUser ? <Component {...routeProps} /> : <Redirect to="/login" />)}
     />
   );
 };
