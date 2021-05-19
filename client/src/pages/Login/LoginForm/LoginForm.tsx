@@ -4,7 +4,7 @@ import Box from '@material-ui/core/Box';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import Typography from '@material-ui/core/Typography';
-import useStyles from './useStyles';
+import useStyles from './loginFormStyles';
 import { CircularProgress } from '@material-ui/core';
 
 interface Props {
