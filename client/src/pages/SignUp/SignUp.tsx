@@ -6,7 +6,7 @@ import Link from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
 import { FormikHelpers } from 'formik';
 import Typography from '@material-ui/core/Typography';
-import useStyles from './useStyles';
+import useStyles from './signUpStyles';
 import register from '../../helpers/APICalls/register';
 import SignUpForm from './SignUpForm/SignUpForm';
 import { useAuth } from '../../context/useAuthContext';

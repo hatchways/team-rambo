@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import Link from '@material-ui/core/Link';
 import { FormikHelpers } from 'formik';
 import Typography from '@material-ui/core/Typography';
-import useStyles from './useStyles';
+import useStyles from './loginStyles';
 import login from '../../helpers/APICalls/login';
 import LoginForm from './LoginForm/LoginForm';
 import { useAuth } from '../../context/useAuthContext';
