@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const mongooseHidden = require("mongoose-hidden")();
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -19,8 +18,6 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
-userSchema.plugin(mongooseHidden);
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
