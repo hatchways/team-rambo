@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
   },
   haveAccount: {
-    marginTop: '30px',
+    marginTop: 30,
     fontWeight: 'bold',
   },
   login: {

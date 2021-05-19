@@ -8,14 +8,14 @@ const useStyles = makeStyles((theme) => ({
   label: {
     fontSize: 19,
     color: 'rgb(0,0,0,0.4)',
-    paddingLeft: '5px',
+    paddingLeft: 5,
   },
   inputs: {
     height: '3rem',
-    padding: '5px',
+    padding: 5,
     background: 'white',
     textAlign: 'center',
-    borderRadius: '5px',
+    borderRadius: 5,
     boxShadow: '1px 1px 4px rgb(0,0,0,.3)',
     '&::placeholder': {
       color: 'black',
