@@ -1,12 +1,17 @@
 import { Box, Button, Divider, InputBase, Grid, Typography } from '@material-ui/core';
-import { useState, useEffect } from 'react';
+import { Dispatch } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 import { useKanban } from '../../../context/useKanbanContext';
 import { CardTagColors } from '../../../helpers/APICalls/kanban/colors';
 import useStyles from './useStyles';
 
-const CardForm = (): JSX.Element => {
+type CardFormProps = {
+  columnId: string;
+};
+
+const CardForm = ({ columnId }: CardFormProps): JSX.Element => {
   const classes = useStyles();
-  const [formIsOpen, setFormIsOpen] = useState(false);
+  const [formIsOpen, setFormIsOpen] = useState<boolean>(false);
 
   const openForm = (): void => setFormIsOpen(true);
   const closeForm = (): void => setFormIsOpen(false);
@@ -26,7 +31,7 @@ const CardForm = (): JSX.Element => {
 
   return (
     <Box>
-      {formIsOpen ? <InnerForm /> : null}
+      {formIsOpen ? <InnerForm columnId={columnId} formAction={setFormIsOpen} /> : null}
       {!formIsOpen && (
         <Button
           onClick={openForm}
@@ -42,7 +47,11 @@ const CardForm = (): JSX.Element => {
   );
 };
 
-const InnerForm = () => {
+type InnerFormProps = {
+  columnId: string;
+  formAction: Dispatch<SetStateAction<boolean>>;
+};
+const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
   const [name, setName] = useState<string>('');
   const [selectedTagColor, setTagColor] = useState<string>('white');
   const { addCard } = useKanban();
@@ -86,14 +95,15 @@ const InnerForm = () => {
         </Box>
       </Box>
       <Button
-        onClick={() =>
+        onClick={() => {
           addCard({
             name,
-            columnId: 'col-id',
-            id: 'card-id',
+            columnId: columnId,
+            id: `card-${Math.floor(Math.random() * 999999)}`,
             tag: CardTagColors[selectedTagColor],
-          })
-        }
+          });
+          formAction(false);
+        }}
         variant="contained"
         size="large"
         color="primary"

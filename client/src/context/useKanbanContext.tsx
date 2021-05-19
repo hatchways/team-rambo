@@ -8,7 +8,7 @@ const initialKanbanData: IKanbanContext = {
   columns: [] as IColumn[],
   handleDragEnd: () => null,
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  addCard: (_: ICard) => false,
+  addCard: (_card: ICard) => false,
 };
 
 export const KanbanContext = createContext<IKanbanContext>(initialKanbanData);
@@ -65,7 +65,14 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   };
 
   const addCard = (card: ICard): boolean => {
-    console.log(card);
+    const columnsCopy = cloneDeep(columns);
+    const columnIndex = columnsCopy.findIndex((col) => col.id === card.columnId);
+    if (columnIndex > -1) {
+      const columnCopy = cloneDeep(columns[columnIndex]);
+      columnCopy.cards.push(card);
+      columnsCopy[columnIndex] = columnCopy;
+      setColumns(columnsCopy);
+    }
     return false;
   };
 

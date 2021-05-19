@@ -24,7 +24,7 @@ const Column = ({ id, name, cards }: ColumnProps): JSX.Element => {
                   return <Card key={card.id} id={card.id} name={card.name} tag={card.tag} index={index} />;
                 })}
                 {provided.placeholder}
-                <CardForm />
+                <CardForm columnId={id} />
               </Grid>
             );
           }}
