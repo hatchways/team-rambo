@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-import Column from "./Column";
-import User from "./User";
+const columnSchema = require("./Column");
+const { userSchema } = require("./User");
 
 const boardSchema = new mongoose.Schema({
   name: {
@@ -8,11 +8,11 @@ const boardSchema = new mongoose.Schema({
     required: true,
   },
   columns: {
-    type: [Column],
-    required: true,
+    type: [columnSchema],
+    required: false,
   },
   user: {
-    type: [User],
+    type: [userSchema],
     required: true,
   },
   createdAt: {

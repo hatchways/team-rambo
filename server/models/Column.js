@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import Card from "./Card";
+const mongoose = require("mongoose");
+const cardSchema = require("./Card");
 
 const columnSchema = new mongoose.Schema({
   name: {
@@ -7,7 +7,7 @@ const columnSchema = new mongoose.Schema({
     required: true,
   },
   cards: {
-    type: [Card],
+    type: [cardSchema],
     required: false,
   },
   createdAt: {
@@ -16,4 +16,4 @@ const columnSchema = new mongoose.Schema({
   },
 });
 
-module.exports = Column = mongoose.model("column", columnSchema);
+module.exports = columnSchema;

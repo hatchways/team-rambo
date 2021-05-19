@@ -1,5 +1,5 @@
-import Board from "../models/Board";
-import User from "../models/User";
+const Board = require("../models/Board");
+const { User } = require("../models/User");
 
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
@@ -33,6 +33,23 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   if (user) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
+
+    const board = await Board.create({
+      name: "My board",
+      columns: [
+        {
+          name: "In progress",
+          cards: [],
+          createdAt: Date.now(),
+        },
+        {
+          name: "Completed",
+          cards: [],
+          createdAt: Date.now(),
+        },
+      ],
+      user: user,
+    });
 
     res.cookie("token", token, {
       httpOnly: true,
