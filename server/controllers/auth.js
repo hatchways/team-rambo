@@ -52,10 +52,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       success: {
         user: {
           id: user._id,
-<<<<<<< HEAD
-          username: user.username,
-=======
->>>>>>> origin/main
           email: user.email,
         },
       },
@@ -87,10 +83,6 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
       success: {
         user: {
           id: user._id,
-<<<<<<< HEAD
-          username: user.username,
-=======
->>>>>>> origin/main
           email: user.email,
         },
       },
@@ -116,10 +108,6 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
     success: {
       user: {
         id: user._id,
-<<<<<<< HEAD
-        username: user.username,
-=======
->>>>>>> origin/main
         email: user.email,
       },
     },
