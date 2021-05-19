@@ -5,15 +5,18 @@ const useStyles = makeStyles((theme) => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
-  label: {
-    fontSize: 19,
-    color: 'rgb(0,0,0,0.4)',
-    paddingLeft: '5px',
-  },
   inputs: {
-    marginTop: '.8rem',
-    height: '2rem',
+    height: '3rem',
     padding: '5px',
+    background: 'white',
+    textAlign: 'center',
+    borderRadius: '5px',
+    boxShadow: '1px 1px 4px rgb(0,0,0,.3)',
+    '&::placeholder': {
+      color: 'black',
+      fontWeight: 'bold',
+      opacity: 1,
+    },
   },
   forgot: {
     paddingRight: 10,
@@ -25,10 +28,18 @@ const useStyles = makeStyles((theme) => ({
     width: 160,
     height: 56,
     borderRadius: theme.shape.borderRadius,
-    marginTop: 49,
+    marginTop: 5,
+    marginBottom: 5,
     fontSize: 16,
-    backgroundColor: '#3a8dff',
+    backgroundColor: '#759CFC',
+    color: 'white',
     fontWeight: 'bold',
+  },
+  buttonBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: 25,
   },
 }));
 
