@@ -8,6 +8,10 @@ const useStyles = makeStyles((theme) => ({
       borderBottom: '1.2px solid rgba(0, 0, 0, 0.2)',
     },
   },
+  board: {
+    marginTop: 30,
+    padding: '0 24px',
+  },
   dashboard: { backgroundColor: '#FFFFFF' },
   drawerWrapper: {
     width: drawerWidth,

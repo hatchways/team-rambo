@@ -1,11 +1,11 @@
-import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useStyles from './useStyles';
 import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import { useHistory } from 'react-router-dom';
-import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
+import NavBar from '../../components/NavBar/NavBar';
 import { useEffect } from 'react';
 import Board from '../../components/Kanban/Board';
 import { KanbanProvider } from '../../context/useKanbanContext';
@@ -30,14 +30,16 @@ export default function Dashboard(): JSX.Element {
   }
 
   return (
-    <Grid container component="main" wrap="wrap" className={`${classes.root} ${classes.dashboard}`}>
+    <Box>
       <CssBaseline />
-      <Grid item className={classes.drawerWrapper}>
-        <ChatSideBanner loggedInUser={loggedInUser} />
-      </Grid>
-      <KanbanProvider>
-        <Board />
-      </KanbanProvider>
-    </Grid>
+      <Box>
+        <NavBar loggedInUser={loggedInUser} />
+      </Box>
+      <Box className={classes.board}>
+        <KanbanProvider>
+          <Board />
+        </KanbanProvider>
+      </Box>
+    </Box>
   );
 }

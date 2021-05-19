@@ -9,9 +9,9 @@ const useStyles = makeStyles(() => ({
   },
   columnWrapper: {
     padding: '1rem',
-    backgroundColor: '#F4F6FF',
+    backgroundColor: 'hsla(229, 100%, 96%, 1)',
     marginRight: '20px',
-    width: '380px',
+    width: '440px',
     borderRadius: '8px',
   },
 }));
