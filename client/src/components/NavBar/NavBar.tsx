@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { User } from '../../interface/User';
 import useStyles from './useStyles';
 import AppBar from '@material-ui/core/AppBar';
@@ -22,21 +21,6 @@ interface Props {
 
 const NavBar = ({ loggedInUser }: Props): JSX.Element => {
   const classes = useStyles();
-  const [auth, setAuth] = useState(true);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAuth(event.target.checked);
-  };
-
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <Container className={classes.root}>
