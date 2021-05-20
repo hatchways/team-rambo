@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     select: false,
-    hide: true,
   },
   register_date: {
     type: Date,
