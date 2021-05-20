@@ -5,7 +5,6 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
       maxWidth: '100%',
-      position: 'fixed',
       overflow: 'hidden',
       padding: '0',
     },
