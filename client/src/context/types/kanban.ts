@@ -12,16 +12,10 @@ export interface ICard {
   columnId: string;
   name: string;
   description?: string;
-  tag?: ICardTag;
+  tag?: string;
   dueDate?: Date;
   createdAt?: Date;
 }
-
-export interface ICardTag {
-  name?: string;
-  hexCode: string;
-}
-
 export interface IKanbanContext {
   columns: IColumn[];
   handleDragEnd: (result: DropResult) => void;

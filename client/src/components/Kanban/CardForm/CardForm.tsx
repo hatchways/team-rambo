@@ -1,8 +1,8 @@
-import { Box, Button, Divider, InputBase, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Divider, InputBase, Grid, Typography, useTheme } from '@material-ui/core';
 import { Dispatch } from 'react';
 import { useState, useEffect, SetStateAction } from 'react';
 import { useKanban } from '../../../context/useKanbanContext';
-import { CardTagColors } from '../../../helpers/APICalls/kanban/colors';
+import useColorTagStyles from '../shared/colorStyles';
 import useStyles from './useStyles';
 
 type CardFormProps = {
@@ -36,7 +36,7 @@ const CardForm = ({ columnId }: CardFormProps): JSX.Element => {
         <Button
           onClick={openForm}
           size="large"
-          color="primary"
+          color="secondary"
           disableElevation
           className={`${!formIsOpen ? classes.button : ''}`}
         >
@@ -55,8 +55,8 @@ const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
   const [name, setName] = useState<string>('');
   const [selectedTagColor, setTagColor] = useState<string>('white');
   const { addCard } = useKanban();
+  const theme = useTheme();
   const classes = useStyles();
-
   return (
     <>
       <Box className={classes.cardFormWrapper}>
@@ -78,12 +78,11 @@ const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
             </Grid>
             <Grid item>
               <Grid container className={classes.colorsWrapper}>
-                {Object.keys(CardTagColors).map((tagColor: string): JSX.Element => {
+                {Object.keys(theme.palette.tags).map((tagColor: string): JSX.Element => {
                   return (
                     <Color
-                      key={CardTagColors[tagColor].hexCode}
+                      key={tagColor}
                       name={tagColor}
-                      hex={CardTagColors[tagColor].hexCode}
                       activeSelected={tagColor === selectedTagColor}
                       setSelected={setTagColor}
                     />
@@ -100,7 +99,7 @@ const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
             name,
             columnId: columnId,
             id: `card-${Math.floor(Math.random() * 999999)}`,
-            tag: CardTagColors[selectedTagColor],
+            tag: selectedTagColor,
           });
           formAction(false);
         }}
@@ -116,20 +115,19 @@ const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
 };
 
 type ColorProps = {
-  hex: string;
+  name: string;
   activeSelected: boolean;
   setSelected: (name: string) => void;
   key?: string | number;
-  name?: string;
 };
 
-const Color = ({ name = 'white', hex, activeSelected, setSelected }: ColorProps): JSX.Element => {
+const Color = ({ name = 'white', activeSelected, setSelected }: ColorProps): JSX.Element => {
   const classes = useStyles();
+  const colorClasses = useColorTagStyles({ tag: name });
   return (
     <Grid
       onClick={() => setSelected(name)}
-      style={{ backgroundColor: hex }}
-      className={`${classes.color} ${activeSelected && classes.colorSelected}`}
+      className={`${classes.color} ${colorClasses.cardTagColor} ${activeSelected && classes.colorSelected}`}
       item
     ></Grid>
   );
