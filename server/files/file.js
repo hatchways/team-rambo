@@ -36,7 +36,7 @@ const imageUpload = (req, res, next) => {
   });
 };
 
-const streamUpload = (req, res, next) => {
+const streamUpload = (req, res) => {
   if (!req.file) return res.status(400).send({ messsage: "File not found!" });
 
   return new Promise((resolve, reject) => {
