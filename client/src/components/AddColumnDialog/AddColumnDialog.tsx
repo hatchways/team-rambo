@@ -1,17 +1,12 @@
 import { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import useStyles from './AddColumnDialogStyles';
-import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
+import { Button, IconButton, Box, Grid, Dialog, TextField, Typography, DialogActions } from '@material-ui/core';
+import addColumnDialogStyles from './AddColumnDialogStyles';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const AddColumnDialog = (): JSX.Element => {
   const [open, setOpen] = useState(false);
-  const classes = useStyles();
+  const classes = addColumnDialogStyles();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -22,28 +17,50 @@ const AddColumnDialog = (): JSX.Element => {
   };
 
   return (
-    <Grid container spacing={4} className={classes.buttonZone}>
-      <Grid item>
-        <Button className={classes.button} onClick={handleClickOpen} startIcon={<AddOutlinedIcon />}></Button>
+    <Box>
+      <Grid container direction="row" alignItems="stretch" justify="space-between">
+        <Grid item xs={1} className={classes.buttonZone}>
+          <Button className={classes.button} onClick={handleClickOpen}>
+            {<AddCircleOutlineOutlinedIcon fontSize="large" />}
+          </Button>
+        </Grid>
+        <Grid item xs={1} className={classes.buttonZone}>
+          <Button className={classes.button} onClick={handleClickOpen}>
+            {<AddCircleOutlineOutlinedIcon fontSize="large" />}
+          </Button>
+        </Grid>
       </Grid>
-      <Dialog open={open} onClose={handleClose} maxWidth="lg" aria-labelledby="form-dialog-column-title">
-        <DialogTitle id="form-dialog-title">Create a new column</DialogTitle>
-        <DialogContent>
-          <TextField required label="Add Title" variant="outlined" />
-        </DialogContent>
-        <DialogActions className={classes.dialog}>
+      <Dialog open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
+        <Typography variant="h5" className={classes.dialogTitle}>
+          Create a new column
+        </Typography>
+        <TextField
+          required
+          fullWidth
+          placeholder="Add Title"
+          variant="outlined"
+          InputProps={{
+            classes: { input: classes.inputs },
+          }}
+          className={classes.textField}
+        />
+        <DialogActions>
+          <IconButton className={classes.topRight} onClick={handleClose}>
+            <ClearIcon />
+          </IconButton>
           <Button
             onClick={handleClose}
             className={classes.dialogButton}
             color="primary"
             variant="contained"
+            size="large"
             disableElevation
           >
             Create
           </Button>
         </DialogActions>
       </Dialog>
-    </Grid>
+    </Box>
   );
 };
 

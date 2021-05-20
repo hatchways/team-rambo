@@ -1,4 +1,4 @@
-import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useStyles from './dashboardStyles';
@@ -29,14 +29,14 @@ export default function Dashboard(): JSX.Element {
   }
 
   return (
-    <Grid container spacing={4} direction="column" component="main" className={`${classes.root} ${classes.dashboard}`}>
+    <Box>
       <CssBaseline />
-      <Grid item>
+      <Box>
         <NavBar loggedInUser={loggedInUser} />
-      </Grid>
-      <Grid item>
+      </Box>
+      <Box>
         <AddColumnDialog />
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 }
