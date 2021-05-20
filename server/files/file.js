@@ -1,8 +1,5 @@
 const multer = require("multer");
 const streamifier = require("streamifier");
-
-const path = require("path");
-
 const cloudinary = require("cloudinary").v2;
 const { v4: uuidv4 } = require("uuid");
 
