@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const addColumnDialogStyles = makeStyles((theme) => ({
+const addBoardDialogStyles = makeStyles((theme) => ({
   textField: {
     display: 'flex',
     textAlign: 'center',
@@ -62,4 +62,4 @@ const addColumnDialogStyles = makeStyles((theme) => ({
   },
 }));
 
-export default addColumnDialogStyles;
+export default addBoardDialogStyles;
