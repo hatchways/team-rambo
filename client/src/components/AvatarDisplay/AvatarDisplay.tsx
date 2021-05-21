@@ -5,6 +5,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useAuth } from '../../context/useAuthContext';
 import useStyles from './useStyles';
+import PictureModal from '../PictureModal/PictureModal';
 
 interface Props {
   loggedIn: boolean;
@@ -13,6 +14,7 @@ interface Props {
 
 const AvatarDisplay = ({ user }: Props): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openImageModal, setOpenImageModal] = useState<boolean>(false);
   const open = Boolean(anchorEl);
   const { logout } = useAuth();
   const classes = useStyles();
@@ -31,7 +33,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
   };
 
   const handleProfile = () => {
-    handleClose();
+    setOpenImageModal(!openImageModal);
     // To do: implement component for profile page and backend routing
   };
 
@@ -61,6 +63,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
         <MenuItem onClick={handleProfile}>Profile</MenuItem>
       </Menu>
+      <PictureModal open={openImageModal} setOpen={handleProfile} />;
     </div>
   );
 };
