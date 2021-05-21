@@ -1,4 +1,6 @@
-const User = require("../models/User");
+const Board = require("../models/Board");
+const { User } = require("../models/User");
+
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 
@@ -7,7 +9,6 @@ const generateToken = require("../utils/generateToken");
 // @access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
-
   const emailExists = await User.findOne({ email });
 
   if (emailExists) {
@@ -23,6 +24,23 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   if (user) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
+
+    const board = await Board.create({
+      name: "My board",
+      columns: [
+        {
+          name: "In progress",
+          cards: [],
+          createdAt: Date.now(),
+        },
+        {
+          name: "Completed",
+          cards: [],
+          createdAt: Date.now(),
+        },
+      ],
+      user: user,
+    });
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -49,7 +67,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 exports.loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).select("+password");
 
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(user._id);

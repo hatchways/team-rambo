@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    select: false,
   },
   register_date: {
     type: Date,
@@ -30,4 +31,4 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-module.exports = User = mongoose.model("user", userSchema);
+module.exports = { User: mongoose.model("user", userSchema), userSchema };
