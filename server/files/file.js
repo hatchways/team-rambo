@@ -55,7 +55,7 @@ const cloudinaryUpload = async (req, res) => {
   } catch (err) {
     return res
       .status(400)
-      .send({ message: "Could not upload file to Cloudinary!" });
+      .send({ error: "Could not upload file to Cloudinary!" });
   }
 };
 

@@ -17,6 +17,7 @@ export interface ImageUploadData {
   url: string;
   secure_url: string;
   original_filename: string;
+  error?: string;
 }
 
 export interface IUploadOptions {

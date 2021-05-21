@@ -2,8 +2,6 @@ import { ImageUploadData } from '../../interface/File';
 import { IUploadOptions } from '../../interface/File';
 
 const uploadImage = async (form: FormData): Promise<ImageUploadData> => {
-  console.log(form, 'oia o form aqui');
-
   const fetchOptions: IUploadOptions = {
     method: 'POST',
     body: form,

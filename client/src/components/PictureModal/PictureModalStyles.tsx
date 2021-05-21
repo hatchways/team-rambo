@@ -11,8 +11,19 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
-  title: {
+  text: {
     fontWeight: 'bold',
+  },
+  dropZonePaper: {
+    padding: 10,
+    '&:hover': {
+      background: '#CECECE',
+    },
+  },
+  uploadIcon: {
+    width: '100%',
+    height: '100%',
+    color: '#759CFC',
   },
 }));
 
