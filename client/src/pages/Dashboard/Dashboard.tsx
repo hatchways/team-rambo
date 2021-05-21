@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import { useEffect } from 'react';
+import AddCardDialog from '../../components/AddCardDialog/AddCardDialog';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
@@ -36,6 +37,7 @@ export default function Dashboard(): JSX.Element {
       </Box>
       <Box>
         <AddColumnDialog />
+        <AddCardDialog />
       </Box>
     </Box>
   );
