@@ -12,7 +12,10 @@ import {
 } from '@material-ui/core';
 import addCardDialogStyles from './AddCardDialogStyles';
 import ClearIcon from '@material-ui/icons/Clear';
+import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 
 const AddCardDialog = (): JSX.Element => {
   const [open, setOpen] = useState(false);
@@ -32,7 +35,7 @@ const AddCardDialog = (): JSX.Element => {
         Add a card
       </Button>
       <Dialog open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} className={classes.hasMargin}>
           <Grid item xs={12} className={classes.titleContainer}>
             <AssignmentOutlinedIcon color="primary" className={classes.icons} />
             <Typography variant="h5" className={classes.dialogTitle}>
@@ -42,12 +45,12 @@ const AddCardDialog = (): JSX.Element => {
               {'In list "Math"'}
             </Typography>
           </Grid>
-          <Divider className={classes.divider} />
         </Grid>
-        <Grid container xs={12} className={classes.titleContainer}>
+        <Divider className={classes.divider} />
+        <Grid container xs={12} className={classes.hasMargin}>
           <Grid container xs={10}>
-            <Grid item xs={12}>
-              <AssignmentOutlinedIcon color="primary" className={classes.icons} />
+            <Grid item xs={12} className={classes.mainSection}>
+              <ImportContactsOutlinedIcon color="primary" className={classes.icons} />
               <Typography variant="h6" className={classes.dialogHeading}>
                 Description:
               </Typography>
@@ -69,9 +72,12 @@ const AddCardDialog = (): JSX.Element => {
               >
                 Save
               </Button>
+              <IconButton onClick={handleClose}>
+                <ClearIcon color="primary" />
+              </IconButton>
             </Grid>
-            <Grid item xs={12}>
-              <AssignmentOutlinedIcon color="primary" className={classes.icons} />
+            <Grid item xs={12} className={classes.mainSection}>
+              <ScheduleIcon color="primary" className={classes.icons} />
               <Typography variant="h6" className={classes.dialogHeading}>
                 Deadline:
               </Typography>
@@ -79,8 +85,8 @@ const AddCardDialog = (): JSX.Element => {
                 March 10
               </Typography>
             </Grid>
-            <Grid item xs={12}>
-              <AssignmentOutlinedIcon color="primary" className={classes.icons} />
+            <Grid item xs={12} className={classes.mainSection}>
+              <ChatBubbleOutlineIcon color="primary" className={classes.icons} />
               <Typography variant="h6" className={classes.dialogHeading}>
                 Add comment:
               </Typography>
@@ -102,12 +108,15 @@ const AddCardDialog = (): JSX.Element => {
               >
                 Save
               </Button>
+              <IconButton onClick={handleClose}>
+                <ClearIcon color="primary" />
+              </IconButton>
             </Grid>
           </Grid>
           <Grid container xs={2} direction="column" className={classes.buttonContainer}>
             <Grid item>
               <Box className={classes.buttonGroup}>
-                <Typography variant="button" className={classes.buttonColumnTitle}>
+                <Typography variant="caption" className={classes.buttonColumnTitle}>
                   ADD TO CARD:
                 </Typography>
                 <Button className={classes.columnButton}>Tag</Button>
@@ -119,7 +128,7 @@ const AddCardDialog = (): JSX.Element => {
             </Grid>
             <Grid item>
               <Box className={classes.buttonGroup}>
-                <Typography variant="button" className={classes.buttonColumnTitle}>
+                <Typography variant="caption" className={classes.buttonColumnTitle}>
                   ACTIONS:
                 </Typography>
                 <Button className={classes.columnButton}>Move</Button>
