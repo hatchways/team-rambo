@@ -8,9 +8,9 @@ import { useHistory } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import { useEffect } from 'react';
-import AddCardDialog from '../../components/AddCardDialog/AddCardDialog';
 import Board from '../../components/Kanban/Board';
 import { KanbanProvider } from '../../context/useKanbanContext';
+import AddCardDialog from '../../components/AddCardDialog/AddCardDialog';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
@@ -42,6 +42,7 @@ export default function Dashboard(): JSX.Element {
           <Board />
         </KanbanProvider>
       </Box>
+      <AddCardDialog />
     </Box>
   );
 }
