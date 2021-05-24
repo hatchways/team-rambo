@@ -7,6 +7,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: '100%',
       overflow: 'hidden',
       padding: '0',
+      backgroundColor: '#FFFFFF',
     },
     menuButton: {
       marginRight: theme.spacing(2),

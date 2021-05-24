@@ -9,6 +9,8 @@ import NavBar from '../../components/NavBar/NavBar';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import { useEffect } from 'react';
 import AddCardDialog from '../../components/AddCardDialog/AddCardDialog';
+import Board from '../../components/Kanban/Board';
+import { KanbanProvider } from '../../context/useKanbanContext';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
@@ -35,9 +37,10 @@ export default function Dashboard(): JSX.Element {
       <Box>
         <NavBar loggedInUser={loggedInUser} />
       </Box>
-      <Box>
-        <AddColumnDialog />
-        <AddCardDialog />
+      <Box className={classes.board}>
+        <KanbanProvider>
+          <Board />
+        </KanbanProvider>
       </Box>
     </Box>
   );
