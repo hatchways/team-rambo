@@ -21,7 +21,7 @@ const Column = ({ id, name, cards }: ColumnProps): JSX.Element => {
             return (
               <Grid container {...provided.droppableProps} ref={provided.innerRef} direction="column">
                 {cards.map((card: ICard, index: number) => {
-                  return <Card key={card.id} id={card.id} name={card.name} tag={card.tag} index={index} />;
+                  return <Card key={card.id} id={card.id} name={card.name} tag={card.tag || 'white'} index={index} />;
                 })}
                 {provided.placeholder}
                 <CardForm columnId={id} />

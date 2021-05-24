@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext, FunctionComponent } from 'react';
+import { useState, useContext, createContext, FunctionComponent } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { columnData } from '../components/Kanban/data';
 import { IColumn, ICard, IKanbanContext } from '../context/types/kanban';
@@ -21,7 +21,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     if (!destination) return;
     const columnsCopy: IColumn[] = cloneDeep(columns);
     const colIndex = columns.findIndex((col) => col.id === source.droppableId);
-    console.log(result);
     if (source.droppableId === destination.droppableId) {
       if (colIndex > -1) {
         const cards = Array.from(columnsCopy[colIndex].cards);
@@ -58,7 +57,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     if (cardIndex > -1) {
       const [card] = cardsCopy.splice(source.index, 1);
       cardsCopy.splice(destination.index, 0, card);
-      console.log(cardsCopy);
       return cardsCopy;
     }
     return cards;

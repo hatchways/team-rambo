@@ -1,23 +1,22 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   cardForm: {
-    padding: '1rem 01.5rem',
+    padding: theme.spacing(2, 2),
     width: '100%',
   },
   cardFormWrapper: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.palette.background.paper,
     boxShadow: '0px 0px 10px rgba(193, 196, 212, .2)',
-    borderRadius: '5px',
-    border: '2px solid #759CFC',
-    marginBottom: '12px',
+    borderRadius: 5,
+    border: `2px solid ${theme.palette.primary.main}`,
+    marginBottom: 12,
   },
   button: {
-    color: '#9BA9CC',
     fontWeight: 'bold',
   },
   tagWrapper: {
-    padding: '1rem 1.5rem',
+    padding: theme.spacing(2, 2),
   },
   input: {
     width: '100%',
@@ -27,20 +26,20 @@ const useStyles = makeStyles(() => ({
     listStyle: 'none',
   },
   typography: {
-    color: '#BCC6DD',
+    color: theme.palette.secondary.main,
     fontWeight: 'bold',
   },
   color: {
     cursor: 'pointer',
-    width: '25px',
-    height: '25px',
+    width: 30,
+    height: 30,
     border: '1px solid #EEEEEE',
-    margin: '0 5px',
-    borderRadius: '9999px',
+    margin: theme.spacing(0, 0.5),
+    borderRadius: 9999,
   },
   colorSelected: {
     outline: '2px solid #b0c5f5',
-    outlineOffset: '1px',
+    outlineOffset: 2,
   },
 }));
 
