@@ -45,7 +45,7 @@ exports.createBoard = asyncHandler(async (req, res) => {
 
 exports.getUserBoards = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
-  const boards = await Board.find({ user: user });
+  const boards = await Board.find({ user: { $all: user } });
 
   const boardsWithoutPassword = boards.map((board) => {
     return board.user.map((user) => {
