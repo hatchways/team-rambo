@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const { User } = require("../models/User");
 const asyncHandler = require("express-async-handler");
 
 // @route POST /users
