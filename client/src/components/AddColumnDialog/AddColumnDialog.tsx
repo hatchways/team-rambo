@@ -17,7 +17,7 @@ const AddColumnDialog = (): JSX.Element => {
   };
 
   return (
-    <Box>
+    <Box className={classes.outerContainer}>
       <Grid container direction="row" alignItems="stretch" justify="space-between">
         <Grid item xs={1} className={classes.buttonZone}>
           <Button className={classes.button} onClick={handleClickOpen}>

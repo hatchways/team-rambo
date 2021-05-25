@@ -1,4 +1,4 @@
-import Box from '@material-ui/core/Box';
+import { Box, Grid } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useStyles from './dashboardStyles';
@@ -6,11 +6,10 @@ import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import { useHistory } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
-import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import { useEffect } from 'react';
 import Board from '../../components/Kanban/Board';
 import { KanbanProvider } from '../../context/useKanbanContext';
-import AddCardDialog from '../../components/AddCardDialog/AddCardDialog';
+import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
@@ -34,15 +33,17 @@ export default function Dashboard(): JSX.Element {
   return (
     <Box>
       <CssBaseline />
-      <Box>
-        <NavBar loggedInUser={loggedInUser} />
+      <NavBar loggedInUser={loggedInUser} />
+      <Box className={classes.buttonOverlay}>
+        <AddColumnDialog />
       </Box>
-      <Box className={classes.board}>
-        <KanbanProvider>
-          <Board />
-        </KanbanProvider>
-      </Box>
-      <AddCardDialog />
+      <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
+        <Grid item xs={10}>
+          <KanbanProvider>
+            <Board />
+          </KanbanProvider>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

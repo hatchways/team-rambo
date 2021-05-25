@@ -2,6 +2,7 @@ import { Box, Button, Divider, InputBase, Grid, Typography, useTheme } from '@ma
 import { Dispatch } from 'react';
 import { useState, useEffect, SetStateAction } from 'react';
 import { useKanban } from '../../../context/useKanbanContext';
+import AddCardDialog from '../../AddCardDialog/AddCardDialog';
 import useColorTagStyles from '../shared/colorStyles';
 import useStyles from './useStyles';
 
@@ -93,7 +94,13 @@ const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
           </Grid>
         </Box>
       </Box>
-      <Button
+      <AddCardDialog
+        name={name}
+        columnId={columnId}
+        id={`card-${Math.floor(Math.random() * 999999)}`}
+        tag={selectedTagColor}
+      />
+      {/* <Button
         onClick={() => {
           addCard({
             name,
@@ -109,7 +116,7 @@ const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
         disableElevation
       >
         Add a card
-      </Button>
+      </Button> */}
     </>
   );
 };

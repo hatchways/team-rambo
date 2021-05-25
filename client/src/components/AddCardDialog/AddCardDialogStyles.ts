@@ -19,6 +19,7 @@ const addCardDialogStyles = makeStyles((theme) => ({
   },
   titleContainer: {
     marginTop: '4%',
+    alignItems: 'center',
   },
   mainSection: {
     padding: '20px 0',
@@ -64,10 +65,16 @@ const addCardDialogStyles = makeStyles((theme) => ({
     width: '100%',
   },
   icons: {
-    marginRight: '2%',
+    marginRight: '2.5%',
     marginTop: '3px',
     display: 'inline',
     float: 'left',
+  },
+  cardTag: {
+    width: 50,
+    height: 8,
+    borderRadius: 9999,
+    marginLeft: '15px',
   },
 }));
 

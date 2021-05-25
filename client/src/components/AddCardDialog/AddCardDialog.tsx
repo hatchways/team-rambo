@@ -11,15 +11,26 @@ import {
   Divider,
 } from '@material-ui/core';
 import addCardDialogStyles from './AddCardDialogStyles';
+import useColorTagStyles from '../Kanban/shared/colorStyles';
+import { useKanban } from '../../context/useKanbanContext';
 import ClearIcon from '@material-ui/icons/Clear';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 
-const AddCardDialog = (): JSX.Element => {
+type DialogProps = {
+  name: string;
+  tag: string;
+  columnId: string;
+  id: string;
+};
+
+const AddCardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const classes = addCardDialogStyles();
+  const colorClasses = useColorTagStyles({ tag });
+  const { addCard, columns } = useKanban();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -29,6 +40,11 @@ const AddCardDialog = (): JSX.Element => {
     setOpen(false);
   };
 
+  const getColNameById = (columnId: string): string => {
+    const matchingColumns = columns.filter((col) => col.id === columnId);
+    return matchingColumns[0].name;
+  };
+
   return (
     <Box>
       <Button color="primary" variant="contained" size="large" onClick={handleClickOpen} disableElevation>
@@ -36,13 +52,16 @@ const AddCardDialog = (): JSX.Element => {
       </Button>
       <Dialog open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
         <Grid container spacing={3} className={classes.hasMargin}>
-          <Grid item xs={12} className={classes.titleContainer}>
-            <AssignmentOutlinedIcon color="primary" className={classes.icons} />
-            <Typography variant="h5" className={classes.dialogTitle}>
-              Midterm Exam
-            </Typography>
+          <Grid item xs={12}>
+            <Grid container className={classes.titleContainer}>
+              <AssignmentOutlinedIcon color="primary" className={classes.icons} />
+              <Typography variant="h5" className={classes.dialogTitle}>
+                {name}
+              </Typography>
+              <Box className={`${classes.cardTag} ${colorClasses.cardTagColor}`}></Box>
+            </Grid>
             <Typography variant="body2" className={classes.dialogSubTitle}>
-              {'In list "Math"'}
+              {`In list "${getColNameById(columnId)}"`}
             </Typography>
           </Grid>
         </Grid>
@@ -63,7 +82,15 @@ const AddCardDialog = (): JSX.Element => {
                 className={classes.textField}
               />
               <Button
-                onClick={handleClose}
+                onClick={() => {
+                  addCard({
+                    name,
+                    columnId: columnId,
+                    id: id,
+                    tag: tag,
+                  });
+                  handleClose();
+                }}
                 className={classes.dialogButton}
                 color="primary"
                 variant="contained"
@@ -99,7 +126,15 @@ const AddCardDialog = (): JSX.Element => {
                 className={classes.textField}
               />
               <Button
-                onClick={handleClose}
+                onClick={() => {
+                  addCard({
+                    name,
+                    columnId: columnId,
+                    id: id,
+                    tag: tag,
+                  });
+                  handleClose();
+                }}
                 className={classes.dialogButton}
                 color="primary"
                 variant="contained"
