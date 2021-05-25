@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const cardSchema = require("./Card");
+const { cardSchema } = require("./Card");
 
 const columnSchema = new mongoose.Schema({
   name: {
