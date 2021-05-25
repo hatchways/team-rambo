@@ -1,4 +1,5 @@
 import { Box, Button, Divider, InputBase, Grid, Typography, useTheme } from '@material-ui/core';
+import clsx from 'clsx';
 import { Dispatch } from 'react';
 import { useState, useEffect, SetStateAction } from 'react';
 import { useKanban } from '../../../context/useKanbanContext';
@@ -81,7 +82,7 @@ const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
                 {Object.keys(theme.palette.tags).map((tagColor: string): JSX.Element => {
                   return (
                     <Color
-                      key={tagColor}
+                      key={`${columnId}-${tagColor}`}
                       name={tagColor}
                       activeSelected={tagColor === selectedTagColor}
                       setSelected={setTagColor}
@@ -127,7 +128,7 @@ const Color = ({ name = 'white', activeSelected, setSelected }: ColorProps): JSX
   return (
     <Grid
       onClick={() => setSelected(name)}
-      className={`${classes.color} ${colorClasses.cardTagColor} ${activeSelected && classes.colorSelected}`}
+      className={`${classes.color} ${colorClasses.cardTagColor} ${clsx(activeSelected && classes.colorSelected)}`}
       item
     ></Grid>
   );
