@@ -8,14 +8,18 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import NavBar from '../../components/NavBar/NavBar';
 import getUserBoards from '../../helpers/APICalls/getUserBoards';
-import { Board } from '../../interface/Board';
+import { IBoard } from '../../interface/Board';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
+import Board from '../../components/Kanban/Board';
+import { KanbanProvider } from '../../context/useKanbanContext';
+import useStyles from './dashboardStyles';
 
 export default function Dashboard(): JSX.Element {
+  const classes = useStyles();
   const { loggedInUser } = useAuth();
   const { initSocket } = useSocket();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  const [boards, setBoards] = useState<Array<Board>>([]);
+  const [boards, setBoards] = useState<Array<IBoard>>([]);
   const history = useHistory();
 
   const getAllUserBoards = async () => {
