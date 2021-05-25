@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   haveAccount: {
-    marginTop: '30px',
+    marginTop: 30,
     fontWeight: 'bold',
   },
   create: {

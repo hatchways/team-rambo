@@ -1,8 +1,6 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import Link from '@material-ui/core/Link';
@@ -43,6 +41,7 @@ export default function Login(): JSX.Element {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={6} md={6} className={classes.image} />
+      <Divider className={classes.divider} />
       <Grid item xs={12} sm={6} md={6} elevation={6} component={Paper} square>
         <Box className={classes.authWrapper}>
           <Box width="100%" maxWidth={450} p={3} alignSelf="center" className={classes.login}>
