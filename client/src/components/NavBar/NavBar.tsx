@@ -14,6 +14,8 @@ import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined'
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import logo from '../../Images/logo.png';
 import createBoard from '../../helpers/APICalls/createBoard';
+import { useState } from 'react';
+import OptionsDrawer from '../OptionsDrawer/OptionsDrawer';
 
 interface Props {
   loggedInUser: User;
@@ -22,11 +24,16 @@ interface Props {
 
 const NavBar = ({ loggedInUser }: Props): JSX.Element => {
   const classes = useStyles();
-
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const newBoard = () => {
     createBoard()
       .then((data) => console.log(data))
       .catch((err) => console.log(err));
+  };
+
+  const toggleDrawer = (): void => {
+    setOpenDrawer(!openDrawer);
+    console.log(openDrawer);
   };
 
   return (
@@ -76,9 +83,16 @@ const NavBar = ({ loggedInUser }: Props): JSX.Element => {
           <Typography variant="h6" className={classes.title}>
             My School Board
           </Typography>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton
+            onClick={toggleDrawer}
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
             <MenuIcon />
           </IconButton>
+          <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
         </Toolbar>
       </AppBar>
     </Container>
