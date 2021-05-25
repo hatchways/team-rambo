@@ -44,7 +44,7 @@ exports.createBoard = asyncHandler(async (req, res) => {
   });
 
   const boardWithoutPassword = newBoard.removePassword();
-  return res.status(200).json({ data: boardWithoutPassword });
+  return res.status(200).json({ boards: boardWithoutPassword });
 });
 
 exports.getUserBoards = asyncHandler(async (req, res, next) => {
@@ -55,5 +55,5 @@ exports.getUserBoards = asyncHandler(async (req, res, next) => {
     return board.removePassword();
   });
 
-  return res.status(200).send({ data: boardsWithoutPassword });
+  return res.status(200).send({ boards: boardsWithoutPassword });
 });

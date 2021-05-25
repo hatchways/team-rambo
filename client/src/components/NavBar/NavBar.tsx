@@ -19,21 +19,16 @@ import OptionsDrawer from '../OptionsDrawer/OptionsDrawer';
 
 interface Props {
   loggedInUser: User;
-  handleDrawerToggle?: () => void;
+  handleDrawerToggle: () => void;
 }
 
-const NavBar = ({ loggedInUser }: Props): JSX.Element => {
+const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
   const classes = useStyles();
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+
   const newBoard = () => {
     createBoard()
       .then((data) => console.log(data))
       .catch((err) => console.log(err));
-  };
-
-  const toggleDrawer = (): void => {
-    setOpenDrawer(!openDrawer);
-    console.log(openDrawer);
   };
 
   return (
@@ -84,7 +79,7 @@ const NavBar = ({ loggedInUser }: Props): JSX.Element => {
             My School Board
           </Typography>
           <IconButton
-            onClick={toggleDrawer}
+            onClick={handleDrawerToggle}
             edge="start"
             className={classes.menuButton}
             color="inherit"
@@ -92,7 +87,6 @@ const NavBar = ({ loggedInUser }: Props): JSX.Element => {
           >
             <MenuIcon />
           </IconButton>
-          <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
         </Toolbar>
       </AppBar>
     </Container>

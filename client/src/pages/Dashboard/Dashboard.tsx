@@ -5,20 +5,41 @@ import useStyles from './dashboardStyles';
 import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import { useHistory } from 'react-router-dom';
-import NavBar from '../../components/NavBar/NavBar';
+import { useState } from 'react';
 import { useEffect } from 'react';
+import NavBar from '../../components/NavBar/NavBar';
+import getUserBoards from '../../helpers/APICalls/getUserBoards';
+import { Board } from '../../interface/Board';
+import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
-
   const { loggedInUser } = useAuth();
   const { initSocket } = useSocket();
-
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [boards, setBoards] = useState<Array<Board>>([]);
   const history = useHistory();
+
+  const getAllUserBoards = () => {
+    getUserBoards()
+      .then((data) => {
+        setBoards(data.boards);
+      })
+      .catch(() => setBoards([]));
+  };
+
+  useEffect(() => {
+    getAllUserBoards();
+  }, []);
 
   useEffect(() => {
     initSocket();
   }, [initSocket]);
+
+  const toggleDrawer = (): void => {
+    setOpenDrawer(!openDrawer);
+    console.log(openDrawer);
+  };
 
   if (loggedInUser === undefined) return <CircularProgress />;
   if (!loggedInUser) {
@@ -30,7 +51,8 @@ export default function Dashboard(): JSX.Element {
   return (
     <Grid container component="main" className={`${classes.root} ${classes.dashboard}`}>
       <CssBaseline />
-      <NavBar loggedInUser={loggedInUser} />
+      <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
+      <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} boards={boards} />
     </Grid>
   );
 }
