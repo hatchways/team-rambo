@@ -49,8 +49,15 @@ export default function Dashboard(): JSX.Element {
   return (
     <Box>
       <CssBaseline />
-      <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
-      <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} boards={boards} />
+      <Box>
+        <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
+        <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} boards={boards} />
+      </Box>
+      <Box className={classes.board}>
+        <KanbanProvider>
+          <Board />
+        </KanbanProvider>
+      </Box>
     </Box>
   );
 }
