@@ -25,6 +25,7 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
 
 exports.createBoard = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
+
   const newBoard = await Board.create({
     name: "My board",
     columns: [
@@ -41,17 +42,17 @@ exports.createBoard = asyncHandler(async (req, res) => {
     ],
     user: user,
   });
+
+  const boardWithoutPassword = newBoard.removePassword();
+  return res.status(200).json({ data: boardWithoutPassword });
 });
 
 exports.getUserBoards = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
-  const boards = await Board.find({ user: { $all: user } });
+  const boards = await Board.find({ "user._id": user._id });
 
   const boardsWithoutPassword = boards.map((board) => {
-    return board.user.map((user) => {
-      delete user.password;
-      return user;
-    });
+    return board.removePassword();
   });
 
   return res.status(200).send({ data: boardsWithoutPassword });

@@ -21,4 +21,10 @@ const boardSchema = new mongoose.Schema({
   },
 });
 
+boardSchema.methods.removePassword = function () {
+  const object = this.toObject();
+  delete object.user.password;
+  return object;
+};
+
 module.exports = Board = mongoose.model("board", boardSchema);

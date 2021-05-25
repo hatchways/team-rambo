@@ -13,6 +13,7 @@ import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import logo from '../../Images/logo.png';
+import createBoard from '../../helpers/APICalls/createBoard';
 
 interface Props {
   loggedInUser: User;
@@ -21,6 +22,12 @@ interface Props {
 
 const NavBar = ({ loggedInUser }: Props): JSX.Element => {
   const classes = useStyles();
+
+  const newBoard = () => {
+    createBoard()
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Container className={classes.root}>
@@ -47,7 +54,14 @@ const NavBar = ({ loggedInUser }: Props): JSX.Element => {
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
             <Grid item>
-              <Button color="primary" variant="contained" size="large" startIcon={<AddOutlinedIcon />} disableElevation>
+              <Button
+                onClick={newBoard}
+                color="primary"
+                variant="contained"
+                size="large"
+                startIcon={<AddOutlinedIcon />}
+                disableElevation
+              >
                 Create Board
               </Button>
             </Grid>
