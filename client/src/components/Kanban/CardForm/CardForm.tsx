@@ -128,7 +128,7 @@ const Color = ({ name = 'white', activeSelected, setSelected }: ColorProps): JSX
   return (
     <Grid
       onClick={() => setSelected(name)}
-      className={`${classes.color} ${colorClasses.cardTagColor} ${clsx(activeSelected && classes.colorSelected)}`}
+      className={clsx(classes.color, colorClasses.cardTagColor, activeSelected && classes.colorSelected)}
       item
     ></Grid>
   );
