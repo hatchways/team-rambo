@@ -14,8 +14,6 @@ import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined'
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import logo from '../../Images/logo.png';
 import createBoard from '../../helpers/APICalls/createBoard';
-import { useState } from 'react';
-import OptionsDrawer from '../OptionsDrawer/OptionsDrawer';
 
 interface Props {
   loggedInUser: User;
@@ -25,10 +23,8 @@ interface Props {
 const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
   const classes = useStyles();
 
-  const newBoard = () => {
-    createBoard()
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+  const newBoard = async () => {
+    await createBoard();
   };
 
   return (

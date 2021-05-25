@@ -51,9 +51,7 @@ exports.getUserBoards = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
   const boards = await Board.find({ "user._id": user._id });
 
-  const boardsWithoutPassword = boards.map((board) => {
-    return board.removePassword();
-  });
+  const boardsWithoutPassword = boards.map((board) => board.removePassword());
 
   return res.status(200).send({ boards: boardsWithoutPassword });
 });

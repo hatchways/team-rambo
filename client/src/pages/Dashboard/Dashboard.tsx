@@ -20,25 +20,21 @@ export default function Dashboard(): JSX.Element {
   const [boards, setBoards] = useState<Array<Board>>([]);
   const history = useHistory();
 
-  const getAllUserBoards = () => {
-    getUserBoards()
-      .then((data) => {
-        setBoards(data.boards);
-      })
-      .catch(() => setBoards([]));
+  const getAllUserBoards = async () => {
+    try {
+      const data = await getUserBoards();
+      setBoards(data.boards);
+    } catch (err) {
+      setBoards([]);
+    }
   };
-
-  useEffect(() => {
-    getAllUserBoards();
-  }, []);
 
   useEffect(() => {
     initSocket();
   }, [initSocket]);
 
   const toggleDrawer = (): void => {
-    setOpenDrawer(!openDrawer);
-    console.log(openDrawer);
+    setOpenDrawer((prevOpen) => !prevOpen);
   };
 
   if (loggedInUser === undefined) return <CircularProgress />;
