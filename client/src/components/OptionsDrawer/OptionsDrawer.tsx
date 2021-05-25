@@ -8,11 +8,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import SwapHorizontalCircleOutlinedIcon from '@material-ui/icons/SwapHorizontalCircleOutlined';
 import useStyles from './optionsDrawerStyles';
-import { Board } from '../../interface/Board';
+import { IBoard } from '../../interface/Board';
 
 interface Props {
   open: boolean;
-  boards: Array<Board>;
+  boards: Array<IBoard>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
