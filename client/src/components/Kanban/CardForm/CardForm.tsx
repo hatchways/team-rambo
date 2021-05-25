@@ -2,8 +2,7 @@ import { Box, Button, Divider, InputBase, Grid, Typography, useTheme } from '@ma
 import clsx from 'clsx';
 import { Dispatch } from 'react';
 import { useState, useEffect, SetStateAction } from 'react';
-import { useKanban } from '../../../context/useKanbanContext';
-import AddCardDialog from '../../AddCardDialog/AddCardDialog';
+import CardDialog from '../../CardDialog/CardDialog';
 import useColorTagStyles from '../shared/colorStyles';
 import useStyles from './useStyles';
 
@@ -53,10 +52,9 @@ type InnerFormProps = {
   columnId: string;
   formAction: Dispatch<SetStateAction<boolean>>;
 };
-const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
+const InnerForm = ({ columnId }: InnerFormProps) => {
   const [name, setName] = useState<string>('');
   const [selectedTagColor, setTagColor] = useState<string>('white');
-  const { addCard } = useKanban();
   const theme = useTheme();
   const classes = useStyles();
   return (
@@ -95,29 +93,12 @@ const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
           </Grid>
         </Box>
       </Box>
-      <AddCardDialog
+      <CardDialog
         name={name}
         columnId={columnId}
         id={`card-${Math.floor(Math.random() * 999999)}`}
         tag={selectedTagColor}
       />
-      {/* <Button
-        onClick={() => {
-          addCard({
-            name,
-            columnId: columnId,
-            id: `card-${Math.floor(Math.random() * 999999)}`,
-            tag: selectedTagColor,
-          });
-          formAction(false);
-        }}
-        variant="contained"
-        size="large"
-        color="primary"
-        disableElevation
-      >
-        Add a card
-      </Button> */}
     </>
   );
 };

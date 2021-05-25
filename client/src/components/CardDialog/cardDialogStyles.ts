@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const cardDialogStyles = makeStyles((theme) => ({
+const cardDialogStyles = makeStyles(() => ({
   textField: {
     display: 'flex',
     width: '100%',
