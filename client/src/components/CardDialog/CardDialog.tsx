@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   IconButton,
@@ -19,6 +19,7 @@ import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import DatePicker from '../DatePicker/DatePicker';
+import { IColumn } from '../../interface/Column';
 
 type DialogProps = {
   name: string;
@@ -28,29 +29,26 @@ type DialogProps = {
 };
 
 const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps): JSX.Element => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [column, setColumn] = useState<IColumn | null>(null);
   const classes = cardDialogStyles();
   const colorClasses = useColorTagStyles({ tag });
-  const { addCard, columns } = useKanban();
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const { addCard, resetOpenCard, getColumnById } = useKanban();
 
   const handleClose = () => {
+    resetOpenCard();
     setOpen(false);
   };
 
-  const getColNameById = (columnId: string): string => {
-    const matchingColumns = columns.filter((col) => col.id === columnId);
-    return matchingColumns[0].name;
-  };
+  useEffect(() => {
+    setColumn(getColumnById(columnId));
+    return () => {
+      setColumn(null);
+    };
+  }, []);
 
   return (
     <Box>
-      <Button color="primary" variant="contained" size="large" onClick={handleClickOpen} disableElevation>
-        Add a card
-      </Button>
       <Dialog open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
         <Grid container spacing={3} className={classes.hasMargin}>
           <Grid item xs={12}>
@@ -62,13 +60,13 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
               <Box className={`${classes.cardTag} ${colorClasses.cardTagColor}`}></Box>
             </Grid>
             <Typography variant="body2" className={classes.dialogSubTitle}>
-              {`In list "${getColNameById(columnId)}"`}
+              {`In list "${column?.name || 'None'}"`}
             </Typography>
           </Grid>
         </Grid>
         <Divider className={classes.divider} />
-        <Grid container xs={12} className={classes.hasMargin}>
-          <Grid container xs={10}>
+        <Grid container className={classes.hasMargin}>
+          <Grid container>
             <Grid item xs={12} className={classes.mainSection}>
               <ImportContactsOutlinedIcon color="primary" className={classes.icons} />
               <Typography variant="h6" className={classes.dialogHeading}>
@@ -147,7 +145,7 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
               </IconButton>
             </Grid>
           </Grid>
-          <Grid container xs={2} direction="column" className={classes.buttonContainer}>
+          <Grid container direction="column" className={classes.buttonContainer}>
             <Grid item>
               <Box className={classes.buttonGroup}>
                 <Typography variant="caption" className={classes.buttonColumnTitle}>

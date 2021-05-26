@@ -1,4 +1,4 @@
-import { IColumn } from '../../context/types/kanban';
+import { IColumn } from '../../interface/Column';
 
 export const columnData: IColumn[] = [
   {
@@ -32,7 +32,7 @@ export const columnData: IColumn[] = [
     cards: [
       {
         id: 'car-3',
-        columnId: 'car-3',
+        columnId: 'col-3',
         name: 'Homework',
         tag: 'red',
         // other data (assignees, due dates, etc.)
