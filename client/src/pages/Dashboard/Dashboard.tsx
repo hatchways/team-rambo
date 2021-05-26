@@ -33,7 +33,7 @@ export default function Dashboard(): JSX.Element {
 
   useEffect(() => {
     getAllUserBoards();
-  }, [getAllUserBoards]);
+  }, []);
 
   useEffect(() => {
     initSocket();
