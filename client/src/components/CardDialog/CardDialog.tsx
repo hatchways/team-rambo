@@ -19,6 +19,7 @@ import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import DatePicker from '../DatePicker/DatePicker';
+import DialogItem from '../CardDialog/DialogItem/DialogItem';
 
 type DialogProps = {
   name: string;
@@ -69,7 +70,21 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
         <Divider className={classes.divider} />
         <Grid container xs={12} className={classes.hasMargin}>
           <Grid container xs={10}>
-            <Grid item xs={12} className={classes.mainSection}>
+            <DialogItem
+              title="Description:"
+              content={
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={4}
+                  placeholder="Add description"
+                  variant="outlined"
+                  className={classes.textField}
+                />
+              }
+              icon={<ImportContactsOutlinedIcon />}
+            />
+            {/* <Grid item xs={12} className={classes.mainSection}>
               <ImportContactsOutlinedIcon color="primary" className={classes.icons} />
               <Typography variant="h6" className={classes.dialogHeading}>
                 Description:
@@ -103,7 +118,7 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
               <IconButton onClick={handleClose}>
                 <ClearIcon color="primary" />
               </IconButton>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} className={classes.mainSection}>
               <ScheduleIcon color="primary" className={classes.icons} />
               <Typography variant="h6" className={classes.dialogHeading}>
