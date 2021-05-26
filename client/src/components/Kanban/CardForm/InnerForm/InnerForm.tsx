@@ -9,7 +9,7 @@ type InnerFormProps = {
   formAction: Dispatch<SetStateAction<boolean>>;
 };
 
-export const InnerForm = ({ columnId, formAction }: InnerFormProps) => {
+export const InnerForm = ({ columnId, formAction }: InnerFormProps): JSX.Element => {
   const [name, setName] = useState<string>('');
   const [selectedTagColor, setTagColor] = useState<string>('white');
   const { addCard } = useKanban();

@@ -1,4 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import { Draggable } from 'react-beautiful-dnd';
 import { useKanban } from '../../../context/useKanbanContext';
 import useColorTagStyles from '../shared/colorStyles';
@@ -29,7 +30,7 @@ const Card = ({ id, name, tag = 'white', columnId, index }: CardProps): JSX.Elem
                   columnId,
                 });
               }}
-              className={`${classes.card} ${snapshot.isDragging && classes.cardDragging}`}
+              className={clsx(classes.card, snapshot.isDragging && classes.cardDragging)}
             >
               <Box className={`${classes.cardTag} ${colorClasses.cardTagColor}`}></Box>
               <Typography className={classes.typography} variant="h6">
