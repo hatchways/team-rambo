@@ -18,6 +18,7 @@ import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutline
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import DatePicker from '../DatePicker/DatePicker';
 
 type DialogProps = {
   name: string;
@@ -26,7 +27,7 @@ type DialogProps = {
   id: string;
 };
 
-const AddCardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps): JSX.Element => {
+const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const classes = cardDialogStyles();
   const colorClasses = useColorTagStyles({ tag });
@@ -108,9 +109,7 @@ const AddCardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogPr
               <Typography variant="h6" className={classes.dialogHeading}>
                 Deadline:
               </Typography>
-              <Typography variant="body1" color="primary" className={classes.date}>
-                March 10
-              </Typography>
+              <DatePicker />
             </Grid>
             <Grid item xs={12} className={classes.mainSection}>
               <ChatBubbleOutlineIcon color="primary" className={classes.icons} />
@@ -184,4 +183,4 @@ const AddCardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogPr
   );
 };
 
-export default AddCardDialog;
+export default CardDialog;
