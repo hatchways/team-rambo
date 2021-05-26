@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const { User } = require("../models/User");
 const Board = require("../models/Board");
 
+
 // @route POST /users
 // @desc Search for users
 // @access Private

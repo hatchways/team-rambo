@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const cardSchema = require("./Card");
+const { cardSchema } = require("./Card");
 
 const columnSchema = new mongoose.Schema({
   name: {
@@ -16,4 +16,7 @@ const columnSchema = new mongoose.Schema({
   },
 });
 
-module.exports = columnSchema;
+module.exports = {
+  Column: mongoose.model("column", columnSchema),
+  columnSchema,
+};

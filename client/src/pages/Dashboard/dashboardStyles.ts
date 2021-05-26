@@ -10,7 +10,12 @@ const useStyles = makeStyles((theme) => ({
   },
   board: {
     marginTop: 30,
-    padding: '0 24px',
+  },
+  buttonOverlay: {
+    position: 'absolute',
+    marginTop: 30,
+    width: '100%',
+    pointerEvents: 'none',
   },
   dashboard: { backgroundColor: '#FFFFFF' },
   drawerWrapper: {

@@ -1,4 +1,3 @@
-import { User } from './User';
 import { Column } from './Column';
 import { Card } from './Card';
 
@@ -7,7 +6,7 @@ export interface IBoard {
   name: string;
   columns: Array<Column>;
   cards: Array<Card>;
-  user: User;
+  user: string;
   createdAt: string;
 }
 

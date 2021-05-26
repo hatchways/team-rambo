@@ -1,4 +1,4 @@
-import Box from '@material-ui/core/Box';
+import { Box, Grid } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useAuth } from '../../context/useAuthContext';
@@ -13,6 +13,7 @@ import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import Board from '../../components/Kanban/Board';
 import { KanbanProvider } from '../../context/useKanbanContext';
 import useStyles from './dashboardStyles';
+import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
@@ -23,12 +24,8 @@ export default function Dashboard(): JSX.Element {
   const history = useHistory();
 
   const getAllUserBoards = async () => {
-    try {
-      const data = await getUserBoards();
-      setBoards(data.boards);
-    } catch (err) {
-      setBoards([]);
-    }
+    const { boards } = await getUserBoards();
+    if (boards) setBoards(boards);
   };
 
   useEffect(() => {
@@ -62,6 +59,16 @@ export default function Dashboard(): JSX.Element {
           <Board />
         </KanbanProvider>
       </Box>
+      <Box className={classes.buttonOverlay}>
+        <AddColumnDialog />
+      </Box>
+      <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
+        <Grid item xs={10}>
+          <KanbanProvider>
+            <Board />
+          </KanbanProvider>
+        </Grid>
+      </Grid>
     </Box>
   );
 }
