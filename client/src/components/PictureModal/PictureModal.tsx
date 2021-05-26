@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
@@ -28,11 +28,17 @@ interface UploadProps {
   getInputProps: () => React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 }
 
+interface IAlert {
+  open: boolean;
+  severity?: Color;
+  message?: string;
+}
+
 const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
   const classes = useStyles();
   const maxFileSize = 5e8;
   const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
-  const [openAlert, setOpenAlert] = useState<boolean>(false);
+  const [alert, setOpenAlert] = useState<IAlert>({ open: false });
   const [preview, setPreview] = useState<string>('');
   const [image, setImage] = useState<Blob>(new Blob());
 
@@ -40,7 +46,10 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
     const reader = new FileReader();
     const currentFile = [...files].shift();
 
-    if (!currentFile) return;
+    if (!currentFile) {
+      setOpenAlert({ open: true, message: 'Insert a valid image file!', severity: 'error' });
+      return;
+    }
 
     reader.onload = () => {
       const result = reader.result;
@@ -57,7 +66,12 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
     form.append('image', file);
 
     const { error } = await uploadImage(form);
-    if (error) setOpenAlert(true);
+    if (error) {
+      setOpenAlert({ open: true, message: 'Insert a valid image file!', severity: 'error' });
+      return;
+    }
+    setOpenAlert({ open: true, message: 'Image saved!', severity: 'success' });
+    setOpen();
   };
 
   const handleAlertClose = (
@@ -67,7 +81,7 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
     if (reason === 'clickaway') {
       return;
     }
-    setOpenAlert(false);
+    setOpenAlert({ open: false });
   };
 
   const Alert = (props: AlertProps) => {
@@ -75,62 +89,64 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
   };
 
   return (
-    <Dialog open={open} onClose={setOpen}>
-      <DialogTitle disableTypography className={classes.root}>
-        <Typography variant="h6" className={classes.title}>
-          Upload profile picture
-        </Typography>
-      </DialogTitle>
-      <Divider />
-      <DialogContent>
-        <Grid container direction="column" justify="center" alignItems="center" spacing={1}>
-          <Grid item>
-            <Box className={classes.avatarBox}>
-              <Typography variant="h6">Preview</Typography>
-              <Avatar alt="preview" src={preview} className={classes.avatar} />
-            </Box>
+    <>
+      <Dialog open={open} onClose={setOpen}>
+        <DialogTitle disableTypography className={classes.root}>
+          <Typography variant="h6" className={classes.title}>
+            Upload profile picture
+          </Typography>
+        </DialogTitle>
+        <Divider />
+        <DialogContent>
+          <Grid container direction="column" justify="center" alignItems="center" spacing={1}>
+            <Grid item>
+              <Box className={classes.avatarBox}>
+                <Typography variant="h6">Preview</Typography>
+                <Avatar alt="preview" src={preview} className={classes.avatar} />
+              </Box>
+            </Grid>
+            <Grid item>
+              <Dropzone
+                maxSize={maxFileSize}
+                multiple={false}
+                accept={acceptedFileTypes}
+                onDrop={(acceptedFiles: File[]) => handleFile(acceptedFiles)}
+              >
+                {({ getRootProps, getInputProps }: UploadProps) => (
+                  <>
+                    <Paper {...getRootProps()} className={classes.dropZonePaper}>
+                      <Box>
+                        <CloudUploadIcon className={classes.uploadIcon} />
+                        <input type="file" {...getInputProps()} />
+                      </Box>
+                      <Typography variant="subtitle2" className={classes.text}>
+                        Drag and drop a file here, or click to select files
+                      </Typography>
+                    </Paper>
+                  </>
+                )}
+              </Dropzone>
+            </Grid>
+            <Grid item>
+              <Button
+                onClick={() => handleUpload(image)}
+                variant="contained"
+                color="primary"
+                size="large"
+                startIcon={<SaveIcon />}
+              >
+                Save
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Dropzone
-              maxSize={maxFileSize}
-              multiple={false}
-              accept={acceptedFileTypes}
-              onDrop={(acceptedFiles: File[]) => handleFile(acceptedFiles)}
-            >
-              {({ getRootProps, getInputProps }: UploadProps) => (
-                <>
-                  <Paper {...getRootProps()} className={classes.dropZonePaper}>
-                    <Box>
-                      <CloudUploadIcon className={classes.uploadIcon} />
-                      <input type="file" {...getInputProps()} />
-                    </Box>
-                    <Typography variant="subtitle2" className={classes.text}>
-                      Drag and drop a file here, or click to select files
-                    </Typography>
-                  </Paper>
-                </>
-              )}
-            </Dropzone>
-          </Grid>
-          <Grid item>
-            <Button
-              onClick={() => handleUpload(image)}
-              variant="contained"
-              color="primary"
-              size="large"
-              startIcon={<SaveIcon />}
-            >
-              Save
-            </Button>
-          </Grid>
-          <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
-            <Alert onClose={handleAlertClose} elevation={7} variant="filled" severity="error">
-              Insert a valid image file!
-            </Alert>
-          </Snackbar>
-        </Grid>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+      <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleAlertClose}>
+        <Alert onClose={handleAlertClose} elevation={7} severity={alert.severity}>
+          {alert.message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 
