@@ -46,8 +46,7 @@ exports.createBoard = asyncHandler(async (req, res) => {
 });
 
 exports.getUserBoards = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id);
-  const boards = await Board.find({ user: user._id });
+  const boards = await Board.find({ user: req.user.id });
 
   return res.status(200).send({ boards: boards });
 });
