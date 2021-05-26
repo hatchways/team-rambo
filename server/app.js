@@ -12,6 +12,7 @@ const logger = require("morgan");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const fileRouter = require("./routes/file");
+const boardsRouter = require("./routes/boards");
 
 const { json, urlencoded } = express;
 
@@ -19,6 +20,7 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 
+//@ts-ignore
 const io = socketio(server, {
   cors: {
     origin: "*",
@@ -38,18 +40,21 @@ app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
 
 app.use((req, res, next) => {
+  //@ts-ignore
   req.io = io;
   next();
 });
 
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
+app.use("/boards", boardsRouter);
 app.use("/files", fileRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
 
   app.get("*", (req, res) =>
+    //@ts-ignore
     res.sendFile(path.resolve(__dirname), "client", "build", "index.html")
   );
 } else {
@@ -63,6 +68,7 @@ app.use(errorHandler);
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
+  //@ts-ignore
   console.log(`Error: ${err.message}`.red);
   // Close server & exit process
   server.close(() => process.exit(1));
