@@ -10,9 +10,12 @@ const useStyles = makeStyles((theme) => ({
   columnWrapper: {
     padding: 16,
     backgroundColor: theme.palette.secondary.light,
-    marginRight: 20,
-    width: 440,
     borderRadius: 8,
+  },
+  columnGridItem: {
+    [theme.breakpoints.up('lg')]: {
+      flex: 1,
+    },
   },
 }));
 

@@ -9,7 +9,7 @@ type ColumnProps = IColumn;
 const Column = ({ id, name, cards }: ColumnProps): JSX.Element => {
   const classes = useStyles();
   return (
-    <Grid item>
+    <Grid xs={12} md={6} lg="auto" item className={classes.columnGridItem}>
       <Box className={classes.columnWrapper}>
         <Box className={classes.typographyWrapper}>
           <Typography className={classes.typography} variant="h5">
