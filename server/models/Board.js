@@ -1,18 +1,16 @@
 const mongoose = require("mongoose");
-const columnSchema = require("./Column");
-const { userSchema } = require("./User");
 
 const boardSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
   },
-  columns: {
-    type: [columnSchema],
-    required: false,
-  },
+  columns: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "card", required: false },
+  ],
   user: {
-    type: userSchema,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
     required: true,
   },
   createdAt: {
@@ -21,4 +19,6 @@ const boardSchema = new mongoose.Schema({
   },
 });
 
-module.exports = Board = mongoose.model("board", boardSchema);
+const Board = mongoose.model("board", boardSchema);
+
+module.exports = Board;

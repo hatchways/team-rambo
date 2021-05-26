@@ -1,19 +1,19 @@
 const mongoose = require("mongoose");
-const cardSchema = require("./Card");
 
 const columnSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
   },
-  cards: {
-    type: [cardSchema],
-    required: false,
-  },
+  cards: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "card", required: false },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-module.exports = columnSchema;
+const Column = mongoose.model("board", columnSchema);
+
+module.exports = Column;
