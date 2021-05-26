@@ -11,10 +11,15 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
-  text: {
+  title: {
     fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  text: {
+    textAlign: 'center',
   },
   dropZonePaper: {
+    height: 'fit-content',
     padding: 10,
     '&:hover': {
       background: '#CECECE',
@@ -22,8 +27,17 @@ const useStyles = makeStyles((theme) => ({
   },
   uploadIcon: {
     width: '100%',
-    height: '100%',
+    height: '4em',
     color: '#759CFC',
+  },
+  avatarBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    height: 100,
+    width: 100,
   },
 }));
 

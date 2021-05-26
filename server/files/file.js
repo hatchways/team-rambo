@@ -25,16 +25,16 @@ const imageUploadConfig = multer({
 const imageUpload = (req, res, next) => {
   imageUploadConfig(req, res, (err) => {
     if (err && err.code == "LIMIT_FILE_SIZE") {
-      return res.status(400).send({ message: "File is too big!" });
+      return res.status(413).send({ error: "File is too big!" });
     } else if (err) {
-      return res.status(400).send({ message: err });
+      return res.status(500).send({ error: err });
     }
     next();
   });
 };
 
 const streamUpload = (req, res) => {
-  if (!req.file) return res.status(400).send({ messsage: "File not found!" });
+  if (!req.file) return res.status(404).send({ error: "File not found!" });
 
   return new Promise((resolve, reject) => {
     let stream = cloudinary.uploader.upload_stream((error, result) => {

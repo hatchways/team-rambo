@@ -33,7 +33,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
   };
 
   const handleProfile = () => {
-    setOpenImageModal(!openImageModal);
+    setOpenImageModal((prevOpen) => !prevOpen);
     // To do: implement component for profile page and backend routing
   };
 
