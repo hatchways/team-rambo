@@ -113,17 +113,15 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
                 onDrop={(acceptedFiles: File[]) => handleFile(acceptedFiles)}
               >
                 {({ getRootProps, getInputProps }: UploadProps) => (
-                  <>
-                    <Paper {...getRootProps()} className={classes.dropZonePaper}>
-                      <Box>
-                        <CloudUploadIcon className={classes.uploadIcon} />
-                        <input type="file" {...getInputProps()} />
-                      </Box>
-                      <Typography variant="subtitle2" className={classes.text}>
-                        Drag and drop a file here, or click to select files
-                      </Typography>
-                    </Paper>
-                  </>
+                  <Paper {...getRootProps()} className={classes.dropZonePaper}>
+                    <Box>
+                      <CloudUploadIcon className={classes.uploadIcon} />
+                      <input type="file" {...getInputProps()} />
+                    </Box>
+                    <Typography variant="subtitle2" className={classes.text}>
+                      Drag and drop a file here, or click to select files
+                    </Typography>
+                  </Paper>
                 )}
               </Dropzone>
             </Grid>
