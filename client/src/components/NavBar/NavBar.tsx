@@ -12,9 +12,7 @@ import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import logo from '../../Images/logo.png';
-import createBoard from '../../helpers/APICalls/createBoard';
 import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
-import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 
 interface Props {
   loggedInUser: User;
@@ -23,10 +21,6 @@ interface Props {
 
 const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
   const classes = useStyles();
-
-  const newBoard = async () => {
-    await createBoard();
-  };
 
   return (
     <Container className={classes.root}>
@@ -53,18 +47,8 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
             <Grid item>
-              <Button
-                onClick={newBoard}
-                color="primary"
-                variant="contained"
-                size="large"
-                startIcon={<AddOutlinedIcon />}
-                disableElevation
-              >
-                Create Board
-              </Button>
+              <AddBoardDialog />
             </Grid>
-            <AddBoardDialog />
             <Grid item>
               <AvatarDisplay loggedIn user={loggedInUser} />
             </Grid>
