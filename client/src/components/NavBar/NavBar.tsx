@@ -16,10 +16,10 @@ import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
 
 interface Props {
   loggedInUser: User;
-  handleDrawerToggle?: () => void;
+  handleDrawerToggle: () => void;
 }
 
-const NavBar = ({ loggedInUser }: Props): JSX.Element => {
+const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
   const classes = useStyles();
 
   return (
@@ -46,7 +46,9 @@ const NavBar = ({ loggedInUser }: Props): JSX.Element => {
         </Grid>
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
-            <AddBoardDialog />
+            <Grid item>
+              <AddBoardDialog />
+            </Grid>
             <Grid item>
               <AvatarDisplay loggedIn user={loggedInUser} />
             </Grid>
@@ -58,7 +60,13 @@ const NavBar = ({ loggedInUser }: Props): JSX.Element => {
           <Typography variant="h6" className={classes.title}>
             My School Board
           </Typography>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton
+            onClick={handleDrawerToggle}
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
             <MenuIcon />
           </IconButton>
         </Toolbar>

@@ -1,4 +1,5 @@
 const { User } = require("../models/User");
+const { Board } = require("../models/Board");
 const asyncHandler = require("express-async-handler");
 
 // @route POST /users
@@ -20,4 +21,32 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).json({ users: users });
+});
+
+exports.createBoard = asyncHandler(async (req, res) => {
+  const { name } = req.body;
+  const newBoard = await Board.create({
+    name: name,
+    columns: [
+      {
+        name: "In progress",
+        cards: [],
+        createdAt: Date.now(),
+      },
+      {
+        name: "Completed",
+        cards: [],
+        createdAt: Date.now(),
+      },
+    ],
+    user: req.user.id,
+  });
+
+  return res.status(200).json({ board: newBoard });
+});
+
+exports.getUserBoards = asyncHandler(async (req, res, next) => {
+  const boards = await Board.find({ user: req.user.id });
+
+  return res.status(200).send({ boards: boards });
 });
