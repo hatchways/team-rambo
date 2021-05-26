@@ -1,5 +1,5 @@
 const { User } = require("../models/User");
-const Board = require("../models/Board");
+const { Board } = require("../models/Board");
 const asyncHandler = require("express-async-handler");
 
 // @route POST /users
@@ -24,10 +24,9 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
 });
 
 exports.createBoard = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id);
-
+  const { name } = req.body;
   const newBoard = await Board.create({
-    name: "My board",
+    name: name,
     columns: [
       {
         name: "In progress",
@@ -40,18 +39,15 @@ exports.createBoard = asyncHandler(async (req, res) => {
         createdAt: Date.now(),
       },
     ],
-    user: user,
+    user: req.user.id,
   });
 
-  const boardWithoutPassword = newBoard.removePassword();
-  return res.status(200).json({ boards: boardWithoutPassword });
+  return res.status(200).json({ board: newBoard });
 });
 
 exports.getUserBoards = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
-  const boards = await Board.find({ "user._id": user._id });
+  const boards = await Board.find({ user: user._id });
 
-  const boardsWithoutPassword = boards.map((board) => board.removePassword());
-
-  return res.status(200).send({ boards: boardsWithoutPassword });
+  return res.status(200).send({ boards: boards });
 });

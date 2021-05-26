@@ -23,17 +23,13 @@ export default function Dashboard(): JSX.Element {
   const history = useHistory();
 
   const getAllUserBoards = async () => {
-    try {
-      const data = await getUserBoards();
-      setBoards(data.boards);
-    } catch (err) {
-      setBoards([]);
-    }
+    const { boards } = await getUserBoards();
+    if (boards) setBoards(boards);
   };
 
   useEffect(() => {
     getAllUserBoards();
-  }, [getAllUserBoards]);
+  }, []);
 
   useEffect(() => {
     initSocket();

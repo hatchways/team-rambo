@@ -7,7 +7,7 @@ const createBoard = async (): Promise<IBoard> => {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   };
-  return await fetch(`/users/board`, fetchOptions)
+  return fetch(`/users/board`, fetchOptions)
     .then((res) => res.json())
     .catch((err) => ({
       error: { error: err, message: 'Unable to connect to server. Please try again' },
