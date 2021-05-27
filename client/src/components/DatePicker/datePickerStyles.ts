@@ -7,7 +7,8 @@ const datePickerStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap',
     },
     textField: {
-      marginLeft: theme.spacing(4),
+      marginLeft: theme.spacing(5.5),
+      paddingBottom: theme.spacing(1),
       width: 200,
     },
   }),

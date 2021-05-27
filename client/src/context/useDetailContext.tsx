@@ -1,50 +1,68 @@
 import { useState, useContext, createContext, FunctionComponent } from 'react';
-import { columnData } from '../components/Kanban/data';
-import { IColumn, ICard, IKanbanContext } from '../context/types/kanban';
-import DialogItem from '../components/CardDialog/DialogItem/DialogItem';
-import cloneDeep from 'lodash.clonedeep';
+import { cardDetailItems } from '../components/CardDialog/initialDetailData';
+import { IDialogItem, IDialogItemContext } from '../context/types/detail';
 
-const initialDetailData: IKanbanContext = {
-  columns: [] as IColumn[],
-  handleDragEnd: () => null,
+const initialDetailData: IDialogItemContext = {
+  items: [] as IDialogItem[],
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  addCard: (_card: ICard) => false,
+  addItem: (_item: IDialogItem) => false,
+  removeItem: (_itemId: string) => false,
+  resetItems: () => false,
 };
 
-export const DetailContext = createContext<IKanbanContext>(initialDetailData);
+export const DialogContext = createContext<IDialogItemContext>(initialDetailData);
 
-export const DetailProvider: FunctionComponent = ({ children }): JSX.Element => {
-  const [items, setItems] = useState<Array<IColumn>>(columnData);
+export const DialogProvider: FunctionComponent = ({ children }): JSX.Element => {
+  const [items, setItems] = useState<Array<IDialogItem>>(cardDetailItems);
 
-  const addCard = (item: JSX.Element): boolean => {
-    const columnsCopy = cloneDeep(columns);
-    const columnIndex = columnsCopy.findIndex((col) => col.id === card.columnId);
-    if (columnIndex > -1) {
-      const columnCopy = cloneDeep(columns[columnIndex]);
-      columnCopy.cards.push(card);
-      columnsCopy[columnIndex] = columnCopy;
-      setItems(columnsCopy);
+  const swapItems = (items: IDialogItem[], source: string, destination: string, itemId: string): IDialogItem[] => {
+    const itemsCopy = [...items];
+    const itemIndex = itemsCopy.findIndex((item: IDialogItem) => item.id === itemId);
+    if (itemIndex > -1) {
+      //    Will need some logic for swapping items
+      //   const [item] = itemsCopy.splice(source.index, 1);
+      //   itemsCopy.splice(destination.index, 0, item);
+      return itemsCopy;
     }
+    return items;
+  };
+
+  const resetItems = (): boolean => {
+    setItems(cardDetailItems);
+    return false;
+  };
+
+  const addItem = (item: IDialogItem): boolean => {
+    const itemsPlusOne = [...items, item];
+    setItems(itemsPlusOne);
+    return false;
+  };
+
+  const removeItem = (itemId: string): boolean => {
+    const remaining = items.filter((item) => item.id !== itemId);
+    console.log(remaining);
+    setItems(remaining);
     return false;
   };
 
   return (
-    <KanbanContext.Provider
+    <DialogContext.Provider
       value={{
-        columns,
-        handleDragEnd,
-        addCard,
+        items,
+        addItem,
+        removeItem,
+        resetItems,
       }}
     >
       {children}
-    </KanbanContext.Provider>
+    </DialogContext.Provider>
   );
 };
 
-export function useKanban(): IKanbanContext {
-  const ctx = useContext(KanbanContext);
+export function useDialog(): IDialogItemContext {
+  const ctx = useContext(DialogContext);
   if (!ctx) {
-    throw new Error('useKanban must be used within KanbanProvider');
+    throw new Error('useDialog must be used within DialogProvider');
   }
   return ctx;
 }

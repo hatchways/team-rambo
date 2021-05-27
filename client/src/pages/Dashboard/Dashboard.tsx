@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import Board from '../../components/Kanban/Board';
 import { KanbanProvider } from '../../context/useKanbanContext';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
+import { DialogProvider } from '../../context/useDetailContext';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
@@ -40,7 +41,9 @@ export default function Dashboard(): JSX.Element {
       <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
         <Grid item xs={10}>
           <KanbanProvider>
-            <Board />
+            <DialogProvider>
+              <Board />
+            </DialogProvider>
           </KanbanProvider>
         </Grid>
       </Grid>

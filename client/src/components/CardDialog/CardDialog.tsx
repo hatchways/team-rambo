@@ -5,21 +5,18 @@ import {
   Box,
   Grid,
   Dialog,
-  TextField,
   Typography,
   DialogActions,
   Divider,
+  DialogContent,
 } from '@material-ui/core';
 import cardDialogStyles from './cardDialogStyles';
 import useColorTagStyles from '../Kanban/shared/colorStyles';
 import { useKanban } from '../../context/useKanbanContext';
 import ClearIcon from '@material-ui/icons/Clear';
-import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
-import ScheduleIcon from '@material-ui/icons/Schedule';
-import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import DatePicker from '../DatePicker/DatePicker';
-import DialogItem from '../CardDialog/DialogItem/DialogItem';
+import DialogItemGroup from './DialogItemGroup/DialogItemGroup';
+import { useDialog } from '../../context/useDetailContext';
 
 type DialogProps = {
   name: string;
@@ -32,7 +29,8 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
   const [open, setOpen] = useState(false);
   const classes = cardDialogStyles();
   const colorClasses = useColorTagStyles({ tag });
-  const { addCard, columns } = useKanban();
+  const { items, addItem, resetItems } = useDialog();
+  const { columns } = useKanban();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -40,6 +38,7 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
 
   const handleClose = () => {
     setOpen(false);
+    resetItems();
   };
 
   const getColNameById = (columnId: string): string => {
@@ -52,7 +51,7 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
       <Button color="primary" variant="contained" size="large" onClick={handleClickOpen} disableElevation>
         Add a card
       </Button>
-      <Dialog open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
+      <Dialog scroll="paper" open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
         <Grid container spacing={3} className={classes.hasMargin}>
           <Grid item xs={12}>
             <Grid container className={classes.titleContainer}>
@@ -68,126 +67,60 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
           </Grid>
         </Grid>
         <Divider className={classes.divider} />
-        <Grid container xs={12} className={classes.hasMargin}>
-          <Grid container xs={10}>
-            <DialogItem
-              title="Description:"
-              content={
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={4}
-                  placeholder="Add description"
-                  variant="outlined"
-                  className={classes.textField}
-                />
-              }
-              icon={<ImportContactsOutlinedIcon />}
-            />
-            {/* <Grid item xs={12} className={classes.mainSection}>
-              <ImportContactsOutlinedIcon color="primary" className={classes.icons} />
-              <Typography variant="h6" className={classes.dialogHeading}>
-                Description:
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                placeholder="Add description"
-                variant="outlined"
-                className={classes.textField}
-              />
-              <Button
-                onClick={() => {
-                  addCard({
-                    name,
-                    columnId: columnId,
-                    id: id,
-                    tag: tag,
-                  });
-                  handleClose();
-                }}
-                className={classes.dialogButton}
-                color="primary"
-                variant="contained"
-                size="large"
-                disableElevation
-              >
-                Save
-              </Button>
-              <IconButton onClick={handleClose}>
-                <ClearIcon color="primary" />
-              </IconButton>
-            </Grid> */}
-            <Grid item xs={12} className={classes.mainSection}>
-              <ScheduleIcon color="primary" className={classes.icons} />
-              <Typography variant="h6" className={classes.dialogHeading}>
-                Deadline:
-              </Typography>
-              <DatePicker />
-            </Grid>
-            <Grid item xs={12} className={classes.mainSection}>
-              <ChatBubbleOutlineIcon color="primary" className={classes.icons} />
-              <Typography variant="h6" className={classes.dialogHeading}>
-                Add comment:
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={2}
-                placeholder="Add description"
-                variant="outlined"
-                className={classes.textField}
-              />
-              <Button
-                onClick={() => {
-                  addCard({
-                    name,
-                    columnId: columnId,
-                    id: id,
-                    tag: tag,
-                  });
-                  handleClose();
-                }}
-                className={classes.dialogButton}
-                color="primary"
-                variant="contained"
-                size="large"
-                disableElevation
-              >
-                Save
-              </Button>
-              <IconButton onClick={handleClose}>
-                <ClearIcon color="primary" />
-              </IconButton>
+        <DialogContent dividers={false}>
+          <Grid container xs={12} className={classes.hasMargin}>
+            <DialogItemGroup items={items} />
+            <Grid container xs={2} direction="column" className={classes.buttonContainer}>
+              <Grid item>
+                <Box className={classes.buttonGroup}>
+                  <Typography variant="caption" className={classes.buttonColumnTitle}>
+                    ADD TO CARD:
+                  </Typography>
+                  <Button className={classes.columnButton}>Tag</Button>
+                  <Button className={classes.columnButton}>Check-list</Button>
+                  <Button
+                    className={classes.columnButton}
+                    onClick={() => {
+                      addItem({
+                        title: 'Deadline:',
+                        content: 'deadline',
+                        icon: 'schedule',
+                        id: `item-${Math.floor(Math.random() * 999999)}`,
+                      });
+                    }}
+                  >
+                    Deadline
+                  </Button>
+                  <Button className={classes.columnButton}>Attachment</Button>
+                  <Button
+                    className={classes.columnButton}
+                    onClick={() => {
+                      addItem({
+                        title: 'Description:',
+                        content: 'description',
+                        icon: 'contacts',
+                        id: `item-${Math.floor(Math.random() * 999999)}`,
+                      });
+                    }}
+                  >
+                    Cover
+                  </Button>
+                </Box>
+              </Grid>
+              <Grid item>
+                <Box className={classes.buttonGroup}>
+                  <Typography variant="caption" className={classes.buttonColumnTitle}>
+                    ACTIONS:
+                  </Typography>
+                  <Button className={classes.columnButton}>Move</Button>
+                  <Button className={classes.columnButton}>Copy</Button>
+                  <Button className={classes.columnButton}>Share</Button>
+                  <Button className={classes.columnButton}>Delete</Button>
+                </Box>
+              </Grid>
             </Grid>
           </Grid>
-          <Grid container xs={2} direction="column" className={classes.buttonContainer}>
-            <Grid item>
-              <Box className={classes.buttonGroup}>
-                <Typography variant="caption" className={classes.buttonColumnTitle}>
-                  ADD TO CARD:
-                </Typography>
-                <Button className={classes.columnButton}>Tag</Button>
-                <Button className={classes.columnButton}>Check-list</Button>
-                <Button className={classes.columnButton}>Deadline</Button>
-                <Button className={classes.columnButton}>Attachment</Button>
-                <Button className={classes.columnButton}>Cover</Button>
-              </Box>
-            </Grid>
-            <Grid item>
-              <Box className={classes.buttonGroup}>
-                <Typography variant="caption" className={classes.buttonColumnTitle}>
-                  ACTIONS:
-                </Typography>
-                <Button className={classes.columnButton}>Move</Button>
-                <Button className={classes.columnButton}>Copy</Button>
-                <Button className={classes.columnButton}>Share</Button>
-                <Button className={classes.columnButton}>Delete</Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </Grid>
+        </DialogContent>
         <DialogActions>
           <IconButton className={classes.topRight} onClick={handleClose}>
             <ClearIcon />
