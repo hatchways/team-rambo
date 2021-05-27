@@ -11,7 +11,7 @@ import getUserBoards from '../../helpers/APICalls/getUserBoards';
 import { IBoard } from '../../interface/Board';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import Board from '../../components/Kanban/Board';
-import { KanbanProvider } from '../../context/useKanbanContext';
+import { KanbanProvider, useKanban } from '../../context/useKanbanContext';
 import useStyles from './dashboardStyles';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 
@@ -20,17 +20,20 @@ export default function Dashboard(): JSX.Element {
   const { loggedInUser } = useAuth();
   const { initSocket } = useSocket();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  const [boards, setBoards] = useState<Array<IBoard>>([]);
   const history = useHistory();
+  const { board } = useKanban();
 
-  const getAllUserBoards = async () => {
-    const { boards } = await getUserBoards();
-    if (boards) setBoards(boards);
-  };
+  // This functionality should live in the drawer instead; moved there
 
-  useEffect(() => {
-    getAllUserBoards();
-  }, []);
+  // const [boards, setBoards] = useState<Array<IBoard>>([]);
+  // const getAllUserBoards = async () => {
+  //   const { boards } = await getUserBoards();
+  //   if (boards) setBoards(boards);
+  // };
+
+  // useEffect(() => {
+  //   getAllUserBoards();
+  // }, []);
 
   useEffect(() => {
     initSocket();
@@ -52,12 +55,7 @@ export default function Dashboard(): JSX.Element {
       <CssBaseline />
       <Box>
         <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
-        <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} boards={boards} />
-      </Box>
-      <Box className={classes.board}>
-        <KanbanProvider>
-          <Board />
-        </KanbanProvider>
+        <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
       </Box>
       <Box className={classes.buttonOverlay}>
         <AddColumnDialog />
