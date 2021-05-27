@@ -8,7 +8,6 @@ const path = require('path');
  * @returns Queue
  */
 const initializeQueue = (queueOptions, queueJobProcessors) => {
-  console.log('Initializing queue...');
   const queue = new Bull(queueOptions.name, queueOptions.options || {
     redis: {
       port: process.env.REDIS_PORT || 6379,
