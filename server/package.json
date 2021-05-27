@@ -26,6 +26,7 @@
     "socket.io": "^4.1.0"
   },
   "devDependencies": {
+    "bull": "^3.22.6",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^8.2.1"
