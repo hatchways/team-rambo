@@ -1,9 +1,10 @@
 import { FetchOptions } from '../../interface/FetchOptions';
 import { IBoard } from '../../interface/Board';
 
-const createBoard = async (): Promise<IBoard> => {
+const createBoard = async (name: string): Promise<IBoard> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
+    body: JSON.stringify({ name }),
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   };
