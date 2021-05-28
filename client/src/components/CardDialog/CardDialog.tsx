@@ -163,7 +163,19 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
                   >
                     Attachment
                   </Button>
-                  <Button className={classes.columnButton}>Check-list</Button>
+                  <Button
+                    className={hasItem('checklist') ? classes.columnButtonActive : classes.columnButton}
+                    onClick={() => {
+                      addItem({
+                        title: 'Checklist:',
+                        content: 'checklist',
+                        icon: 'checklist',
+                        id: `item-${Math.floor(Math.random() * 999999)}`,
+                      });
+                    }}
+                  >
+                    Check-list
+                  </Button>
                 </Box>
               </Grid>
               <Grid item>
