@@ -7,6 +7,7 @@ import { IKanbanContext } from '../interface/KanbanContext';
 import { IColumn } from '../interface/Column';
 import { ICard } from '../interface/Card';
 import { IBoard } from '../interface/Board';
+import { useAuth } from './useAuthContext';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
@@ -22,10 +23,13 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const [columns, setColumns] = useState<IColumn[]>(activeBoard.columns);
   const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
   const { updateSnackBarMessage } = useSnackBar();
+  const { loggedInUser } = useAuth();
 
   useEffect(() => {
-    getFirstBoard();
-  }, []);
+    if (loggedInUser) getFirstBoard();
+
+    return;
+  }, [loggedInUser]);
 
   // Helper function to set the first board;
   const getFirstBoard = async () => {
