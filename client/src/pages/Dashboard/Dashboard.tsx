@@ -14,6 +14,7 @@ import Board from '../../components/Kanban/Board';
 import { KanbanProvider } from '../../context/useKanbanContext';
 import useStyles from './dashboardStyles';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
+import { DialogProvider } from '../../context/useDetailContext';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
@@ -54,18 +55,15 @@ export default function Dashboard(): JSX.Element {
         <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
         <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} boards={boards} />
       </Box>
-      <Box className={classes.board}>
-        <KanbanProvider>
-          <Board />
-        </KanbanProvider>
-      </Box>
       <Box className={classes.buttonOverlay}>
         <AddColumnDialog />
       </Box>
       <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
         <Grid item xs={10}>
           <KanbanProvider>
-            <Board />
+            <DialogProvider>
+              <Board />
+            </DialogProvider>
           </KanbanProvider>
         </Grid>
       </Grid>

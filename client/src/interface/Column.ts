@@ -1,8 +1,8 @@
-import { Card } from './Card';
+import { ICard } from './Card';
 
-export interface Column {
-  _id: string;
+export interface IColumn {
+  id: string;
   name: string;
-  cards: Array<Card>;
-  createdAt: string;
+  cards: Array<ICard>;
+  createdAt: Date;
 }
