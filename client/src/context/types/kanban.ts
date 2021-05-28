@@ -10,14 +10,14 @@ export interface IBoard {
 }
 
 export interface IColumn {
-  id: string;
+  _id: string;
   name: string;
   cards: ICard[];
   createdAt?: Date;
 }
 
 export interface ICard {
-  id: string;
+  _id: string;
   columnId: string;
   name: string;
   description?: string;
