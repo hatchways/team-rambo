@@ -1,5 +1,7 @@
 import { DropResult } from 'react-beautiful-dnd';
 
+// Will createdAt be a string or date? Inconsistency
+
 export interface IBoard {
   _id: string;
   name: string;
@@ -27,8 +29,8 @@ export interface ICard {
 }
 
 export interface IKanbanContext {
-  columns: IColumn[];
+  activeBoard: IBoard;
   handleDragEnd: (result: DropResult) => void;
   addCard: (card: ICard) => boolean;
-  getFirstBoard: () => Promise<IBoard>;
+  setActiveBoard: (value: IBoard) => void;
 }
