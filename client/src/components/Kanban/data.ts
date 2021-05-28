@@ -2,7 +2,7 @@ import { IColumn } from '../../context/types/kanban';
 
 export const columnData: IColumn[] = [
   {
-    id: 'col-1',
+    _id: 'col-1',
     name: 'Philosophy',
     cards: [
       {
@@ -14,7 +14,7 @@ export const columnData: IColumn[] = [
     ],
   },
   {
-    id: 'col-2',
+    _id: 'col-2',
     name: 'Math',
     cards: [
       {
@@ -27,7 +27,7 @@ export const columnData: IColumn[] = [
     ],
   },
   {
-    id: 'col-3',
+    _id: 'col-3',
     name: 'In Progress',
     cards: [
       {
@@ -40,7 +40,7 @@ export const columnData: IColumn[] = [
     ],
   },
   {
-    id: 'col-4',
+    _id: 'col-4',
     name: 'Done',
     cards: [
       {
