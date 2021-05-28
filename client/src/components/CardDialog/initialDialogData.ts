@@ -1,6 +1,6 @@
-import { IDialogItem } from '../../interface/detail';
+import { IDialogItem } from '../../interface/DialogItem';
 
-export const cardDetailItems: IDialogItem[] = [
+export const cardDialogItems: IDialogItem[] = [
   {
     title: 'Description:',
     content: 'description',

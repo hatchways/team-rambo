@@ -1,18 +1,19 @@
 import { useState, useContext, createContext, FunctionComponent } from 'react';
-import { cardDetailItems } from '../components/CardDialog/initialDetailData';
-import { IDialogItem, IDialogItemContext } from '../interface/detail';
+import { cardDialogItems } from '../components/CardDialog/initialDialogData';
+import { IDialogItem } from '../interface/DialogItem';
+import { IDialogItemContext } from '../interface/DialogItemContext';
 
 export const DialogContext = createContext<IDialogItemContext>({} as IDialogItemContext);
 
 export const DialogProvider: FunctionComponent = ({ children }): JSX.Element => {
-  const [items, setItems] = useState<Array<IDialogItem>>(cardDetailItems);
+  const [items, setItems] = useState<Array<IDialogItem>>(cardDialogItems);
 
   const hasItem = (itemContent: string): boolean => {
     return items.findIndex((item: IDialogItem) => item.content === itemContent) > -1 ? true : false;
   };
 
   const resetItems = (): void => {
-    setItems(cardDetailItems);
+    setItems(cardDialogItems);
   };
 
   const addItem = (item: IDialogItem): void => {

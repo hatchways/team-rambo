@@ -1,17 +1,17 @@
 import { cloneElement } from 'react';
 import { Button, IconButton, Grid, Box, TextField, Typography } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
+import ClearIcon from '@material-ui/icons/Clear';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import AttachFileOutlinedIcon from '@material-ui/icons/AttachFileOutlined';
-import dialogItemStyles from './dialogItemStyles';
-import { IDialogItem } from '../../../interface/detail';
-import DatePicker from '../../DatePicker/DatePicker';
-import CheckList from '../../CheckList/CheckList';
+import { IDialogItem } from '../../../interface/DialogItem';
 import { useDialog } from '../../../context/useDetailContext';
+import CheckList from '../CheckList/CheckList';
+import DatePicker from '../DatePicker/DatePicker';
+import dialogItemStyles from './dialogItemStyles';
 
 type ItemProps = IDialogItem;
 
