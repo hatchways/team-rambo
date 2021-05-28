@@ -20,9 +20,7 @@ import { IColumn } from '../../interface/Column';
 import DialogItemGroup from './DialogItemGroup/DialogItemGroup';
 import cardDialogStyles from './cardDialogStyles';
 import useColorTagStyles from '../Kanban/shared/colorStyles';
-import { useSnackBar } from '../../context/useSnackbarContext';
-import { useDialog } from '../../context/useDetailContext';
-import { useKanban } from '../../context/useKanbanContext';
+import { useSnackBar, useDialog, useKanban } from '../../context/';
 
 interface DialogProps {
   name: string;
