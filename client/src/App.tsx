@@ -1,14 +1,11 @@
 import { MuiThemeProvider } from '@material-ui/core';
-import { theme } from './themes/theme';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { theme } from './themes/theme';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
 import ProtectedRoute from '../src/components/ProtectedRoute';
-import { AuthProvider } from './context/useAuthContext';
-import { SocketProvider } from './context/useSocketContext';
-import { SnackBarProvider } from './context/useSnackbarContext';
-import { KanbanProvider } from './context/useKanbanContext';
+import { AuthProvider, SocketProvider, SnackBarProvider, KanbanProvider, DialogProvider } from './context/';
 
 const App = (): JSX.Element => (
   <MuiThemeProvider theme={theme}>
@@ -17,14 +14,16 @@ const App = (): JSX.Element => (
         <AuthProvider>
           <SocketProvider>
             <KanbanProvider>
-              <Switch>
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/signup" component={Signup} />
-                <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                <Route path="*">
-                  <Redirect to="/login" />
-                </Route>
-              </Switch>
+              <DialogProvider>
+                <Switch>
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/signup" component={Signup} />
+                  <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+                  <Route path="*">
+                    <Redirect to="/login" />
+                  </Route>
+                </Switch>
+              </DialogProvider>
             </KanbanProvider>
           </SocketProvider>
         </AuthProvider>
