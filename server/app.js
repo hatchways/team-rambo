@@ -9,7 +9,7 @@ const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-const initializeQueue = require('./queue/initializer');
+const initializeQueue = require('./queue/initialize');
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
