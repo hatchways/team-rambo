@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
-const cardDialogStyles = makeStyles(() => ({
+const cardDialogStyles = makeStyles((theme: Theme) => ({
   textField: {
     display: 'flex',
     width: '100%',
@@ -29,7 +29,7 @@ const cardDialogStyles = makeStyles(() => ({
     display: 'inline',
   },
   dialogSubTitle: {
-    color: '#9ba9cc',
+    color: theme.palette.secondary.main,
     margin: '2px 0 5px 6%',
   },
   dialogHeading: {
@@ -39,12 +39,28 @@ const cardDialogStyles = makeStyles(() => ({
   },
   dialogButton: { padding: '5px 20px', margin: '0 0 0 6.5%' },
   columnButton: {
-    backgroundColor: '#F4F6FF',
-    color: '#9ba9cc',
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.secondary.main,
     padding: '5px 0',
     margin: '2px 5px',
     border: 'none',
     width: '90px',
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+    },
+  },
+  columnButtonActive: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    padding: '5px 0',
+    margin: '2px 5px',
+    border: 'none',
+    width: '90px',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.secondary.main,
+    },
   },
   buttonContainer: { display: 'flex', alignItems: 'center', justify: 'flex-start', padding: '18px 0px 0 25px' },
   buttonGroup: { paddingTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'left' },
@@ -54,7 +70,7 @@ const cardDialogStyles = makeStyles(() => ({
     top: '1%',
   },
   buttonColumnTitle: {
-    color: '#9ba9cc',
+    color: theme.palette.secondary.main,
     margin: '0 5px',
   },
   divider: {
@@ -71,6 +87,11 @@ const cardDialogStyles = makeStyles(() => ({
     height: 8,
     borderRadius: 9999,
     marginLeft: '15px',
+  },
+  cardTagCentered: {
+    width: 50,
+    height: 8,
+    borderRadius: 9999,
   },
 }));
 

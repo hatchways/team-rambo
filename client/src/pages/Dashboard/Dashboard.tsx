@@ -55,11 +55,6 @@ export default function Dashboard(): JSX.Element {
         <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
         <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} boards={boards} />
       </Box>
-      <Box className={classes.board}>
-        <KanbanProvider>
-          <Board />
-        </KanbanProvider>
-      </Box>
       <Box className={classes.buttonOverlay}>
         <AddColumnDialog />
       </Box>

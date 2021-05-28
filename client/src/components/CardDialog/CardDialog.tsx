@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import {
   Button,
   IconButton,
+  Menu,
+  MenuItem,
   Box,
   Grid,
   Dialog,
@@ -9,12 +11,13 @@ import {
   DialogActions,
   Divider,
   DialogContent,
+  useTheme,
 } from '@material-ui/core';
 import cardDialogStyles from './cardDialogStyles';
-import useColorTagStyles from '../Kanban/shared/colorStyles';
 import { useKanban } from '../../context/useKanbanContext';
 import ClearIcon from '@material-ui/icons/Clear';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import SettingsIcon from '@material-ui/icons/Settings';
 import DialogItemGroup from './DialogItemGroup/DialogItemGroup';
 import { useDialog } from '../../context/useDetailContext';
 
@@ -25,12 +28,23 @@ type DialogProps = {
   id: string;
 };
 
-const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps): JSX.Element => {
+const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const classes = cardDialogStyles();
-  const colorClasses = useColorTagStyles({ tag });
-  const { items, addItem, resetItems } = useDialog();
+  const theme = useTheme();
+  const { items, addItem, resetItems, hasItem } = useDialog();
   const { columns } = useKanban();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [tagColor, setTagColor] = useState(tag);
+
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = (tag: string) => {
+    setAnchorEl(null);
+    setTagColor(tag);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -59,7 +73,22 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
               <Typography variant="h5" className={classes.dialogTitle}>
                 {name}
               </Typography>
-              <Box className={`${classes.cardTag} ${colorClasses.cardTagColor}`}></Box>
+              <Box className={`${classes.cardTag}`} style={{ backgroundColor: theme.palette.tags[tagColor] }}></Box>
+              <IconButton onClick={handleClick}>
+                <SettingsIcon className={classes.icons} />
+              </IconButton>
+              <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                {Object.keys(theme.palette.tags).map((tag: string): JSX.Element => {
+                  return (
+                    <MenuItem onClick={() => handleMenuClose(tag)} key={`${columnId}-${tag}`}>
+                      <Box
+                        style={{ backgroundColor: theme.palette.tags[tag] }}
+                        className={classes.cardTagCentered}
+                      ></Box>
+                    </MenuItem>
+                  );
+                })}
+              </Menu>
             </Grid>
             <Typography variant="body2" className={classes.dialogSubTitle}>
               {`In list "${getColNameById(columnId)}"`}
@@ -74,12 +103,23 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
               <Grid item>
                 <Box className={classes.buttonGroup}>
                   <Typography variant="caption" className={classes.buttonColumnTitle}>
-                    ADD TO CARD:
+                    SECTIONS:
                   </Typography>
-                  <Button className={classes.columnButton}>Tag</Button>
-                  <Button className={classes.columnButton}>Check-list</Button>
                   <Button
-                    className={classes.columnButton}
+                    className={hasItem('description') ? classes.columnButtonActive : classes.columnButton}
+                    onClick={() => {
+                      addItem({
+                        title: 'Description:',
+                        content: 'description',
+                        icon: 'contacts',
+                        id: `item-${Math.floor(Math.random() * 999999)}`,
+                      });
+                    }}
+                  >
+                    Description
+                  </Button>
+                  <Button
+                    className={hasItem('deadline') ? classes.columnButtonActive : classes.columnButton}
                     onClick={() => {
                       addItem({
                         title: 'Deadline:',
@@ -91,20 +131,33 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
                   >
                     Deadline
                   </Button>
-                  <Button className={classes.columnButton}>Attachment</Button>
                   <Button
-                    className={classes.columnButton}
+                    className={hasItem('comment') ? classes.columnButtonActive : classes.columnButton}
                     onClick={() => {
                       addItem({
-                        title: 'Description:',
-                        content: 'description',
-                        icon: 'contacts',
+                        title: 'Comment:',
+                        content: 'comment',
+                        icon: 'bubble',
                         id: `item-${Math.floor(Math.random() * 999999)}`,
                       });
                     }}
                   >
-                    Cover
+                    Comment
                   </Button>
+                  <Button
+                    className={hasItem('attachment') ? classes.columnButtonActive : classes.columnButton}
+                    onClick={() => {
+                      addItem({
+                        title: 'Attachments:',
+                        content: 'attachment',
+                        icon: 'attachment',
+                        id: `item-${Math.floor(Math.random() * 999999)}`,
+                      });
+                    }}
+                  >
+                    Attachment
+                  </Button>
+                  <Button className={classes.columnButton}>Check-list</Button>
                 </Box>
               </Grid>
               <Grid item>

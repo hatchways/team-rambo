@@ -1,48 +1,31 @@
 import { useState, useContext, createContext, FunctionComponent } from 'react';
 import { cardDetailItems } from '../components/CardDialog/initialDetailData';
-import { IDialogItem, IDialogItemContext } from '../context/types/detail';
+import { IDialogItem, IDialogItemContext } from '../interface/detail';
 
-const initialDetailData: IDialogItemContext = {
-  items: [] as IDialogItem[],
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  addItem: (_item: IDialogItem) => false,
-  removeItem: (_itemId: string) => false,
-  resetItems: () => false,
-};
-
-export const DialogContext = createContext<IDialogItemContext>(initialDetailData);
+export const DialogContext = createContext<IDialogItemContext>({} as IDialogItemContext);
 
 export const DialogProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [items, setItems] = useState<Array<IDialogItem>>(cardDetailItems);
 
-  const swapItems = (items: IDialogItem[], source: string, destination: string, itemId: string): IDialogItem[] => {
-    const itemsCopy = [...items];
-    const itemIndex = itemsCopy.findIndex((item: IDialogItem) => item.id === itemId);
-    if (itemIndex > -1) {
-      //    Will need some logic for swapping items
-      //   const [item] = itemsCopy.splice(source.index, 1);
-      //   itemsCopy.splice(destination.index, 0, item);
-      return itemsCopy;
-    }
-    return items;
+  const hasItem = (itemContent: string): boolean => {
+    return items.findIndex((item: IDialogItem) => item.content === itemContent) > -1 ? true : false;
   };
 
-  const resetItems = (): boolean => {
+  const resetItems = (): void => {
     setItems(cardDetailItems);
-    return false;
   };
 
-  const addItem = (item: IDialogItem): boolean => {
-    const itemsPlusOne = [...items, item];
-    setItems(itemsPlusOne);
-    return false;
+  const addItem = (item: IDialogItem): void => {
+    if (!hasItem(item.content)) {
+      const itemsPlusOne = [...items, item];
+      setItems(itemsPlusOne);
+    }
   };
 
-  const removeItem = (itemId: string): boolean => {
+  const removeItem = (itemId: string): void => {
     const remaining = items.filter((item) => item.id !== itemId);
     console.log(remaining);
     setItems(remaining);
-    return false;
   };
 
   return (
@@ -52,6 +35,7 @@ export const DialogProvider: FunctionComponent = ({ children }): JSX.Element => 
         addItem,
         removeItem,
         resetItems,
+        hasItem,
       }}
     >
       {children}

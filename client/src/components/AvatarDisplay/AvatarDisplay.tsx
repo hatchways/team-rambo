@@ -63,7 +63,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
         <MenuItem onClick={handleProfile}>Profile</MenuItem>
       </Menu>
-      <PictureModal open={openImageModal} setOpen={handleProfile} />;
+      <PictureModal open={openImageModal} setOpen={handleProfile} />
     </div>
   );
 };
