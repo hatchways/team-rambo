@@ -31,7 +31,7 @@ type DialogProps = {
   id: string;
 };
 
-const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps): JSX.Element => {
+const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
   const [column, setColumn] = useState<IColumn | null>(null);
   const classes = cardDialogStyles();
