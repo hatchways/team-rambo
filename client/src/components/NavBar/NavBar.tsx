@@ -22,6 +22,9 @@ interface Props {
 const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
   const classes = useStyles();
 
+  // Need to grab the active board from context and use it's information here instead
+  // Title, anything else, etc
+
   return (
     <Container className={classes.root}>
       <Grid container spacing={4} direction="row" alignItems="center" justify="center" className={classes.statusBar}>
