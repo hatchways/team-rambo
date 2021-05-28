@@ -4,6 +4,7 @@ export const columnData: IColumn[] = [
   {
     id: 'col-1',
     name: 'Philosophy',
+    createdAt: new Date(),
     cards: [
       {
         id: 'car-1',
@@ -16,6 +17,7 @@ export const columnData: IColumn[] = [
   {
     id: 'col-2',
     name: 'Math',
+    createdAt: new Date(),
     cards: [
       {
         id: 'car-2',
@@ -29,6 +31,7 @@ export const columnData: IColumn[] = [
   {
     id: 'col-3',
     name: 'In Progress',
+    createdAt: new Date(),
     cards: [
       {
         id: 'car-3',

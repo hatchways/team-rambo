@@ -12,7 +12,7 @@ const AddBoardDialog = (): JSX.Element => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = async () => {
     setOpen(false);
   };
 

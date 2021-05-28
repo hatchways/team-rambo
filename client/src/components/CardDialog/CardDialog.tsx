@@ -92,7 +92,7 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
                   addCard({
                     name,
                     columnId: columnId,
-                    id: id,
+                    id,
                     tag: tag,
                   });
                   handleClose();
@@ -134,7 +134,7 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
                   addCard({
                     name,
                     columnId: columnId,
-                    id: id,
+                    id,
                     tag: tag,
                   });
                   handleClose();
