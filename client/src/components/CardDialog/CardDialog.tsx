@@ -21,7 +21,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { IColumn } from '../../interface/Column';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import DialogItemGroup from './DialogItemGroup/DialogItemGroup';
-import { useDialog } from '../../context/useDetailContext';
+import { useDialog } from '../../context/useDialogContext';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 
 type DialogProps = {
