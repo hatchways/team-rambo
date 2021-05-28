@@ -8,14 +8,15 @@ import ProtectedRoute from '../src/components/ProtectedRoute';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
+import { KanbanProvider } from './context/useKanbanContext';
 
-function App(): JSX.Element {
-  return (
-    <MuiThemeProvider theme={theme}>
-      <BrowserRouter>
-        <SnackBarProvider>
-          <AuthProvider>
-            <SocketProvider>
+const App = (): JSX.Element => (
+  <MuiThemeProvider theme={theme}>
+    <BrowserRouter>
+      <SnackBarProvider>
+        <AuthProvider>
+          <SocketProvider>
+            <KanbanProvider>
               <Switch>
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
@@ -24,12 +25,12 @@ function App(): JSX.Element {
                   <Redirect to="/login" />
                 </Route>
               </Switch>
-            </SocketProvider>
-          </AuthProvider>
-        </SnackBarProvider>
-      </BrowserRouter>
-    </MuiThemeProvider>
-  );
-}
+            </KanbanProvider>
+          </SocketProvider>
+        </AuthProvider>
+      </SnackBarProvider>
+    </BrowserRouter>
+  </MuiThemeProvider>
+);
 
 export default App;
