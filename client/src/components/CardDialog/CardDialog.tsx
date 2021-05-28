@@ -20,6 +20,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import DatePicker from '../DatePicker/DatePicker';
 import { IColumn } from '../../interface/Column';
+import { useSnackBar } from '../../context/useSnackbarContext';
 
 type DialogProps = {
   name: string;
@@ -32,6 +33,7 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
   const [open, setOpen] = useState(true);
   const [column, setColumn] = useState<IColumn | null>(null);
   const classes = cardDialogStyles();
+  const { updateSnackBarMessage } = useSnackBar();
   const colorClasses = useColorTagStyles({ tag });
   const { addCard, resetOpenCard, getColumnById } = useKanban();
 
@@ -41,7 +43,12 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
   };
 
   useEffect(() => {
-    setColumn(getColumnById(columnId));
+    const column = getColumnById(columnId);
+    if (!column) {
+      updateSnackBarMessage('Column does not exist anymore');
+      handleClose();
+    }
+    setColumn(column);
     return () => {
       setColumn(null);
     };
@@ -60,7 +67,7 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
               <Box className={`${classes.cardTag} ${colorClasses.cardTagColor}`}></Box>
             </Grid>
             <Typography variant="body2" className={classes.dialogSubTitle}>
-              {`In list "${column?.name || 'None'}"`}
+              {`In list "${column?.name}"`}
             </Typography>
           </Grid>
         </Grid>
