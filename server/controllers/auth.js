@@ -1,4 +1,4 @@
-const { Board } = require("../models/Board");
+const Board = require("../models/Board");
 const { User } = require("../models/User");
 
 const asyncHandler = require("express-async-handler");

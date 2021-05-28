@@ -1,0 +1,98 @@
+const asyncHandler = require("express-async-handler");
+const { User } = require("../models/User");
+const Board = require("../models/Board");
+
+exports.getBoards = asyncHandler(async (req, res) => {
+  const boards = await Board.find();
+
+  return res.json(boards);
+});
+
+exports.getBoard = asyncHandler(async (req, res) => {
+  try {
+    const board = await Board.findById(req.params.id);
+
+    console.log(board);
+    if (!board) res.status(404).json({ error: "Board not found" });
+
+    return res.status(200).json(board);
+  } catch (error) {
+    return res.json(error);
+  }
+});
+
+// createBoard should be in boards controller + routes instead of users
+exports.createBoard = asyncHandler(async (req, res) => {
+  const { name } = req.body;
+  const newBoard = await Board.create({
+    name: name,
+    columns: [
+      {
+        name: "Not Started",
+        cards: [
+          {
+            _id: "car-1",
+            columnId: "col-1",
+            name: "Essay on the environment",
+            tag: "green",
+          },
+        ],
+        createdAt: Date.now(),
+      },
+      {
+        name: "In Progress",
+        cards: [
+          {
+            _id: "car-2",
+            columnId: "col-2",
+            name: "Midterm exam",
+            dueDate: new Date(),
+            tag: "red",
+          },
+          {
+            _id: "car-3",
+            columnId: "car-3",
+            name: "Homework",
+            tag: "red",
+          },
+        ],
+        createdAt: Date.now(),
+      },
+      {
+        name: "Completed",
+        cards: [],
+        createdAt: Date.now(),
+      },
+    ],
+    user: req.user.id,
+  });
+
+  return res.status(200).json({ board: newBoard });
+});
+
+exports.updateBoard = asyncHandler(async (req, res, next) => {
+  // This needs to be fixed according to a non-double-stringified body from frontend
+  const { id } = req.params;
+  const { board } = req.body;
+  const temp = JSON.parse(board);
+  const boardValues = JSON.parse(temp);
+
+  try {
+    const filter = { _id: id };
+    const update = {
+      name: boardValues.name,
+      columns: boardValues.columns,
+    };
+
+    const board = await Board.findOneAndUpdate(filter, update, {
+      new: true,
+    });
+
+    //@ts-ignore
+    const newBoard = board.removePassword();
+
+    return res.status(200).json(newBoard);
+  } catch (error) {
+    return res.json(error);
+  }
+});

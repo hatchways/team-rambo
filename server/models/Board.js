@@ -28,4 +28,5 @@ boardSchema.methods.removePassword = function () {
   return object;
 };
 
-module.exports = { Board: mongoose.model("board", boardSchema), boardSchema };
+const Board = mongoose.model("board", boardSchema);
+module.exports = Board;
