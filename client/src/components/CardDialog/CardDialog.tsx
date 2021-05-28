@@ -13,16 +13,15 @@ import {
   DialogContent,
   useTheme,
 } from '@material-ui/core';
-import cardDialogStyles from './cardDialogStyles';
-import useColorTagStyles from '../Kanban/shared/colorStyles';
-import { useKanban } from '../../context/useKanbanContext';
 import ClearIcon from '@material-ui/icons/Clear';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { IColumn } from '../../interface/Column';
-import { useSnackBar } from '../../context/useSnackbarContext';
-import DialogItemGroup from './DialogItemGroup/DialogItemGroup';
-import { useDialog } from '../../context/useDialogContext';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
+import useColorTagStyles from '../Kanban/shared/colorStyles';
+import { useSnackBar } from '../../context/useSnackbarContext';
+import { useKanban } from '../../context/useKanbanContext';
+import { useDialog } from '../../context/useDialogContext';
+import { IColumn } from '../../interface/Column';
+import { cardDialogStyles, DialogItemGroup } from '../CardDialog';
 
 type DialogProps = {
   name: string;

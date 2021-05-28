@@ -8,7 +8,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import AttachFileOutlinedIcon from '@material-ui/icons/AttachFileOutlined';
 import { IDialogItem } from '../../../interface/DialogItem';
-import { useDialog } from '../../../context/useDetailContext';
+import { useDialog } from '../../../context/useDialogContext';
 import CheckList from '../CheckList/CheckList';
 import DatePicker from '../DatePicker/DatePicker';
 import dialogItemStyles from './dialogItemStyles';
