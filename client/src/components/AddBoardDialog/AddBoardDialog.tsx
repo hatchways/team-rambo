@@ -55,6 +55,7 @@ const AddBoardDialog = ({ onAddNewBoard }: Props): JSX.Element => {
     if (!error) {
       setOpenAlert({ open: true, message: 'Board created', severity: 'success' });
       onAddNewBoard(board);
+      handleClose();
       return;
     }
     setOpenAlert({ open: true, message: 'Could not create board!', severity: 'error' });
