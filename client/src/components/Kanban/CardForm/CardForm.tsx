@@ -30,7 +30,7 @@ const CardForm = ({ columnId }: CardFormProps): JSX.Element => {
 
   return (
     <Box>
-      {formIsOpen ? <InnerForm columnId={columnId} formAction={setFormIsOpen} /> : null}
+      {formIsOpen && <InnerForm columnId={columnId} formAction={setFormIsOpen} />}
       {!formIsOpen && (
         <Button
           onClick={openForm}
