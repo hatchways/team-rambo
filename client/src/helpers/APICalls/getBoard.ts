@@ -1,5 +1,5 @@
+import { IBoard } from '../../context/types/kanban';
 import { FetchOptions } from '../../interface/FetchOptions';
-import { IBoard } from '../../interface/Board';
 
 const getBoard = async (id: string): Promise<IBoard> => {
   const fetchOptions: FetchOptions = {
