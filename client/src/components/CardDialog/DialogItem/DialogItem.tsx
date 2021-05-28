@@ -6,18 +6,16 @@ import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import dialogItemStyles from './dialogItemStyles';
-import { IDialogItem } from '../../../context/types/detail';
 import DatePicker from '../../DatePicker/DatePicker';
-import { useDialog } from '../../../context/useDetailContext';
-
-type ItemProps = IDialogItem;
+import { IDialogItem } from '../../../context/types/detail';
+import { useDialog } from '../../../context/';
 
 const DialogItem = ({
   title = 'blank',
   content = 'description',
   icon = 'clear',
   id = 'testId',
-}: ItemProps): JSX.Element => {
+}: IDialogItem): JSX.Element => {
   const classes = dialogItemStyles();
   const { removeItem } = useDialog();
 

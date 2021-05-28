@@ -1,7 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import { Draggable } from 'react-beautiful-dnd';
-import { useKanban } from '../../../context/useKanbanContext';
+import { useKanban } from '../../../context/';
 import useColorTagStyles from '../shared/colorStyles';
 import useStyles from './useStyles';
 
@@ -12,6 +12,7 @@ type CardProps = {
   index: number;
   tag: string;
 };
+
 const Card = ({ id, name, tag = 'white', columnId, index }: CardProps): JSX.Element => {
   const { setOpenCard } = useKanban();
   const classes = useStyles();
@@ -24,11 +25,13 @@ const Card = ({ id, name, tag = 'white', columnId, index }: CardProps): JSX.Elem
             <Box
               onClick={() => {
                 setOpenCard({
-                  id,
+                  _id: id,
                   name,
                   tag,
                   columnId,
                 });
+
+                return;
               }}
               className={clsx(classes.card, snapshot.isDragging && classes.cardDragging)}
             >

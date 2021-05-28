@@ -1,4 +1,4 @@
-import { IBoard } from '../../context/types/kanban';
+import { IBoard } from '../../interface/Board';
 import { FetchOptions } from '../../interface/FetchOptions';
 
 export const createBoard = async (): Promise<IBoard> => {
