@@ -1,30 +1,25 @@
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
-import Typography from '@material-ui/core/Typography';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import Drawer from '@material-ui/core/Drawer';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+import { Typography, ListItem, ListItemText, ListItemIcon, List, Divider, Drawer } from '@material-ui/core';
 import SwapHorizontalCircleOutlinedIcon from '@material-ui/icons/SwapHorizontalCircleOutlined';
 import useStyles from './optionsDrawerStyles';
-import getUserBoards from '../../helpers/APICalls/getUserBoards';
-import getBoard from '../../helpers/APICalls/getBoard';
-import { IBoard } from '../../context/types/kanban';
+import { getUserBoards, getBoard } from '../../helpers/';
+import { useKanban } from '../../context/useKanbanContext';
+import { IBoard } from '../../interface/Board';
 
 interface Props {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  setActiveBoard: Dispatch<SetStateAction<IBoard | null>>;
 }
 
-const OptionsDrawer = ({ open, setActiveBoard, setOpen }: Props): JSX.Element => {
+const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
   const classes = useStyles();
   const [boards, setBoards] = useState<Array<IBoard>>([]);
+  const { setActiveBoard } = useKanban();
 
   const fetchBoard = async (id: string): Promise<IBoard> => {
     const request = await getBoard(id);
     setActiveBoard(request);
+    setOpen((prevOpen) => !prevOpen);
 
     return request;
   };
@@ -32,13 +27,13 @@ const OptionsDrawer = ({ open, setActiveBoard, setOpen }: Props): JSX.Element =>
   const getAllUserBoards = async () => {
     const { boards } = await getUserBoards();
     if (boards) setBoards(boards);
+
+    return undefined;
   };
 
   useEffect(() => {
     getAllUserBoards();
   }, []);
-
-  // On click of the item, should set our active board
 
   return (
     <Drawer anchor={'right'} open={open} onClose={setOpen}>

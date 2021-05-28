@@ -3,6 +3,8 @@ const { User } = require("../models/User");
 
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const sendEmail = require("../utils/sendEmail");
+const sgMail = require("@sendgrid/mail");
 
 // @route POST /auth/register
 // @desc Register user
@@ -66,7 +68,11 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 exports.loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  // Sending email using templated Email through SendGrid
+
+  await sendEmail();
+
+  const user = await User.findOne({ email }).select("+password");
 
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(user._id);

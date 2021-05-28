@@ -3,7 +3,7 @@ import { Box, Grid, CssBaseline, CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
-import { KanbanProvider, useKanban } from '../../context/useKanbanContext';
+import { useKanban } from '../../context/useKanbanContext';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
@@ -37,16 +37,14 @@ const Dashboard = (): JSX.Element => {
       <CssBaseline />
       <Box>
         <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
-        <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} setActiveBoard={() => console.log('sup')} />
+        <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
       </Box>
       <Box className={classes.buttonOverlay}>
         <AddColumnDialog />
       </Box>
       <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
         <Grid item xs={10}>
-          <KanbanProvider>
-            <Board activeBoard={activeBoard} />
-          </KanbanProvider>
+          <Board activeBoard={activeBoard} />
         </Grid>
       </Grid>
     </Box>

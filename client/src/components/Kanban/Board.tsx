@@ -2,6 +2,7 @@ import { Grid } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { IBoard } from '../../context/types/kanban';
 import { useKanban } from '../../context/useKanbanContext';
+import { FocusCard } from './FocusCard/FocusCard';
 import Column from './Column/Column';
 
 const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element => {
@@ -9,6 +10,7 @@ const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element => {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
+      <FocusCard />
       <Grid container>
         {activeBoard.columns.map((column) => (
           <Column key={column._id} id={column._id} name={column.name} cards={column.cards} />

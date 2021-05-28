@@ -1,7 +1,7 @@
 import { AuthApiData } from '../../interface/AuthApiData';
 import { FetchOptions } from '../../interface/FetchOptions';
 
-const logout = async (): Promise<AuthApiData> => {
+export const logout = async (): Promise<AuthApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'GET',
     credentials: 'include',
@@ -12,5 +12,3 @@ const logout = async (): Promise<AuthApiData> => {
       error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
-
-export default logout;

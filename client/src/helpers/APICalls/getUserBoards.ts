@@ -1,12 +1,12 @@
 import { FetchOptions } from '../../interface/FetchOptions';
-import { IBoard } from '../../context/types/kanban';
+import { IBoard } from '../../interface/Board';
 
 interface BoardApiData {
   boards: Array<IBoard>;
   error?: { message: string };
 }
 
-const getUserBoards = async (): Promise<BoardApiData> => {
+export const getUserBoards = async (): Promise<BoardApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
@@ -18,5 +18,3 @@ const getUserBoards = async (): Promise<BoardApiData> => {
       error: { error: err, message: 'Unable to connect to server. Please try again' },
     }));
 };
-
-export default getUserBoards;

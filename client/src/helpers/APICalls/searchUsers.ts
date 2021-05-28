@@ -5,7 +5,7 @@ interface Props {
   search: string;
 }
 
-export async function searchUsers({ search }: Props): Promise<SearchUsersApiData> {
+export const searchUsers = async ({ search }: Props): Promise<SearchUsersApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'GET',
     credentials: 'include',
@@ -15,4 +15,4 @@ export async function searchUsers({ search }: Props): Promise<SearchUsersApiData
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },
     }));
-}
+};
