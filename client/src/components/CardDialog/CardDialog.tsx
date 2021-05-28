@@ -9,6 +9,7 @@ import {
   DialogActions,
   Divider,
   DialogContent,
+  TextField,
 } from '@material-ui/core';
 import cardDialogStyles from './cardDialogStyles';
 import useColorTagStyles from '../Kanban/shared/colorStyles';
@@ -22,6 +23,7 @@ import { IColumn } from '../../interface/Column';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import DialogItemGroup from './DialogItemGroup/DialogItemGroup';
 import { useDialog } from '../../context/useDetailContext';
+import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 
 type DialogProps = {
   name: string;
@@ -63,7 +65,7 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
         <Grid container spacing={3} className={classes.hasMargin}>
           <Grid item xs={12}>
             <Grid container className={classes.titleContainer}>
-              <AssignmentOutlinedIcon color="primary" className={classes.icons} />
+              <ImportContactsOutlinedIcon color="primary" className={classes.icons} />
               <Typography variant="h5" className={classes.dialogTitle}>
                 {name}
               </Typography>

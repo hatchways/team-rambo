@@ -11,7 +11,7 @@ const Board = (): JSX.Element => {
       <FocusCard />
       <Grid container>
         {columns.map((column) => (
-          <Column key={column.id} id={column.id} name={column.name} cards={column.cards} />
+          <Column key={column.id} {...column} />
         ))}
       </Grid>
     </DragDropContext>

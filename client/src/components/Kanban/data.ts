@@ -45,6 +45,7 @@ export const columnData: IColumn[] = [
   {
     id: 'col-4',
     name: 'Done',
+    createdAt: new Date(),
     cards: [
       {
         id: 'car-4',
