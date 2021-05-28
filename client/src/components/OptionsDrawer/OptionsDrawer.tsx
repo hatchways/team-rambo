@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
@@ -8,18 +8,26 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import SwapHorizontalCircleOutlinedIcon from '@material-ui/icons/SwapHorizontalCircleOutlined';
 import useStyles from './optionsDrawerStyles';
-import { IBoard } from '../../interface/Board';
 import getUserBoards from '../../helpers/APICalls/getUserBoards';
+import getBoard from '../../helpers/APICalls/getBoard';
+import { IBoard } from '../../context/types/kanban';
 
 interface Props {
   open: boolean;
-  // boards: Array<IBoard>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  setActiveBoard: Dispatch<SetStateAction<IBoard | null>>;
 }
 
-const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
+const OptionsDrawer = ({ open, setActiveBoard, setOpen }: Props): JSX.Element => {
   const classes = useStyles();
   const [boards, setBoards] = useState<Array<IBoard>>([]);
+
+  const fetchBoard = async (id: string): Promise<IBoard> => {
+    const request = await getBoard(id);
+    setActiveBoard(request);
+
+    return request;
+  };
 
   const getAllUserBoards = async () => {
     const { boards } = await getUserBoards();
@@ -29,6 +37,8 @@ const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
   useEffect(() => {
     getAllUserBoards();
   }, []);
+
+  // On click of the item, should set our active board
 
   return (
     <Drawer anchor={'right'} open={open} onClose={setOpen}>
@@ -41,7 +51,7 @@ const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
         </ListItem>
         <Divider />
         {boards.map((board) => (
-          <ListItem key={board._id} button>
+          <ListItem key={board._id} button onClick={() => fetchBoard(board._id)}>
             <ListItemIcon>
               <SwapHorizontalCircleOutlinedIcon className={classes.icon} />
             </ListItemIcon>

@@ -10,38 +10,36 @@ import {
   DialogActions,
   Divider,
 } from '@material-ui/core';
-import cardDialogStyles from './cardDialogStyles';
-import useColorTagStyles from '../Kanban/shared/colorStyles';
-import { useKanban } from '../../context/useKanbanContext';
 import ClearIcon from '@material-ui/icons/Clear';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import cardDialogStyles from './cardDialogStyles';
+import useColorTagStyles from '../Kanban/shared/colorStyles';
+import { useKanban } from '../../context/useKanbanContext';
 
-type DialogProps = {
+interface DialogProps {
   name: string;
   tag: string;
   columnId: string;
   id: string;
-};
+}
 
-const AddCardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps): JSX.Element => {
+const AddCardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps): JSX.Element | null => {
+  const { addCard, activeBoard } = useKanban();
+
   const [open, setOpen] = useState(false);
   const classes = cardDialogStyles();
   const colorClasses = useColorTagStyles({ tag });
-  const { addCard, columns } = useKanban();
+  const columns = activeBoard.columns;
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const handleClickOpen = () => setOpen(true);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = () => setOpen(false);
 
   const getColNameById = (columnId: string): string => {
-    const matchingColumns = columns.filter((col) => col.id === columnId);
+    const matchingColumns = columns.filter((col: { _id: string }) => col._id === columnId);
     return matchingColumns[0].name;
   };
 
@@ -66,8 +64,8 @@ const AddCardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogPr
           </Grid>
         </Grid>
         <Divider className={classes.divider} />
-        <Grid container xs={12} className={classes.hasMargin}>
-          <Grid container xs={10}>
+        <Grid container className={classes.hasMargin}>
+          <Grid container>
             <Grid item xs={12} className={classes.mainSection}>
               <ImportContactsOutlinedIcon color="primary" className={classes.icons} />
               <Typography variant="h6" className={classes.dialogHeading}>
@@ -84,10 +82,10 @@ const AddCardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogPr
               <Button
                 onClick={() => {
                   addCard({
+                    _id: id,
                     name,
-                    columnId: columnId,
-                    id: id,
-                    tag: tag,
+                    columnId,
+                    tag,
                   });
                   handleClose();
                 }}
@@ -128,10 +126,10 @@ const AddCardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogPr
               <Button
                 onClick={() => {
                   addCard({
+                    _id: id,
                     name,
-                    columnId: columnId,
-                    id: id,
-                    tag: tag,
+                    columnId,
+                    tag,
                   });
                   handleClose();
                 }}
@@ -148,7 +146,7 @@ const AddCardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogPr
               </IconButton>
             </Grid>
           </Grid>
-          <Grid container xs={2} direction="column" className={classes.buttonContainer}>
+          <Grid container direction="column" className={classes.buttonContainer}>
             <Grid item>
               <Box className={classes.buttonGroup}>
                 <Typography variant="caption" className={classes.buttonColumnTitle}>
