@@ -17,10 +17,18 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const [columns, setColumns] = useState<Array<IColumn>>(columnData);
 
   const handleDragEnd = (result: DropResult): void => {
-    const { destination, source, draggableId } = result;
+    const { destination, source, draggableId, type } = result;
     if (!destination) return;
     const columnsCopy: IColumn[] = cloneDeep(columns);
     const colIndex = columns.findIndex((col) => col.id === source.droppableId);
+
+    if (type === 'column') {
+      // reorder the column.
+      const reorderedColumns = swapColumns(columnsCopy, source, destination);
+      setColumns(reorderedColumns);
+      return;
+    }
+
     if (source.droppableId === destination.droppableId) {
       if (colIndex > -1) {
         const cards = Array.from(columnsCopy[colIndex].cards);
@@ -44,6 +52,12 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
     setColumns(columnsCopy);
     return;
+  };
+
+  const swapColumns = (columns: IColumn[], source: DraggableLocation, destination: DraggableLocation): IColumn[] => {
+    const [sourceCol] = columns.splice(source.index, 1);
+    columns.splice(destination.index, 0, sourceCol);
+    return columns;
   };
 
   const swapCards = (
