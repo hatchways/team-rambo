@@ -1,7 +1,7 @@
+import { NewBoardApiData } from './../../interface/Board';
 import { FetchOptions } from '../../interface/FetchOptions';
-import { BoardApiData } from '../../interface/Board';
 
-const createBoard = async (name: string): Promise<BoardApiData> => {
+const createBoard = async (name: string): Promise<NewBoardApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     body: JSON.stringify({ name }),

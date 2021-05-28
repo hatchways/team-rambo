@@ -17,6 +17,11 @@ import ClearIcon from '@material-ui/icons/Clear';
 import * as Yup from 'yup';
 import { Formik, useFormik } from 'formik';
 import createBoard from '../../helpers/APICalls/createBoard';
+import { IBoard } from '../../interface/Board';
+
+interface Props {
+  onAddNewBoard: (board: IBoard) => void;
+}
 
 interface Values {
   name: string;
@@ -28,7 +33,7 @@ interface IAlert {
   message?: string;
 }
 
-const AddBoardDialog = (): JSX.Element => {
+const AddBoardDialog = ({ onAddNewBoard }: Props): JSX.Element => {
   const [open, setOpen] = useState(false);
   const classes = addBoardDialogStyles();
   const [alert, setOpenAlert] = useState<IAlert>({ open: false });
@@ -46,9 +51,10 @@ const AddBoardDialog = (): JSX.Element => {
   };
 
   const handleSubmit = async ({ name }: Values) => {
-    const { error } = await createBoard(name);
+    const { board, error } = await createBoard(name);
     if (!error) {
       setOpenAlert({ open: true, message: 'Board created', severity: 'success' });
+      onAddNewBoard(board);
       return;
     }
     setOpenAlert({ open: true, message: 'Could not create board!', severity: 'error' });
