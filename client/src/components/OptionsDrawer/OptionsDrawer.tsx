@@ -30,7 +30,7 @@ const OptionsDrawer = ({ open, boards, setOpen }: Props): JSX.Element => {
         </ListItem>
         <Divider />
         {boards.map((board) => (
-          <ListItem key={board._id} button>
+          <ListItem key={board.id} button>
             <ListItemIcon>
               <SwapHorizontalCircleOutlinedIcon className={classes.icon} />
             </ListItemIcon>
