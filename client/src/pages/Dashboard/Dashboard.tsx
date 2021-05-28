@@ -1,52 +1,34 @@
-import { Box, Grid } from '@material-ui/core';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { useEffect, useState } from 'react';
+import { Box, Grid, CssBaseline, CircularProgress } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
-import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { KanbanProvider, useKanban } from '../../context/useKanbanContext';
+import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
-import getUserBoards from '../../helpers/APICalls/getUserBoards';
-import { IBoard } from '../../interface/Board';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import Board from '../../components/Kanban/Board';
-import { KanbanProvider, useKanban } from '../../context/useKanbanContext';
 import useStyles from './dashboardStyles';
-import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 
-export default function Dashboard(): JSX.Element {
+const Dashboard = (): JSX.Element => {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
   const { initSocket } = useSocket();
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const history = useHistory();
-  const { board } = useKanban();
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const { activeBoard } = useKanban();
 
-  // This functionality should live in the drawer instead; moved there
-
-  // const [boards, setBoards] = useState<Array<IBoard>>([]);
-  // const getAllUserBoards = async () => {
-  //   const { boards } = await getUserBoards();
-  //   if (boards) setBoards(boards);
-  // };
-
-  // useEffect(() => {
-  //   getAllUserBoards();
-  // }, []);
+  const toggleDrawer = (): void => setOpenDrawer((prevOpen) => !prevOpen);
 
   useEffect(() => {
     initSocket();
   }, [initSocket]);
 
-  const toggleDrawer = (): void => {
-    setOpenDrawer((prevOpen) => !prevOpen);
-  };
-
-  if (loggedInUser === undefined) return <CircularProgress />;
+  // These both do the same check; should remove redundancy
+  if (loggedInUser === undefined || !activeBoard) return <CircularProgress />;
   if (!loggedInUser) {
     history.push('/login');
-    // loading for a split seconds until history.push works
+
     return <CircularProgress />;
   }
 
@@ -55,7 +37,7 @@ export default function Dashboard(): JSX.Element {
       <CssBaseline />
       <Box>
         <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
-        <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
+        <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} setActiveBoard={() => console.log('sup')} />
       </Box>
       <Box className={classes.buttonOverlay}>
         <AddColumnDialog />
@@ -63,10 +45,12 @@ export default function Dashboard(): JSX.Element {
       <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
         <Grid item xs={10}>
           <KanbanProvider>
-            <Board />
+            <Board activeBoard={activeBoard} />
           </KanbanProvider>
         </Grid>
       </Grid>
     </Box>
   );
-}
+};
+
+export default Dashboard;
