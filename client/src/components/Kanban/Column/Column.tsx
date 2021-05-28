@@ -1,13 +1,20 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import { Droppable } from 'react-beautiful-dnd';
-import { ICard, IColumn } from '../../../context/types/kanban';
+import { ICard } from '../../../context/types/kanban';
 import Card from '../Card/Card';
 import CardForm from '../CardForm/CardForm';
 import useStyles from './useStyles';
 
-type ColumnProps = IColumn;
+interface ColumnProps {
+  id: string;
+  name: string;
+  cards: ICard[];
+  createdAt?: Date;
+}
+
 const Column = ({ id, name, cards }: ColumnProps): JSX.Element => {
   const classes = useStyles();
+
   return (
     <Grid item>
       <Box className={classes.columnWrapper}>
@@ -17,17 +24,15 @@ const Column = ({ id, name, cards }: ColumnProps): JSX.Element => {
           </Typography>
         </Box>
         <Droppable droppableId={id}>
-          {(provided) => {
-            return (
-              <Grid container {...provided.droppableProps} ref={provided.innerRef} direction="column">
-                {cards.map((card: ICard, index: number) => {
-                  return <Card key={card.id} id={card.id} name={card.name} tag={card.tag || 'white'} index={index} />;
-                })}
-                {provided.placeholder}
-                <CardForm columnId={id} />
-              </Grid>
-            );
-          }}
+          {(provided) => (
+            <Grid container {...provided.droppableProps} ref={provided.innerRef} direction="column">
+              {cards.map((card: ICard, index: number) => (
+                <Card key={card._id} id={card._id} name={card.name} tag={card.tag || 'white'} index={index} />
+              ))}
+              {provided.placeholder}
+              <CardForm columnId={id} />
+            </Grid>
+          )}
         </Droppable>
       </Box>
     </Grid>
