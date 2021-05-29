@@ -1,3 +1,4 @@
+export { updateBoard } from './APICalls/updateBoard';
 export { uploadImage } from './APICalls/uploadImage';
 export { searchUsers } from './APICalls/searchUsers';
 export { register } from './APICalls/register';
