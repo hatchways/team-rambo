@@ -1,7 +1,7 @@
 import { useState, useContext, createContext, FunctionComponent, useEffect } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
-import { getUserBoards } from '../helpers/';
+import { getUserBoards, updateBoard } from '../helpers/';
 import { useSnackBar } from './useSnackbarContext';
 import { IKanbanContext } from '../interface/KanbanContext';
 import { IColumn } from '../interface/Column';
@@ -54,10 +54,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       const newCards = swapCards(cards, source, destination, draggableId);
       columnsCopy[colIndex].cards = newCards;
       activeBoard.columns = columnsCopy;
+
       setColumns(columnsCopy);
 
-      // update board...
-      // updateBoard(activeBoard._id)
+      updateBoard(activeBoard);
 
       return;
     }
@@ -74,8 +74,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     }
 
     activeBoard.columns = columnsCopy;
+
     setColumns(columnsCopy);
-    // updateBoard(activeBoard._id)
+
+    updateBoard(activeBoard);
 
     return;
   };
@@ -112,8 +114,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       columnCopy.cards.push(card);
       columnsCopy[columnIndex] = columnCopy;
       activeBoard.columns = columnsCopy;
+
       setColumns(columnsCopy);
-      // updateBoard(activeBoard._id)
+
+      updateBoard(activeBoard);
 
       return true;
     }
