@@ -72,16 +72,16 @@ exports.createBoard = asyncHandler(async (req, res) => {
 
 exports.updateBoard = asyncHandler(async (req, res, next) => {
   // This needs to be fixed according to a non-double-stringified body from frontend
-  const { id } = req.params;
-  const { board } = req.body;
-  const temp = JSON.parse(board);
-  const boardValues = JSON.parse(temp);
+  const { _id, name, user, columns, createdAt } = req.body;
 
   try {
-    const filter = { _id: id };
+    const filter = { _id };
     const update = {
-      name: boardValues.name,
-      columns: boardValues.columns,
+      _id,
+      user,
+      name,
+      columns,
+      createdAt,
     };
 
     const board = await Board.findOneAndUpdate(filter, update, {
