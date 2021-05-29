@@ -1,16 +1,5 @@
 import { useState } from 'react';
-import {
-  Button,
-  IconButton,
-  Box,
-  Grid,
-  Dialog,
-  TextField,
-  Typography,
-  DialogActions,
-  Snackbar,
-} from '@material-ui/core';
-import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
+import { Button, IconButton, Box, Grid, Dialog, TextField, Typography, DialogActions } from '@material-ui/core';
 import addBoardDialogStyles from './AddBoardDialogStyles';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -18,6 +7,7 @@ import * as Yup from 'yup';
 import { Formik, useFormik } from 'formik';
 import createBoard from '../../helpers/APICalls/createBoard';
 import { IBoard } from '../../interface/Board';
+import { useSnackBar } from '../../context/useSnackbarContext';
 
 interface Props {
   onAddNewBoard: (board: IBoard) => void;
@@ -27,16 +17,10 @@ interface Values {
   name: string;
 }
 
-interface IAlert {
-  open: boolean;
-  severity?: Color;
-  message?: string;
-}
-
 const AddBoardDialog = ({ onAddNewBoard }: Props): JSX.Element => {
   const [open, setOpen] = useState(false);
   const classes = addBoardDialogStyles();
-  const [alert, setOpenAlert] = useState<IAlert>({ open: false });
+  const { updateSnackBarMessage } = useSnackBar();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -46,19 +30,15 @@ const AddBoardDialog = ({ onAddNewBoard }: Props): JSX.Element => {
     setOpen(false);
   };
 
-  const handleAlertClose = async () => {
-    setOpenAlert({ open: false });
-  };
-
   const handleSubmit = async ({ name }: Values) => {
     const { board, error } = await createBoard(name);
     if (!error) {
-      setOpenAlert({ open: true, message: 'Board created', severity: 'success' });
+      updateSnackBarMessage('Board created', 'success');
       onAddNewBoard(board);
       handleClose();
       return;
     }
-    setOpenAlert({ open: true, message: 'Could not create board!', severity: 'error' });
+    updateSnackBarMessage('Could not create board!', 'error');
   };
 
   const formik = useFormik({
@@ -73,10 +53,6 @@ const AddBoardDialog = ({ onAddNewBoard }: Props): JSX.Element => {
     }),
     onSubmit: (values) => handleSubmit(values),
   });
-
-  const Alert = (props: AlertProps) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  };
 
   return (
     <Box>
@@ -142,11 +118,6 @@ const AddBoardDialog = ({ onAddNewBoard }: Props): JSX.Element => {
           </IconButton>
         </DialogActions>
       </Dialog>
-      <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleAlertClose}>
-        <Alert onClose={handleAlertClose} severity={alert.severity}>
-          {alert.message}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };
