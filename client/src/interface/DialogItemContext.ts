@@ -1,9 +1,4 @@
-export interface IDialogItem {
-  title?: string;
-  content?: string;
-  icon?: string;
-  id?: string;
-}
+import { IDialogItem } from './DialogItem';
 
 export interface IDialogItemContext {
   items: IDialogItem[];
