@@ -24,7 +24,7 @@ exports.getAllNotifications = asyncHandler(async (req, res) => {
 
 exports.getUnreadNotifications = asyncHandler(async (req, res) => {
   const notifications = await Notification.find({
-    read: true,
+    read: false,
     user: req.user.id,
   });
   return res.status(200).json({ data: notifications });
@@ -36,7 +36,8 @@ exports.setNotificationAsRead = asyncHandler(async (req, res) => {
     { _id: id },
     {
       $set: { read: true },
-    }
+    },
+    { new: true }
   );
 
   if (notification) return res.status(200).json({ data: notification });
