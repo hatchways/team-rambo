@@ -12,4 +12,7 @@ export interface IKanbanContext {
   getColumnById: (columnId: string) => IColumn | null;
   handleDragEnd: (result: DropResult) => void;
   setActiveBoard: (board: IBoard) => void;
+  renameColumn: (columnId: string) => void;
+  removeColumn: (columnId: string) => void;
+  fetchBoard: (id: string) => Promise<IBoard>;
 }

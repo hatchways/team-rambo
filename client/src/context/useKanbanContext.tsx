@@ -1,7 +1,7 @@
 import { useState, useContext, createContext, FunctionComponent, useEffect } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
-import { getUserBoards, updateBoard } from '../helpers/';
+import { getBoard, getUserBoards, updateBoard } from '../helpers/';
 import { useSnackBar, useAuth } from './';
 import { IKanbanContext, IColumn, ICard, IBoard } from '../interface/';
 
@@ -27,10 +27,17 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return;
   }, [loggedInUser]);
 
-  // Helper function to set the first board;
-  const getFirstBoard = async () => {
+  const getFirstBoard = async (): Promise<IBoard> => {
     const request = await getUserBoards();
     const board = request.boards[0];
+    setActiveBoard(board);
+    setColumns(board.columns);
+
+    return board;
+  };
+
+  const fetchBoard = async (id: string): Promise<IBoard> => {
+    const board = await getBoard(id);
     setActiveBoard(board);
     setColumns(board.columns);
 
@@ -121,6 +128,26 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return false;
   };
 
+  const renameColumn = (columnId: string): undefined => {
+    const columnsCopy = cloneDeep(columns);
+
+    // setColumns(columnsCopy);
+
+    // updateBoard(activeBoard);
+
+    return undefined;
+  };
+
+  const removeColumn = (columnId: string): undefined => {
+    const columnsCopy = cloneDeep(columns);
+
+    // setColumns(columnsCopy);
+
+    // updateBoard(activeBoard);
+
+    return undefined;
+  };
+
   const setOpenCard = (card: ICard): void => setFocusedCard(card);
 
   const resetOpenCard = (): void => setFocusedCard(null);
@@ -143,6 +170,9 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         getColumnById,
         handleDragEnd,
         setActiveBoard,
+        renameColumn,
+        removeColumn,
+        fetchBoard,
       }}
     >
       {children}
