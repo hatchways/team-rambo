@@ -1,8 +1,7 @@
-import { IBoard } from '../../interface/Board';
-import { FetchOptions } from '../../interface/FetchOptions';
+import { IFetchOptions, IBoard } from '../../interface/';
 
 export const createBoard = async (): Promise<IBoard> => {
-  const fetchOptions: FetchOptions = {
+  const fetchOptions: IFetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',

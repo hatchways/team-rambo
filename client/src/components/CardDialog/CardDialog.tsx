@@ -16,7 +16,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 import DatePicker from '../DatePicker/DatePicker';
-import { IColumn } from '../../interface/Column';
+import { IColumn } from '../../interface/';
 import DialogItemGroup from './DialogItemGroup/DialogItemGroup';
 import cardDialogStyles from './cardDialogStyles';
 import useColorTagStyles from '../Kanban/shared/colorStyles';

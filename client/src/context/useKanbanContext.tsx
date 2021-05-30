@@ -2,12 +2,8 @@ import { useState, useContext, createContext, FunctionComponent, useEffect } fro
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
 import { getUserBoards, updateBoard } from '../helpers/';
-import { useSnackBar } from './useSnackbarContext';
-import { IKanbanContext } from '../interface/KanbanContext';
-import { IColumn } from '../interface/Column';
-import { ICard } from '../interface/Card';
-import { IBoard } from '../interface/Board';
-import { useAuth } from './useAuthContext';
+import { useSnackBar, useAuth } from './';
+import { IKanbanContext, IColumn, ICard, IBoard } from '../interface/';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 

@@ -1,4 +1,4 @@
-import { IDialogItem } from '../../context/types/detail';
+import { IDialogItem } from '../../interface';
 
 export const cardDetailItems: IDialogItem[] = [
   {

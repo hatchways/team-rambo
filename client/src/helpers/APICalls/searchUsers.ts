@@ -1,12 +1,12 @@
-import { FetchOptions } from '../../interface/FetchOptions';
-import { SearchUsersApiData } from '../../interface/User';
+import { ISearchUsersApiData, IFetchOptions } from '../../interface/';
 
 interface Props {
   search: string;
 }
 
-export const searchUsers = async ({ search }: Props): Promise<SearchUsersApiData> => {
-  const fetchOptions: FetchOptions = {
+// Why does the search need to be deconstructed? Is this from starting code?
+export const searchUsers = async ({ search }: Props): Promise<ISearchUsersApiData> => {
+  const fetchOptions: IFetchOptions = {
     method: 'GET',
     credentials: 'include',
   };

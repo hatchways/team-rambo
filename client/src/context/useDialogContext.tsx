@@ -1,6 +1,6 @@
 import { useState, useContext, createContext, FunctionComponent } from 'react';
 import { cardDetailItems } from '../components/CardDialog/initialDetailData';
-import { IDialogItem, IDialogItemContext } from './types/detail';
+import { IDialogItemContext, IDialogItem } from '../interface';
 
 export const DialogContext = createContext<IDialogItemContext>({} as IDialogItemContext);
 

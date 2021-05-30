@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { IBoard } from '../../interface/Board';
+import { IBoard } from '../../interface/';
 import { useKanban } from '../../context/';
 import { FocusCard } from './FocusCard/FocusCard';
 import Column from './Column/Column';

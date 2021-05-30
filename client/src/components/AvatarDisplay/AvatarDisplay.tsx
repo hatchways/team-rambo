@@ -1,15 +1,15 @@
-import Avatar from '@material-ui/core/Avatar';
-import { User } from '../../interface/User';
 import { useState, MouseEvent } from 'react';
+import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useAuth } from '../../context/useAuthContext';
 import useStyles from './useStyles';
 import PictureModal from '../PictureModal/PictureModal';
+import { IUser } from '../../interface';
 
 interface Props {
   loggedIn: boolean;
-  user: User;
+  user: IUser;
 }
 
 const AvatarDisplay = ({ user }: Props): JSX.Element => {

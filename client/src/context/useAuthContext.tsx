@@ -1,12 +1,11 @@
 import { useState, useContext, createContext, FunctionComponent, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AuthApiData, AuthApiDataSuccess } from '../interface/AuthApiData';
-import { User } from '../interface/User';
+import { IUser, IAuthApiData, IAuthApiDataSuccess } from '../interface/';
 import { loginWithCookies, logout as logoutApi } from '../helpers/';
 
 interface IAuthContext {
-  loggedInUser: User | null | undefined;
-  updateLoginContext: (data: AuthApiDataSuccess) => void;
+  loggedInUser: IUser | null | undefined;
+  updateLoginContext: (data: IAuthApiDataSuccess) => void;
   logout: () => void;
 }
 
@@ -14,11 +13,11 @@ export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   // default undefined before loading, once loaded provide user or null if logged out
-  const [loggedInUser, setLoggedInUser] = useState<User | null | undefined>();
+  const [loggedInUser, setLoggedInUser] = useState<IUser | null | undefined>();
   const history = useHistory();
 
   const updateLoginContext = useCallback(
-    (data: AuthApiDataSuccess) => {
+    (data: IAuthApiDataSuccess) => {
       setLoggedInUser(data.user);
       history.push('/dashboard');
 
@@ -42,7 +41,7 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   // use our cookies to check if we can login straight away
   useEffect(() => {
     const checkLoginWithCookies = async () => {
-      loginWithCookies().then((data: AuthApiData) => {
+      loginWithCookies().then((data: IAuthApiData) => {
         if (data.success) {
           updateLoginContext(data.success);
           history.push('/dashboard');

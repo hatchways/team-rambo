@@ -4,7 +4,7 @@ import SwapHorizontalCircleOutlinedIcon from '@material-ui/icons/SwapHorizontalC
 import useStyles from './optionsDrawerStyles';
 import { getUserBoards, getBoard } from '../../helpers/';
 import { useKanban } from '../../context/useKanbanContext';
-import { IBoard } from '../../interface/Board';
+import { IBoard } from '../../interface/';
 
 interface Props {
   open: boolean;

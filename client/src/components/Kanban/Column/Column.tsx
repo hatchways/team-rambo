@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import { Droppable } from 'react-beautiful-dnd';
-import { ICard } from '../../../interface/Card';
+import { ICard } from '../../../interface/';
 import Card from '../Card/Card';
 import CardForm from '../CardForm/CardForm';
 import useStyles from './useStyles';

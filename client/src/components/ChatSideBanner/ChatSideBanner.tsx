@@ -3,19 +3,19 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './chatSideBannerStyles';
-import { User } from '../../interface/User';
+import { IUser } from '../../interface/';
 import AvatarDisplay from '../AvatarDisplay/AvatarDisplay';
 import Search from '../Search/Search';
 import AuthMenu from '../AuthMenu/AuthMenu';
 
 interface Props {
-  loggedInUser: User;
+  loggedInUser: IUser;
   handleDrawerToggle?: () => void;
 }
 
 const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
   const [search, setSearch] = useState<string>('test');
-  const [newChatUser, setNewChatUser] = useState<User | null>(null);
+  const [newChatUser, setNewChatUser] = useState<IUser | null>(null);
   const classes = useStyles();
 
   // React.FormEvent<FormControl & FormControlProps>)

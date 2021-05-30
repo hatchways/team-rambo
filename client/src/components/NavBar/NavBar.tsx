@@ -1,4 +1,4 @@
-import { User } from '../../interface/User';
+import { IUser } from '../../interface/';
 import useStyles from './useStyles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,7 +15,7 @@ import logo from '../../Images/logo.png';
 import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
 
 interface Props {
-  loggedInUser: User;
+  loggedInUser: IUser;
   handleDrawerToggle: () => void;
 }
 

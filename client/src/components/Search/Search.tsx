@@ -3,7 +3,7 @@ import useStyles from './searchStyles';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { User } from '../../interface/User';
+import { IUser } from '../../interface/';
 import { useDebounce } from 'use-debounce';
 import { searchUsers } from '../../helpers/APICalls/searchUsers';
 
@@ -13,14 +13,14 @@ interface Props {
 }
 const Search = ({ search, handleChange }: Props): JSX.Element => {
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState<User[]>([]);
+  const [options, setOptions] = useState<IUser[]>([]);
   const [loading, setLoading] = useState(false);
   // limit our call to the api with a debounced value at max of 1 per 0.5 seconds
   const [debouncedSearch] = useDebounce(search, 500);
 
   const classes = useStyles();
 
-  const saveOptions = (users: User[]) => {
+  const saveOptions = (users: IUser[]) => {
     setOptions(users);
   };
 

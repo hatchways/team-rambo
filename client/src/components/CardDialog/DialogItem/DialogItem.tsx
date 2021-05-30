@@ -7,8 +7,8 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import dialogItemStyles from './dialogItemStyles';
 import DatePicker from '../../DatePicker/DatePicker';
-import { IDialogItem } from '../../../context/types/detail';
 import { useDialog } from '../../../context/';
+import { IDialogItem } from '../../../interface';
 
 const DialogItem = ({
   title = 'blank',
