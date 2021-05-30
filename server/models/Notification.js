@@ -21,6 +21,11 @@ const notificationSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -28,6 +33,6 @@ const notificationSchema = new mongoose.Schema({
 });
 
 module.exports = {
-  Card: mongoose.model("notification", notificationSchema),
+  Notification: mongoose.model("notification", notificationSchema),
   notificationSchema,
 };
