@@ -9,11 +9,12 @@ const Board = (): JSX.Element => {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Grid container spacing={2}>
-      <FocusCard />
-      <Grid container>
-        {columns.map((column) => (
-          <Column key={column.id} {...column} />
-        ))}
+        <FocusCard />
+        <Grid container>
+          {columns.map((column) => (
+            <Column key={column.id} {...column} />
+          ))}
+        </Grid>
       </Grid>
     </DragDropContext>
   );
