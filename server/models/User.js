@@ -7,12 +7,16 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  picture: {
+    type: String,
+    required: false,
+  },
   password: {
     type: String,
     required: true,
     select: false,
   },
-  register_date: {
+  registerDate: {
     type: Date,
     default: Date.now,
   },

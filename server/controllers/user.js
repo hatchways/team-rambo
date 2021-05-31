@@ -21,3 +21,19 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ users: users });
 });
+
+exports.setProfilePicture = asyncHandler(async (req, res) => {
+  console.log(req.picture);
+  if (!req.picture) return res.status(404).send("Picture not found");
+
+  const user = await User.findOneAndUpdate(
+    { _id: req.user.id },
+    { $set: { picture: req.picture.url } },
+    { new: true }
+  );
+
+  if (user) return res.status(200).send({ data: user });
+
+  res.status(400);
+  throw new Error("Could not retrieve user!");
+});

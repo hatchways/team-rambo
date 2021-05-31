@@ -48,10 +48,11 @@ const streamUpload = (req, res) => {
   });
 };
 
-const cloudinaryUpload = async (req, res) => {
+const cloudinaryUpload = async (req, res, next) => {
   try {
     let result = await streamUpload(req);
-    return res.status(200).send(result);
+    req.picture = result;
+    next();
   } catch (err) {
     return res
       .status(400)
