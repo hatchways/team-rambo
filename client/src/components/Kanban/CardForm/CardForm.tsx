@@ -1,9 +1,6 @@
-import { Box, Button, Divider, InputBase, Grid, Typography, useTheme } from '@material-ui/core';
-import clsx from 'clsx';
-import { Dispatch } from 'react';
-import { useState, useEffect, SetStateAction } from 'react';
-import CardDialog from '../../CardDialog/CardDialog';
-import useColorTagStyles from '../shared/colorStyles';
+import { Box, Button } from '@material-ui/core';
+import { InnerForm } from './InnerForm/InnerForm';
+import { useState, useEffect } from 'react';
 import useStyles from './useStyles';
 
 type CardFormProps = {
@@ -45,80 +42,6 @@ const CardForm = ({ columnId }: CardFormProps): JSX.Element => {
         </Button>
       )}
     </Box>
-  );
-};
-
-type InnerFormProps = {
-  columnId: string;
-  formAction: Dispatch<SetStateAction<boolean>>;
-};
-const InnerForm = ({ columnId }: InnerFormProps) => {
-  const [name, setName] = useState<string>('');
-  const [selectedTagColor, setTagColor] = useState<string>('white');
-  const theme = useTheme();
-  const classes = useStyles();
-  return (
-    <>
-      <Box className={classes.cardFormWrapper}>
-        <Box className={classes.cardForm}>
-          <InputBase
-            className={classes.input}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Add title..."
-          />
-        </Box>
-        <Divider light />
-        <Box className={classes.tagWrapper}>
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <Typography className={classes.typography} variant="body1">
-                Select tag:
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Grid container className={classes.colorsWrapper}>
-                {Object.keys(theme.palette.tags).map((tagColor: string): JSX.Element => {
-                  return (
-                    <Color
-                      key={`${columnId}-${tagColor}`}
-                      name={tagColor}
-                      activeSelected={tagColor === selectedTagColor}
-                      setSelected={setTagColor}
-                    />
-                  );
-                })}
-              </Grid>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-      <CardDialog
-        name={name}
-        columnId={columnId}
-        id={`card-${Math.floor(Math.random() * 999999)}`}
-        tag={selectedTagColor}
-      />
-    </>
-  );
-};
-
-type ColorProps = {
-  name: string;
-  activeSelected: boolean;
-  setSelected: (name: string) => void;
-  key?: string | number;
-};
-
-const Color = ({ name = 'white', activeSelected, setSelected }: ColorProps): JSX.Element => {
-  const classes = useStyles();
-  const colorClasses = useColorTagStyles({ tag: name });
-  return (
-    <Grid
-      onClick={() => setSelected(name)}
-      className={clsx(classes.color, colorClasses.cardTagColor, activeSelected && classes.colorSelected)}
-      item
-    ></Grid>
   );
 };
 

@@ -1,6 +1,9 @@
-export interface Card {
-  _id: string;
+export interface ICard {
+  id: string;
+  columnId: string;
   name: string;
-  description: string;
-  createdAt: string;
+  tag?: string;
+  dueDate?: Date;
+  description?: string;
+  createdAt?: Date;
 }
