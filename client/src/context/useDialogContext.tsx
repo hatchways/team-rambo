@@ -25,7 +25,6 @@ export const DialogProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const removeItem = (itemId: string): void => {
     const remaining = items.filter((item) => item.id !== itemId);
-    console.log(remaining);
     setItems(remaining);
   };
 

@@ -11,14 +11,14 @@ import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import { DialogProvider } from '../../context/useDialogContext';
 import { KanbanProvider } from '../../context/useKanbanContext';
 import { useAuth } from '../../context/useAuthContext';
-import { useSocket } from '../../context/useSocketContext';
+//import { useSocket } from '../../context/useSocketContext';
 import getUserBoards from '../../helpers/APICalls/getUserBoards';
 import { IBoard } from '../../interface/Board';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
-  const { initSocket } = useSocket();
+  //const { initSocket } = useSocket();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [boards, setBoards] = useState<Array<IBoard>>([]);
   const history = useHistory();
@@ -32,9 +32,9 @@ export default function Dashboard(): JSX.Element {
     getAllUserBoards();
   }, []);
 
-  useEffect(() => {
-    initSocket();
-  }, [initSocket]);
+  // useEffect(() => {
+  //   initSocket();
+  // }, [initSocket]);
 
   const toggleDrawer = (): void => {
     setOpenDrawer((prevOpen) => !prevOpen);
