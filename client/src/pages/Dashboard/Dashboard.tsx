@@ -26,6 +26,10 @@ export default function Dashboard(): JSX.Element {
     if (boards) setBoards(boards);
   };
 
+  const getNewBoard = async (newBoard: IBoard) => {
+    setBoards((boards) => [...boards, newBoard]);
+  };
+
   useEffect(() => {
     getAllUserBoards();
   }, []);
@@ -49,7 +53,7 @@ export default function Dashboard(): JSX.Element {
     <Box>
       <CssBaseline />
       <Box>
-        <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
+        <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} onAddNewBoard={getNewBoard} />
         <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} boards={boards} />
       </Box>
       <Box className={classes.buttonOverlay}>

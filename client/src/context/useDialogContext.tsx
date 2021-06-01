@@ -1,5 +1,5 @@
 import { useState, useContext, createContext, FunctionComponent } from 'react';
-import { cardDialogItems } from '../components/CardDialog/initialDialogData';
+import { cardDialogItems } from '../components/CardDialog';
 import { IDialogItem } from '../interface/DialogItem';
 import { IDialogItemContext } from '../interface/DialogItemContext';
 
