@@ -20,7 +20,7 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 import { useKanban } from '../../context/useKanbanContext';
 import { useDialog } from '../../context/useDialogContext';
 import { IColumn } from '../../interface/Column';
-import { cardDialogStyles, DialogItemGroup, DialogActionButton } from '../CardDialog';
+import { cardDialogStyles, DialogItemGroup, DialogActionButton, dialogActionButtonStyles } from '../CardDialog';
 
 type DialogProps = {
   name: string;
@@ -33,6 +33,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
   const [column, setColumn] = useState<IColumn | null>(null);
   const classes = cardDialogStyles();
+  const buttonClasses = dialogActionButtonStyles(); //to be removed in Dialog Actions PR
   const theme = useTheme();
   const { updateSnackBarMessage } = useSnackBar();
   const { resetOpenCard, getColumnById } = useKanban();
@@ -120,10 +121,10 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
                   <Typography variant="caption" className={classes.buttonColumnTitle}>
                     ACTIONS:
                   </Typography>
-                  <Button className={classes.columnButton}>Move</Button>
-                  <Button className={classes.columnButton}>Copy</Button>
-                  <Button className={classes.columnButton}>Share</Button>
-                  <Button className={classes.columnButton}>Delete</Button>
+                  <Button className={buttonClasses.columnButton}>Move</Button>
+                  <Button className={buttonClasses.columnButton}>Copy</Button>
+                  <Button className={buttonClasses.columnButton}>Share</Button>
+                  <Button className={buttonClasses.columnButton}>Delete</Button>
                 </Box>
               </Grid>
             </Grid>
