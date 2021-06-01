@@ -8,6 +8,7 @@ const Board = (): JSX.Element => {
   const { columns, handleDragEnd } = useKanban();
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
+      <Grid container spacing={2}>
       <FocusCard />
       <Grid container>
         {columns.map((column) => (
