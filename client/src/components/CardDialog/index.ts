@@ -6,3 +6,4 @@ export { default as cardDialogStyles } from './cardDialogStyles';
 export { default as DatePicker } from './DatePicker/DatePicker';
 export { default as datePickerStyles } from './DatePicker/datePickerStyles';
 export { cardDialogItems } from './initialDialogData';
+export { default as DialogActionButton } from './DialogActionButton/DialogActionButton';

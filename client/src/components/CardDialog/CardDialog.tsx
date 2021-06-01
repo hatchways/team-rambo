@@ -16,12 +16,11 @@ import {
 import ClearIcon from '@material-ui/icons/Clear';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
-import useColorTagStyles from '../Kanban/shared/colorStyles';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import { useKanban } from '../../context/useKanbanContext';
 import { useDialog } from '../../context/useDialogContext';
 import { IColumn } from '../../interface/Column';
-import { cardDialogStyles, DialogItemGroup } from '../CardDialog';
+import { cardDialogStyles, DialogItemGroup, DialogActionButton } from '../CardDialog';
 
 type DialogProps = {
   name: string;
@@ -36,9 +35,8 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const classes = cardDialogStyles();
   const theme = useTheme();
   const { updateSnackBarMessage } = useSnackBar();
-  const colorClasses = useColorTagStyles({ tag });
   const { resetOpenCard, getColumnById } = useKanban();
-  const { items, addItem, resetItems, hasItem } = useDialog();
+  const { items, resetItems } = useDialog();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [tagColor, setTagColor] = useState(tag);
 
@@ -110,71 +108,11 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
                   <Typography variant="caption" className={classes.buttonColumnTitle}>
                     SECTIONS:
                   </Typography>
-                  <Button
-                    className={hasItem('description') ? classes.columnButtonActive : classes.columnButton}
-                    onClick={() => {
-                      addItem({
-                        title: 'Description:',
-                        content: 'description',
-                        icon: 'contacts',
-                        id: `item-${Math.floor(Math.random() * 999999)}`,
-                      });
-                    }}
-                  >
-                    Description
-                  </Button>
-                  <Button
-                    className={hasItem('deadline') ? classes.columnButtonActive : classes.columnButton}
-                    onClick={() => {
-                      addItem({
-                        title: 'Deadline:',
-                        content: 'deadline',
-                        icon: 'schedule',
-                        id: `item-${Math.floor(Math.random() * 999999)}`,
-                      });
-                    }}
-                  >
-                    Deadline
-                  </Button>
-                  <Button
-                    className={hasItem('comment') ? classes.columnButtonActive : classes.columnButton}
-                    onClick={() => {
-                      addItem({
-                        title: 'Comment:',
-                        content: 'comment',
-                        icon: 'bubble',
-                        id: `item-${Math.floor(Math.random() * 999999)}`,
-                      });
-                    }}
-                  >
-                    Comment
-                  </Button>
-                  <Button
-                    className={hasItem('attachment') ? classes.columnButtonActive : classes.columnButton}
-                    onClick={() => {
-                      addItem({
-                        title: 'Attachments:',
-                        content: 'attachment',
-                        icon: 'attachment',
-                        id: `item-${Math.floor(Math.random() * 999999)}`,
-                      });
-                    }}
-                  >
-                    Attachment
-                  </Button>
-                  <Button
-                    className={hasItem('checklist') ? classes.columnButtonActive : classes.columnButton}
-                    onClick={() => {
-                      addItem({
-                        title: 'Checklist:',
-                        content: 'checklist',
-                        icon: 'checklist',
-                        id: `item-${Math.floor(Math.random() * 999999)}`,
-                      });
-                    }}
-                  >
-                    Check-list
-                  </Button>
+                  <DialogActionButton title="Description" content="description" icon="contacts" />
+                  <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
+                  <DialogActionButton title="Comment" content="comment" icon="bubble" />
+                  <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
+                  <DialogActionButton title="Checklist" content="checklist" icon="checklist" />
                 </Box>
               </Grid>
               <Grid item>
