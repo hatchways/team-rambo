@@ -59,11 +59,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       columnsCopy[colIndex].cards = newCards;
       dupBoard.columns = columnsCopy;
 
-      setColumns(columnsCopy);
-
       updateBoard(dupBoard);
 
       setActiveBoard(dupBoard);
+      setColumns(columnsCopy);
 
       return;
     }
@@ -81,11 +80,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
     dupBoard.columns = columnsCopy;
 
-    setColumns(columnsCopy);
-
     updateBoard(dupBoard);
 
     setActiveBoard(dupBoard);
+    setColumns(columnsCopy);
 
     return;
   };
@@ -124,11 +122,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       const copyBoard = Object.assign({}, activeBoard);
       copyBoard.columns = columnsCopy;
 
+      updateBoard(copyBoard);
+
       setActiveBoard(copyBoard);
-
       setColumns(columnsCopy);
-
-      updateBoard(activeBoard);
 
       return true;
     }
@@ -157,8 +154,8 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       setIsRenaming((prev) => !prev);
     });
 
-    setColumns(dupColumns);
     setActiveBoard(dupBoard);
+    setColumns(dupColumns);
 
     return undefined;
   };
@@ -174,8 +171,8 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     dupBoard.columns = newColumns;
 
     updateBoard(dupBoard);
-    setColumns(newColumns);
     setActiveBoard(dupBoard);
+    setColumns(newColumns);
 
     return undefined;
   };
