@@ -45,22 +45,38 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   };
 
   const handleDragEnd = (result: DropResult): void => {
-    if (!result.destination || !columns) return;
+    if (!result.destination) return;
 
-    const { destination, source, draggableId } = result;
+    const { destination, source, draggableId, type } = result;
 
+    const dupBoard = Object.assign({}, activeBoard);
     const columnsCopy: IColumn[] = cloneDeep(columns);
     const colIndex = columns.findIndex((col) => col._id === source.droppableId);
+
+    if (type === 'column') {
+      // reorder the column.
+      const reorderedColumns = swapColumns(columnsCopy, source, destination);
+      dupBoard.columns = reorderedColumns;
+
+      updateBoard(dupBoard);
+
+      setActiveBoard(dupBoard);
+
+      setColumns(reorderedColumns);
+
+      return;
+    }
 
     if (source.droppableId === destination.droppableId && colIndex > -1) {
       const cards = Array.from(columnsCopy[colIndex].cards);
       const newCards = swapCards(cards, source, destination, draggableId);
       columnsCopy[colIndex].cards = newCards;
-      activeBoard.columns = columnsCopy;
+      dupBoard.columns = columnsCopy;
 
+      updateBoard(dupBoard);
+
+      setActiveBoard(dupBoard);
       setColumns(columnsCopy);
-
-      updateBoard(activeBoard);
 
       return;
     }
@@ -76,13 +92,18 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       }
     }
 
-    activeBoard.columns = columnsCopy;
+    dupBoard.columns = columnsCopy;
 
+    updateBoard(dupBoard);
+    setActiveBoard(dupBoard);
     setColumns(columnsCopy);
+  };
 
-    updateBoard(activeBoard);
+  const swapColumns = (columns: IColumn[], source: DraggableLocation, destination: DraggableLocation): IColumn[] => {
+    const [sourceCol] = columns.splice(source.index, 1);
+    columns.splice(destination.index, 0, sourceCol);
 
-    return;
+    return columns;
   };
 
   const swapCards = (

@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect, MouseEvent } from 'react';
 import {
   Button,
   IconButton,
+  Menu,
+  MenuItem,
   Box,
   Grid,
   Dialog,
@@ -9,18 +11,14 @@ import {
   DialogActions,
   Divider,
   DialogContent,
-  TextField,
+  useTheme,
 } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
-import ScheduleIcon from '@material-ui/icons/Schedule';
-import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
-import DatePicker from '../DatePicker/DatePicker';
-import { IColumn } from '../../interface/';
-import DialogItemGroup from './DialogItemGroup/DialogItemGroup';
-import cardDialogStyles from './cardDialogStyles';
-import useColorTagStyles from '../Kanban/shared/colorStyles';
+import SettingsIcon from '@material-ui/icons/Settings';
+import { cardDialogStyles, DialogItemGroup, DialogActionButton, dialogActionButtonStyles } from '../CardDialog';
 import { useSnackBar, useDialog, useKanban } from '../../context/';
+import { IColumn } from '../../interface/';
 
 interface DialogProps {
   name: string;
@@ -29,19 +27,30 @@ interface DialogProps {
   id: string;
 }
 
-const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps): JSX.Element => {
+const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
   const [column, setColumn] = useState<IColumn | null>(null);
   const classes = cardDialogStyles();
+  const buttonClasses = dialogActionButtonStyles(); //to be removed in Dialog Actions PR
+  const theme = useTheme();
   const { updateSnackBarMessage } = useSnackBar();
-  const colorClasses = useColorTagStyles({ tag });
-  const { addCard, resetOpenCard, getColumnById } = useKanban();
-  const { items, addItem, resetItems } = useDialog();
+  const { resetOpenCard, getColumnById } = useKanban();
+  const { items, resetItems } = useDialog();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [tagColor, setTagColor] = useState(tag);
 
   const handleClose = () => {
     resetOpenCard();
     setOpen(false);
     resetItems();
+  };
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = (tag: string) => {
+    setAnchorEl(null);
+    setTagColor(tag);
   };
 
   useEffect(() => {
@@ -65,7 +74,22 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
               <Typography variant="h5" className={classes.dialogTitle}>
                 {name}
               </Typography>
-              <Box className={`${classes.cardTag} ${colorClasses.cardTagColor}`}></Box>
+              <Box className={`${classes.cardTag}`} style={{ backgroundColor: theme.palette.tags[tagColor] }}></Box>
+              <IconButton onClick={handleClick}>
+                <SettingsIcon className={classes.icons} />
+              </IconButton>
+              <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                {Object.keys(theme.palette.tags).map((tag: string): JSX.Element => {
+                  return (
+                    <MenuItem onClick={() => handleMenuClose(tag)} key={`${columnId}-${tag}`}>
+                      <Box
+                        style={{ backgroundColor: theme.palette.tags[tag] }}
+                        className={classes.cardTagCentered}
+                      ></Box>
+                    </MenuItem>
+                  );
+                })}
+              </Menu>
             </Grid>
             <Typography variant="body2" className={classes.dialogSubTitle}>
               {`In list "${column?.name}"`}
@@ -73,112 +97,6 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
           </Grid>
         </Grid>
         <Divider className={classes.divider} />
-        <Grid container className={classes.hasMargin}>
-          <Grid container>
-            <Grid item xs={12} className={classes.mainSection}>
-              <ImportContactsOutlinedIcon color="primary" className={classes.icons} />
-              <Typography variant="h6" className={classes.dialogHeading}>
-                Description:
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                placeholder="Add description"
-                variant="outlined"
-                className={classes.textField}
-              />
-              <Button
-                onClick={() => {
-                  addCard({
-                    _id: id,
-                    name,
-                    columnId,
-                    tag,
-                  });
-                  handleClose();
-                }}
-                className={classes.dialogButton}
-                color="primary"
-                variant="contained"
-                size="large"
-                disableElevation
-              >
-                Save
-              </Button>
-              <IconButton onClick={handleClose}>
-                <ClearIcon color="primary" />
-              </IconButton>
-            </Grid>
-            <Grid item xs={12} className={classes.mainSection}>
-              <ScheduleIcon color="primary" className={classes.icons} />
-              <Typography variant="h6" className={classes.dialogHeading}>
-                Deadline:
-              </Typography>
-              <DatePicker />
-            </Grid>
-            <Grid item xs={12} className={classes.mainSection}>
-              <ChatBubbleOutlineIcon color="primary" className={classes.icons} />
-              <Typography variant="h6" className={classes.dialogHeading}>
-                Add comment:
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={2}
-                placeholder="Add description"
-                variant="outlined"
-                className={classes.textField}
-              />
-              <Button
-                onClick={() => {
-                  addCard({
-                    _id: id,
-                    name,
-                    columnId,
-                    tag,
-                  });
-                  handleClose();
-                }}
-                className={classes.dialogButton}
-                color="primary"
-                variant="contained"
-                size="large"
-                disableElevation
-              >
-                Save
-              </Button>
-              <IconButton onClick={handleClose}>
-                <ClearIcon color="primary" />
-              </IconButton>
-            </Grid>
-          </Grid>
-          <Grid container direction="column" className={classes.buttonContainer}>
-            <Grid item>
-              <Box className={classes.buttonGroup}>
-                <Typography variant="caption" className={classes.buttonColumnTitle}>
-                  ADD TO CARD:
-                </Typography>
-                <Button className={classes.columnButton}>Tag</Button>
-                <Button className={classes.columnButton}>Check-list</Button>
-                <Button className={classes.columnButton}>Deadline</Button>
-                <Button className={classes.columnButton}>Attachment</Button>
-                <Button className={classes.columnButton}>Cover</Button>
-              </Box>
-            </Grid>
-            <Grid item>
-              <Box className={classes.buttonGroup}>
-                <Typography variant="caption" className={classes.buttonColumnTitle}>
-                  ACTIONS:
-                </Typography>
-                <Button className={classes.columnButton}>Move</Button>
-                <Button className={classes.columnButton}>Copy</Button>
-                <Button className={classes.columnButton}>Share</Button>
-                <Button className={classes.columnButton}>Delete</Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </Grid>
         <DialogContent dividers={false}>
           <Grid container xs={12} className={classes.hasMargin}>
             <DialogItemGroup items={items} />
@@ -186,37 +104,13 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
               <Grid item>
                 <Box className={classes.buttonGroup}>
                   <Typography variant="caption" className={classes.buttonColumnTitle}>
-                    ADD TO CARD:
+                    SECTIONS:
                   </Typography>
-                  <Button className={classes.columnButton}>Tag</Button>
-                  <Button className={classes.columnButton}>Check-list</Button>
-                  <Button
-                    className={classes.columnButton}
-                    onClick={() => {
-                      addItem({
-                        title: 'Deadline:',
-                        content: 'deadline',
-                        icon: 'schedule',
-                        id: `item-${Math.floor(Math.random() * 999999)}`,
-                      });
-                    }}
-                  >
-                    Deadline
-                  </Button>
-                  <Button className={classes.columnButton}>Attachment</Button>
-                  <Button
-                    className={classes.columnButton}
-                    onClick={() => {
-                      addItem({
-                        title: 'Description:',
-                        content: 'description',
-                        icon: 'contacts',
-                        id: `item-${Math.floor(Math.random() * 999999)}`,
-                      });
-                    }}
-                  >
-                    Cover
-                  </Button>
+                  <DialogActionButton title="Description" content="description" icon="contacts" />
+                  <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
+                  <DialogActionButton title="Comment" content="comment" icon="bubble" />
+                  <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
+                  <DialogActionButton title="Checklist" content="checklist" icon="checklist" />
                 </Box>
               </Grid>
               <Grid item>
@@ -224,10 +118,10 @@ const CardDialog = ({ name = 'blank', columnId, tag = 'white', id }: DialogProps
                   <Typography variant="caption" className={classes.buttonColumnTitle}>
                     ACTIONS:
                   </Typography>
-                  <Button className={classes.columnButton}>Move</Button>
-                  <Button className={classes.columnButton}>Copy</Button>
-                  <Button className={classes.columnButton}>Share</Button>
-                  <Button className={classes.columnButton}>Delete</Button>
+                  <Button className={buttonClasses.columnButton}>Move</Button>
+                  <Button className={buttonClasses.columnButton}>Copy</Button>
+                  <Button className={buttonClasses.columnButton}>Share</Button>
+                  <Button className={buttonClasses.columnButton}>Delete</Button>
                 </Box>
               </Grid>
             </Grid>

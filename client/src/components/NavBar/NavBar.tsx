@@ -13,13 +13,15 @@ import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined'
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import logo from '../../Images/logo.png';
 import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
+import { IBoard } from '../../interface/Board';
 
 interface Props {
   loggedInUser: IUser;
   handleDrawerToggle: () => void;
+  onAddNewBoard: (board: IBoard) => void;
 }
 
-const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
+const NavBar = ({ loggedInUser, handleDrawerToggle, onAddNewBoard }: Props): JSX.Element => {
   const classes = useStyles();
 
   // Need to grab the active board from context and use it's information here instead
@@ -50,7 +52,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
             <Grid item>
-              <AddBoardDialog />
+              <AddBoardDialog onAddNewBoard={onAddNewBoard} />
             </Grid>
             <Grid item>
               <AvatarDisplay loggedIn user={loggedInUser} />

@@ -1,11 +1,9 @@
 import { useState, MouseEvent } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { useAuth } from '../../context/useAuthContext';
-import useStyles from './useStyles';
+import { Avatar, Menu, MenuItem } from '@material-ui/core';
 import PictureModal from '../PictureModal/PictureModal';
+import { useAuth } from '../../context/';
 import { IUser } from '../../interface';
+import useStyles from './useStyles';
 
 interface Props {
   loggedIn: boolean;
@@ -63,7 +61,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
         <MenuItem onClick={handleProfile}>Profile</MenuItem>
       </Menu>
-      <PictureModal open={openImageModal} setOpen={handleProfile} />;
+      <PictureModal open={openImageModal} setOpen={handleProfile} />
     </div>
   );
 };
