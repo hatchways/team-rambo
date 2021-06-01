@@ -1,21 +1,18 @@
 import { useState, useContext, createContext, FunctionComponent } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import { columnData } from '../components/Kanban/data';
-import { IColumn, ICard, IKanbanContext } from '../context/types/kanban';
+import { IKanbanContext } from '../interface/KanbanContext';
+import { IColumn } from '../interface/Column';
+import { ICard } from '../interface/Card';
 import cloneDeep from 'lodash.clonedeep';
+import { useSnackBar } from './useSnackbarContext';
 
-const initialKanbanData: IKanbanContext = {
-  columns: [] as IColumn[],
-  handleDragEnd: () => null,
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  addCard: (_card: ICard) => false,
-};
-
-export const KanbanContext = createContext<IKanbanContext>(initialKanbanData);
+export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
 export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [columns, setColumns] = useState<Array<IColumn>>(columnData);
-
+  const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
+  const { updateSnackBarMessage } = useSnackBar();
   const handleDragEnd = (result: DropResult): void => {
     const { destination, source, draggableId, type } = result;
     if (!destination) return;
@@ -77,6 +74,11 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   };
 
   const addCard = (card: ICard): boolean => {
+    if (card.name === '') {
+      updateSnackBarMessage('Please enter a card name');
+      return false;
+    }
+
     const columnsCopy = cloneDeep(columns);
     const columnIndex = columnsCopy.findIndex((col) => col.id === card.columnId);
     if (columnIndex > -1) {
@@ -84,16 +86,35 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       columnCopy.cards.push(card);
       columnsCopy[columnIndex] = columnCopy;
       setColumns(columnsCopy);
+      return true;
     }
     return false;
+  };
+
+  const setOpenCard = (card: ICard): void => {
+    setFocusedCard(card);
+  };
+  const resetOpenCard = (): void => setFocusedCard(null);
+
+  const getColumnById = (columnId: string): IColumn | null => {
+    if (!columnId) return null;
+    const colIndex = columns.findIndex((col) => col.id === columnId);
+    if (colIndex > -1) {
+      return columns[colIndex];
+    }
+    return null;
   };
 
   return (
     <KanbanContext.Provider
       value={{
         columns,
+        focusedCard,
         handleDragEnd,
         addCard,
+        setOpenCard,
+        resetOpenCard,
+        getColumnById,
       }}
     >
       {children}

@@ -1,8 +1,10 @@
-const Board = require("../models/Board");
+const { Board } = require("../models/Board");
 const { User } = require("../models/User");
 
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const sendEmail = require("../utils/sendEmail");
+const sgMail = require("@sendgrid/mail");
 
 // @route POST /auth/register
 // @desc Register user
@@ -24,7 +26,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   if (user) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
-
     const board = await Board.create({
       name: "My board",
       columns: [
@@ -39,7 +40,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
           createdAt: Date.now(),
         },
       ],
-      user: user,
+      user: user._id,
     });
 
     res.cookie("token", token, {

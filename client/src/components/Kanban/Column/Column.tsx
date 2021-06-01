@@ -1,6 +1,7 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import { ICard, IColumn } from '../../../context/types/kanban';
+import { ICard } from '../../../interface/Card';
+import { IColumn } from '../../../interface/Column';
 import Card from '../Card/Card';
 import CardForm from '../CardForm/CardForm';
 import useStyles from './useStyles';
@@ -33,7 +34,14 @@ const Column = ({ id, name, cards, index }: ColumnProps): JSX.Element => {
                     <Grid container {...provided.droppableProps} ref={provided.innerRef} direction="column">
                       {cards.map((card: ICard, index: number) => {
                         return (
-                          <Card key={card.id} id={card.id} name={card.name} tag={card.tag || 'white'} index={index} />
+                          <Card
+                            key={card.id}
+                            id={card.id}
+                            columnId={card.columnId}
+                            name={card.name}
+                            tag={card.tag || 'white'}
+                            index={index}
+                          />
                         );
                       })}
                       {provided.placeholder}

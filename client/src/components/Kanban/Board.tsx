@@ -1,6 +1,7 @@
 import { Grid } from '@material-ui/core';
 import { DragDropContext, Droppable, DroppableProvided } from 'react-beautiful-dnd';
 import { useKanban } from '../../context/useKanbanContext';
+import { FocusCard } from './FocusCard/FocusCard';
 import Column from './Column/Column';
 
 const Board = (): JSX.Element => {
@@ -12,7 +13,17 @@ const Board = (): JSX.Element => {
           return (
             <Grid ref={provided.innerRef} container spacing={2} {...provided.droppableProps}>
               {columns.map((column, index) => (
-                <Column key={column.id} index={index} id={column.id} name={column.name} cards={column.cards} />
+                <>
+                  <FocusCard />
+                  <Column
+                    key={column.id}
+                    index={index}
+                    id={column.id}
+                    name={column.name}
+                    cards={column.cards}
+                    createdAt={column.createdAt}
+                  />
+                </>
               ))}
               {provided.placeholder}
             </Grid>
