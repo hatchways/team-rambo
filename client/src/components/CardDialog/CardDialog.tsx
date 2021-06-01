@@ -16,12 +16,11 @@ import {
 import ClearIcon from '@material-ui/icons/Clear';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
-import useColorTagStyles from '../Kanban/shared/colorStyles';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import { useKanban } from '../../context/useKanbanContext';
 import { useDialog } from '../../context/useDialogContext';
 import { IColumn } from '../../interface/Column';
-import { cardDialogStyles, DialogItemGroup } from '../CardDialog';
+import { cardDialogStyles, DialogItemGroup, DialogActionButton, dialogActionButtonStyles } from '../CardDialog';
 
 type DialogProps = {
   name: string;
@@ -34,11 +33,11 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
   const [column, setColumn] = useState<IColumn | null>(null);
   const classes = cardDialogStyles();
+  const buttonClasses = dialogActionButtonStyles(); //to be removed in Dialog Actions PR
   const theme = useTheme();
   const { updateSnackBarMessage } = useSnackBar();
-  const colorClasses = useColorTagStyles({ tag });
   const { resetOpenCard, getColumnById } = useKanban();
-  const { items, addItem, resetItems, hasItem } = useDialog();
+  const { items, resetItems } = useDialog();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [tagColor, setTagColor] = useState(tag);
 
@@ -102,90 +101,32 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
         </Grid>
         <Divider className={classes.divider} />
         <DialogContent dividers={false}>
-          <Grid container className={classes.hasMargin}>
-            <Grid item xs={10}>
-              <DialogItemGroup items={items} />
-            </Grid>
-            <Grid item xs={2} direction="column" className={classes.buttonContainer}>
-              <Box className={classes.buttonGroup}>
-                <Typography variant="caption" className={classes.buttonColumnTitle}>
-                  SECTIONS:
-                </Typography>
-                <Button
-                  className={hasItem('description') ? classes.columnButtonActive : classes.columnButton}
-                  onClick={() => {
-                    addItem({
-                      title: 'Description:',
-                      content: 'description',
-                      icon: 'contacts',
-                      id: `item-${Math.floor(Math.random() * 999999)}`,
-                    });
-                  }}
-                >
-                  Description
-                </Button>
-                <Button
-                  className={hasItem('deadline') ? classes.columnButtonActive : classes.columnButton}
-                  onClick={() => {
-                    addItem({
-                      title: 'Deadline:',
-                      content: 'deadline',
-                      icon: 'schedule',
-                      id: `item-${Math.floor(Math.random() * 999999)}`,
-                    });
-                  }}
-                >
-                  Deadline
-                </Button>
-                <Button
-                  className={hasItem('comment') ? classes.columnButtonActive : classes.columnButton}
-                  onClick={() => {
-                    addItem({
-                      title: 'Comment:',
-                      content: 'comment',
-                      icon: 'bubble',
-                      id: `item-${Math.floor(Math.random() * 999999)}`,
-                    });
-                  }}
-                >
-                  Comment
-                </Button>
-                <Button
-                  className={hasItem('attachment') ? classes.columnButtonActive : classes.columnButton}
-                  onClick={() => {
-                    addItem({
-                      title: 'Attachments:',
-                      content: 'attachment',
-                      icon: 'attachment',
-                      id: `item-${Math.floor(Math.random() * 999999)}`,
-                    });
-                  }}
-                >
-                  Attachment
-                </Button>
-                <Button
-                  className={hasItem('checklist') ? classes.columnButtonActive : classes.columnButton}
-                  onClick={() => {
-                    addItem({
-                      title: 'Checklist:',
-                      content: 'checklist',
-                      icon: 'checklist',
-                      id: `item-${Math.floor(Math.random() * 999999)}`,
-                    });
-                  }}
-                >
-                  Check-list
-                </Button>
-              </Box>
-              <Box className={classes.buttonGroup}>
-                <Typography variant="caption" className={classes.buttonColumnTitle}>
-                  ACTIONS:
-                </Typography>
-                <Button className={classes.columnButton}>Move</Button>
-                <Button className={classes.columnButton}>Copy</Button>
-                <Button className={classes.columnButton}>Share</Button>
-                <Button className={classes.columnButton}>Delete</Button>
-              </Box>
+          <Grid container xs={12} className={classes.hasMargin}>
+            <DialogItemGroup items={items} />
+            <Grid container xs={2} direction="column" className={classes.buttonContainer}>
+              <Grid item>
+                <Box className={classes.buttonGroup}>
+                  <Typography variant="caption" className={classes.buttonColumnTitle}>
+                    SECTIONS:
+                  </Typography>
+                  <DialogActionButton title="Description" content="description" icon="contacts" />
+                  <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
+                  <DialogActionButton title="Comment" content="comment" icon="bubble" />
+                  <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
+                  <DialogActionButton title="Checklist" content="checklist" icon="checklist" />
+                </Box>
+              </Grid>
+              <Grid item>
+                <Box className={classes.buttonGroup}>
+                  <Typography variant="caption" className={classes.buttonColumnTitle}>
+                    ACTIONS:
+                  </Typography>
+                  <Button className={buttonClasses.columnButton}>Move</Button>
+                  <Button className={buttonClasses.columnButton}>Copy</Button>
+                  <Button className={buttonClasses.columnButton}>Share</Button>
+                  <Button className={buttonClasses.columnButton}>Delete</Button>
+                </Box>
+              </Grid>
             </Grid>
           </Grid>
         </DialogContent>

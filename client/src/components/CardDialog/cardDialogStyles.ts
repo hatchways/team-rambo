@@ -38,30 +38,6 @@ const cardDialogStyles = makeStyles((theme: Theme) => ({
     marginTop: '4%',
   },
   dialogButton: { padding: '5px 20px', margin: '0 0 0 6.5%' },
-  columnButton: {
-    backgroundColor: theme.palette.secondary.light,
-    color: theme.palette.secondary.main,
-    padding: '5px 0',
-    margin: '2px 5px',
-    border: 'none',
-    width: '90px',
-    '&:hover': {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-    },
-  },
-  columnButtonActive: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    padding: '5px 0',
-    margin: '2px 5px',
-    border: 'none',
-    width: '90px',
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.light,
-      color: theme.palette.secondary.main,
-    },
-  },
   buttonContainer: { display: 'flex', alignItems: 'center', justify: 'flex-start', padding: '18px 0px 0 25px' },
   buttonGroup: { paddingTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'left' },
   topRight: {

@@ -1,19 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Grid } from '@material-ui/core';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import useStyles from './dashboardStyles';
+import { Box, Grid, CssBaseline, CircularProgress } from '@material-ui/core';
+import { DialogProvider } from '../../context/useDialogContext';
+import { KanbanProvider } from '../../context/useKanbanContext';
+import getUserBoards from '../../helpers/APICalls/getUserBoards';
+import { useAuth } from '../../context/useAuthContext';
+import { IBoard } from '../../interface/Board';
 import Board from '../../components/Kanban/Board';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
-import { DialogProvider } from '../../context/useDialogContext';
-import { KanbanProvider } from '../../context/useKanbanContext';
-import { useAuth } from '../../context/useAuthContext';
-//import { useSocket } from '../../context/useSocketContext';
-import getUserBoards from '../../helpers/APICalls/getUserBoards';
-import { IBoard } from '../../interface/Board';
+import useStyles from './dashboardStyles';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
