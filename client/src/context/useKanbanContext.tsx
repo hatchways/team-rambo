@@ -1,4 +1,4 @@
-import { useState, useContext, createContext, FunctionComponent, useEffect } from 'react';
+import { useState, useContext, createContext, FunctionComponent, useEffect, Dispatch, SetStateAction } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
 import { getBoard, getUserBoards, updateBoard } from '../helpers/';
@@ -49,6 +49,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
     const { destination, source, draggableId } = result;
 
+    const dupBoard = Object.assign({}, activeBoard);
     const columnsCopy: IColumn[] = cloneDeep(columns);
     const colIndex = columns.findIndex((col) => col._id === source.droppableId);
 
@@ -56,11 +57,13 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       const cards = Array.from(columnsCopy[colIndex].cards);
       const newCards = swapCards(cards, source, destination, draggableId);
       columnsCopy[colIndex].cards = newCards;
-      activeBoard.columns = columnsCopy;
+      dupBoard.columns = columnsCopy;
 
       setColumns(columnsCopy);
 
-      updateBoard(activeBoard);
+      updateBoard(dupBoard);
+
+      setActiveBoard(dupBoard);
 
       return;
     }
@@ -76,11 +79,13 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       }
     }
 
-    activeBoard.columns = columnsCopy;
+    dupBoard.columns = columnsCopy;
 
     setColumns(columnsCopy);
 
-    updateBoard(activeBoard);
+    updateBoard(dupBoard);
+
+    setActiveBoard(dupBoard);
 
     return;
   };
@@ -116,7 +121,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       const columnCopy = cloneDeep(columns[columnIndex]);
       columnCopy.cards.push(card);
       columnsCopy[columnIndex] = columnCopy;
-      activeBoard.columns = columnsCopy;
+      const copyBoard = Object.assign({}, activeBoard);
+      copyBoard.columns = columnsCopy;
+
+      setActiveBoard(copyBoard);
 
       setColumns(columnsCopy);
 
@@ -128,22 +136,46 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return false;
   };
 
-  const renameColumn = (columnId: string): undefined => {
-    const columnsCopy = cloneDeep(columns);
+  const renameColumn = (
+    columnId: string,
+    name: string,
+    setIsRenaming: Dispatch<SetStateAction<boolean>>,
+    setSubmitting: (isSubmitting: boolean) => void,
+  ): undefined => {
+    const colId = columns.findIndex((col) => col._id === columnId);
 
-    // setColumns(columnsCopy);
+    if (colId < 0) return undefined;
 
-    // updateBoard(activeBoard);
+    const dupColumns = cloneDeep(columns);
+    const dupBoard = Object.assign({}, activeBoard);
+
+    dupColumns[colId].name = name;
+    dupBoard.columns = dupColumns;
+
+    updateBoard(dupBoard).then(() => {
+      setSubmitting(false);
+      setIsRenaming((prev) => !prev);
+    });
+
+    setColumns(dupColumns);
+    setActiveBoard(dupBoard);
 
     return undefined;
   };
 
   const removeColumn = (columnId: string): undefined => {
-    const columnsCopy = cloneDeep(columns);
+    const colId = columns.findIndex((col) => col._id === columnId);
 
-    // setColumns(columnsCopy);
+    if (colId < 0) return undefined;
 
-    // updateBoard(activeBoard);
+    const dupBoard = Object.assign({}, activeBoard);
+    const dupColumnsArray = dupBoard.columns.slice();
+    const newColumns = dupColumnsArray.slice(0, colId).concat(dupColumnsArray.slice(colId + 1));
+    dupBoard.columns = newColumns;
+
+    updateBoard(dupBoard);
+    setColumns(newColumns);
+    setActiveBoard(dupBoard);
 
     return undefined;
   };

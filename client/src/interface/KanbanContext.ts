@@ -1,7 +1,6 @@
+import { Dispatch, SetStateAction } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
-import { IBoard } from './Board';
-import { ICard } from './Card';
-import { IColumn } from './Column';
+import { IBoard, ICard, IColumn } from './';
 
 export interface IKanbanContext {
   activeBoard: IBoard;
@@ -12,7 +11,12 @@ export interface IKanbanContext {
   getColumnById: (columnId: string) => IColumn | null;
   handleDragEnd: (result: DropResult) => void;
   setActiveBoard: (board: IBoard) => void;
-  renameColumn: (columnId: string) => void;
+  renameColumn: (
+    columnId: string,
+    name: string,
+    setIsRenaming: Dispatch<SetStateAction<boolean>>,
+    setSubmitting: (isSubmitting: boolean) => void,
+  ) => void;
   removeColumn: (columnId: string) => void;
   fetchBoard: (id: string) => Promise<IBoard>;
 }
