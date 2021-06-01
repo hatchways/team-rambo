@@ -14,3 +14,8 @@ export interface BoardApiData {
   boards: Array<IBoard>;
   error?: { message: string };
 }
+
+export interface NewBoardApiData {
+  board: IBoard;
+  error?: { messge: string };
+}

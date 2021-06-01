@@ -1,6 +1,6 @@
-import { IDialogItem } from '../../context/types/detail';
+import { IDialogItem } from '../../interface/DialogItem';
 
-export const cardDetailItems: IDialogItem[] = [
+const cardDialogItems: IDialogItem[] = [
   {
     title: 'Description:',
     content: 'description',
@@ -20,3 +20,5 @@ export const cardDetailItems: IDialogItem[] = [
     id: 'item-3',
   },
 ];
+
+export default cardDialogItems;
