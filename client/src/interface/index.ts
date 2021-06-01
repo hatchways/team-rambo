@@ -1,5 +1,5 @@
 export type { IUser, ISearchUsersApiData } from './User';
-export type { IBoard } from './Board';
+export type { IBoard, NewBoardApiData, BoardApiData } from './Board';
 export type { ICard } from './Card';
 export type { IColumn } from './Column';
 export type { IDialogItem } from './DialogItem';

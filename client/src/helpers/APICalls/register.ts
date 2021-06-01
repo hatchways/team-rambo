@@ -1,6 +1,6 @@
 import { IFetchOptions, IAuthApiData } from '../../interface/';
 
-export const register = async (email: string, password: string): Promise<IAuthApiData> => {
+const register = async (email: string, password: string): Promise<IAuthApiData> => {
   const fetchOptions: IFetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -13,3 +13,5 @@ export const register = async (email: string, password: string): Promise<IAuthAp
       error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
+
+export default register;

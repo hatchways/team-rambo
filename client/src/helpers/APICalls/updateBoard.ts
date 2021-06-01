@@ -1,6 +1,6 @@
 import { IBoard, IFetchOptions } from '../../interface/';
 
-export const updateBoard = async (board: IBoard): Promise<IBoard> => {
+const updateBoard = async (board: IBoard): Promise<IBoard> => {
   const fetchOptions: IFetchOptions = {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -13,3 +13,5 @@ export const updateBoard = async (board: IBoard): Promise<IBoard> => {
       error: { error: err, message: 'Unable to connect to server. Please try again' },
     }));
 };
+
+export default updateBoard;

@@ -1,6 +1,6 @@
 import { IFetchOptions, IAuthApiData } from '../../interface/';
 
-export const logout = async (): Promise<IAuthApiData> => {
+const logout = async (): Promise<IAuthApiData> => {
   const fetchOptions: IFetchOptions = {
     method: 'GET',
     credentials: 'include',
@@ -11,3 +11,5 @@ export const logout = async (): Promise<IAuthApiData> => {
       error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
+
+export default logout;
