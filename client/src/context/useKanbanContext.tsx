@@ -1,9 +1,9 @@
 import { useState, useContext, createContext, FunctionComponent, useEffect } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
-import { getBoard, getUserBoards, updateBoard } from '../helpers/';
+import { getBoard, getUserBoards, updateBoard, createBoard } from '../helpers/';
 import { useSnackBar, useAuth } from './';
-import { IKanbanContext, IColumn, ICard, IBoard } from '../interface/';
+import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
@@ -16,6 +16,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     user: 'Initial',
     createdAt: 'Initial',
   });
+  const [userBoards, setUserBoards] = useState<IBoard[]>([]);
   const [columns, setColumns] = useState<IColumn[]>(activeBoard.columns);
   const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
   const { updateSnackBarMessage } = useSnackBar();
@@ -31,6 +32,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     const request = await getUserBoards();
     const board = request.boards[0];
     setActiveBoard(board);
+    setUserBoards(request.boards);
     setColumns(board.columns);
 
     return board;
@@ -42,6 +44,13 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     setColumns(board.columns);
 
     return board;
+  };
+
+  const createNewBoard = async (name: string): Promise<NewBoardApiData> => {
+    const request = await createBoard(name);
+    if (request.board) setUserBoards((boards) => [...boards, request.board]);
+
+    return request;
   };
 
   const handleDragEnd = (result: DropResult): void => {
@@ -185,6 +194,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       value={{
         activeBoard,
         focusedCard,
+        userBoards,
         addCard,
         setOpenCard,
         resetOpenCard,
@@ -194,6 +204,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         renameColumn,
         removeColumn,
         fetchBoard,
+        createNewBoard,
       }}
     >
       {children}
