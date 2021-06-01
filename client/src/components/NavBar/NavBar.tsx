@@ -8,6 +8,7 @@ import logo from '../../Images/logo.png';
 import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
 import NotificationCenter from './Notifications/NotificationCenter/NotificationCenter';
 import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
+import { testNotifications } from './Notifications/sampleNotificationData';
 
 type Props = {
   loggedInUser: User;
@@ -42,7 +43,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
             <Grid item>
-              <NotificationCenter loggedInUser={loggedInUser} />
+              <NotificationCenter loggedInUser={loggedInUser} notifications={testNotifications} />
             </Grid>
             <Grid item>
               <AddBoardDialog />

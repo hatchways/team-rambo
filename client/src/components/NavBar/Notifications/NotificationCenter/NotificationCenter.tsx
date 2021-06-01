@@ -1,38 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Popover, IconButton } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { User } from '../../../../interface/User';
 import NotificationItem from '../NotificationItem/NotificationItem';
-import { testNotifications } from '../sampleNotificationData';
 import INotificationItem from '../../../../interface/Notification';
 import { StyledBadge } from './notificationCenterStyles';
 
 type NotificationProps = {
   loggedInUser: User;
+  notifications: INotificationItem[];
 };
 
-const NotificationCenter = ({ loggedInUser }: NotificationProps): JSX.Element => {
+const NotificationCenter = ({ loggedInUser, notifications }: NotificationProps): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [unread, setUnread] = useState(testNotifications.filter((item) => item.read === true).length);
+  const [unread, setUnread] = useState(
+    notifications.filter((item: INotificationItem) => item.user === loggedInUser.email).length,
+  );
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    setUnread(testNotifications.filter((item) => item.read === true).length);
   };
 
   const handleClose = () => setAnchorEl(null);
 
+  const countNotifications = () => {
+    return notifications.filter((item) => item.read === false && item.user === loggedInUser.email).length;
+  };
+
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    setUnread(countNotifications);
+  });
 
   return (
     <div>
       <IconButton onClick={handleClick}>
-        <StyledBadge badgeContent={unread} color="secondary">
+        <StyledBadge badgeContent={unread > 0 && unread} invisible={unread < 1 ? true : false} color="secondary">
           <NotificationsIcon color="primary" style={{ fontSize: 45 }} />
         </StyledBadge>
       </IconButton>
       <Popover
-        open={open}
+        open={countNotifications() !== 0 ? open : false}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
@@ -44,7 +53,7 @@ const NotificationCenter = ({ loggedInUser }: NotificationProps): JSX.Element =>
           horizontal: 'left',
         }}
       >
-        {testNotifications
+        {notifications
           .filter((item: INotificationItem) => item.user === loggedInUser.email)
           .map((item: INotificationItem) => {
             return (

@@ -6,6 +6,7 @@ import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import INotificationItem from '../../../../interface/Notification';
+import { testNotifications } from '../sampleNotificationData';
 
 type NotificationItemProps = INotificationItem;
 
@@ -26,7 +27,12 @@ const NotificationItem = ({ type, title, description, read, link }: Notification
     }
   };
 
-  const handleClick = () => setReadState(readState ? false : true);
+  const handleClick = () => {
+    setReadState(!readState);
+    testNotifications
+      .filter((item: INotificationItem) => item.title === title)
+      .map((item: INotificationItem) => (item.read = !read));
+  };
 
   return (
     <div className={!readState ? classes.main : `${classes.main} ${classes.read}`} onClick={handleClick}>
