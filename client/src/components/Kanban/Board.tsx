@@ -10,11 +10,9 @@ const Board = (): JSX.Element => {
     <DragDropContext onDragEnd={handleDragEnd}>
       <Grid container spacing={2}>
         <FocusCard />
-        <Grid container>
-          {columns.map((column) => (
-            <Column key={column.id} {...column} />
-          ))}
-        </Grid>
+        {columns.map((column) => (
+          <Column key={column.id} {...column} />
+        ))}
       </Grid>
     </DragDropContext>
   );
