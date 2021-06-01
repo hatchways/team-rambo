@@ -1,11 +1,12 @@
 import Avatar from '@material-ui/core/Avatar';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import PictureModal from '../PictureModal/PictureModal';
+import useStyles from './useStyles';
 import { User } from '../../interface/User';
 import { useState, MouseEvent } from 'react';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import { useAuth } from '../../context/useAuthContext';
-import useStyles from './useStyles';
-import PictureModal from '../PictureModal/PictureModal';
+import { useUser } from '../../context/useUserContext';
 
 interface Props {
   loggedIn: boolean;
@@ -17,6 +18,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
   const [openImageModal, setOpenImageModal] = useState<boolean>(false);
   const open = Boolean(anchorEl);
   const { logout } = useAuth();
+  const { picture } = useUser();
   const classes = useStyles();
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -34,6 +36,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
 
   const handleProfile = () => {
     setOpenImageModal((prevOpen) => !prevOpen);
+    setAnchorEl(null);
     // To do: implement component for profile page and backend routing
   };
 
@@ -41,7 +44,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
     <div>
       <Avatar
         alt="Profile Image"
-        src={`https://robohash.org/${user.email}.png`}
+        src={picture ? picture : `https://robohash.org/${user.email}.png`}
         aria-label="show auth menu"
         aria-controls="auth-menu"
         aria-haspopup="true"
@@ -63,7 +66,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
         <MenuItem onClick={handleProfile}>Profile</MenuItem>
       </Menu>
-      <PictureModal open={openImageModal} setOpen={handleProfile} />;
+      <PictureModal open={openImageModal} setOpen={handleProfile} />
     </div>
   );
 };
