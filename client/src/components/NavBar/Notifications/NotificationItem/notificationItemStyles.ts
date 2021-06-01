@@ -10,6 +10,7 @@ const notificationStyles = makeStyles((theme: Theme) =>
     },
     title: {
       color: theme.palette.primary.main,
+      display: 'inline',
     },
     divider: {
       width: '100%',
@@ -26,13 +27,25 @@ const notificationStyles = makeStyles((theme: Theme) =>
       paddingLeft: '7%',
     },
     read: {
-      '& *': {
-        color: theme.palette.secondary.main,
-      },
+      '& *': { color: theme.palette.secondary.main },
     },
     linkText: {
       textDecoration: 'underline',
       color: theme.palette.primary.main,
+    },
+    ignoreRead: {
+      '& *': { color: 'unset' },
+    },
+    dismiss: {
+      display: 'inline',
+      float: 'right',
+      padding: '0',
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+      '&:hover': { backgroundColor: theme.palette.primary.main, color: theme.palette.primary.contrastText },
+      '&:disabled': {
+        opacity: 0,
+      },
     },
   }),
 );

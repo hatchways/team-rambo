@@ -1,6 +1,7 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { Badge } from '@material-ui/core';
+import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 
-const notificationCenterStyles = makeStyles((theme: Theme) =>
+export const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
     badge: {
       right: 10,
@@ -10,6 +11,4 @@ const notificationCenterStyles = makeStyles((theme: Theme) =>
       fontWeight: 'bold',
     },
   }),
-);
-
-export default notificationCenterStyles;
+)(Badge);

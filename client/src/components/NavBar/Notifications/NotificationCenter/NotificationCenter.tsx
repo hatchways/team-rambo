@@ -1,29 +1,17 @@
 import { useState } from 'react';
-import { Theme, withStyles, createStyles } from '@material-ui/core/styles';
-import { Badge, Popover, IconButton } from '@material-ui/core';
+import { Popover, IconButton } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { User } from '../../../../interface/User';
 import NotificationItem from '../NotificationItem/NotificationItem';
 import { testNotifications } from '../sampleNotificationData';
 import INotificationItem from '../../../../interface/Notification';
+import { StyledBadge } from './notificationCenterStyles';
 
 type NotificationProps = {
   loggedInUser: User;
 };
 
-const StyledBadge = withStyles((theme: Theme) =>
-  createStyles({
-    badge: {
-      right: 10,
-      top: 10,
-      backgroundColor: theme.palette.tags.red,
-      color: theme.palette.primary.contrastText,
-      fontWeight: 'bold',
-    },
-  }),
-)(Badge);
-
-export default function NotificationCenter({ loggedInUser }: NotificationProps): JSX.Element {
+const NotificationCenter = ({ loggedInUser }: NotificationProps): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [unread, setUnread] = useState(testNotifications.filter((item) => item.read === true).length);
 
@@ -74,4 +62,6 @@ export default function NotificationCenter({ loggedInUser }: NotificationProps):
       </Popover>
     </div>
   );
-}
+};
+
+export default NotificationCenter;

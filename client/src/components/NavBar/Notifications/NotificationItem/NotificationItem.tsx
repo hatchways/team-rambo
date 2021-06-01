@@ -1,6 +1,6 @@
 import { cloneElement, useState } from 'react';
 import notificationItemStyles from './notificationItemStyles';
-import { Divider, Typography, Box } from '@material-ui/core';
+import { Divider, Typography, Box, Button } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
@@ -35,6 +35,9 @@ const NotificationItem = ({ type, title, description, read, link }: Notification
         <Typography className={classes.title} variant="h5">
           {title}
         </Typography>
+        <Button disabled={!readState} className={`${classes.dismiss} ${classes.ignoreRead}`}>
+          Dismiss
+        </Button>
       </Box>
       <Divider className={classes.divider} />
       <Typography className={classes.indent} variant="body1">
