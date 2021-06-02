@@ -1,5 +1,6 @@
 import { useState, MouseEvent } from 'react';
-import { Avatar, Menu, MenuItem } from '@material-ui/core';
+import { Box, Avatar, Menu, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { PowerSettingsNew, AccountCircle } from '@material-ui/icons';
 import { useAuth } from '../../context/useAuthContext';
 import PictureModal from '../PictureModal/PictureModal';
 import { User } from '../../interface/User';
@@ -63,8 +64,18 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
         }}
         getContentAnchorEl={null}
       >
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        <MenuItem onClick={handleProfile}>Profile</MenuItem>
+        <MenuItem onClick={handleProfile}>
+          <ListItemIcon className={classes.listItemIcon}>
+            <AccountCircle color="primary" />
+          </ListItemIcon>
+          <ListItemText className={classes.listItemText}>Profile</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon className={classes.listItemIcon}>
+            <PowerSettingsNew color="primary" />
+          </ListItemIcon>
+          <ListItemText className={classes.listItemText}>Logout</ListItemText>
+        </MenuItem>
       </Menu>
       <PictureModal open={openImageModal} onClose={closeImageModal} />
     </div>

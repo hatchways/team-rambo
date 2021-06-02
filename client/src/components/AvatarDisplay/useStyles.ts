@@ -20,6 +20,13 @@ const useStyles = makeStyles((theme: Theme) =>
       width: theme.spacing(7),
       height: theme.spacing(7),
     },
+    listItemIcon: {
+      minWidth: 38,
+    },
+    listItemText: {
+      color: theme.palette.primary.main,
+      fontWeight: 'bolder',
+    },
   }),
 );
 
