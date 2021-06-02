@@ -15,7 +15,6 @@ import useStyles from './dashboardStyles';
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
-  //const { initSocket } = useSocket();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [boards, setBoards] = useState<Array<IBoard>>([]);
   const history = useHistory();
@@ -28,10 +27,6 @@ export default function Dashboard(): JSX.Element {
   useEffect(() => {
     getAllUserBoards();
   }, []);
-
-  // useEffect(() => {
-  //   initSocket();
-  // }, [initSocket]);
 
   const toggleDrawer = (): void => {
     setOpenDrawer((prevOpen) => !prevOpen);
