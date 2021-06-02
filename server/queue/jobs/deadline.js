@@ -30,8 +30,9 @@ const cardDueTemplate = (dueCards) => {
 /*
   Deadline reminder job handler.
 */
-module.exports = async (_, done) => {
+module.exports = async (job, done) => {
   // spawned processes don't share mongo connection.
+  console.log('establishing mongo connection in spawn...');
   connectDB();
   const boards = await Board.find({}).populate('user');
   if (boards.length === 0) return null;
@@ -55,6 +56,6 @@ module.exports = async (_, done) => {
     });
   }
 
-  mongoose.disconnect();
+  mongoose.disconnect(() => console.log('Disconnected mongo connection in spawned process'));
   done();
 }
