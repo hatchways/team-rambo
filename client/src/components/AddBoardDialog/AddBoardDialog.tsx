@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Button, IconButton, Box, Grid, Dialog, TextField, Typography, DialogActions } from '@material-ui/core';
+import { Button, Grid, TextField } from '@material-ui/core';
 import addBoardDialogStyles from './AddBoardDialogStyles';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
-import ClearIcon from '@material-ui/icons/Clear';
 import * as Yup from 'yup';
 import { Formik, useFormik } from 'formik';
 import createBoard from '../../helpers/APICalls/createBoard';
 import { IBoard } from '../../interface/Board';
 import { useSnackBar } from '../../context/useSnackbarContext';
+import StyledDialog from '../StyledDialog/StyledDialog';
 
 interface Props {
   onAddNewBoard: (board: IBoard) => void;
@@ -55,70 +55,54 @@ const AddBoardDialog = ({ onAddNewBoard }: Props): JSX.Element => {
   });
 
   return (
-    <Box>
-      <Grid item>
-        <Button
-          color="primary"
-          variant="contained"
-          size="large"
-          startIcon={<AddOutlinedIcon />}
-          onClick={handleClickOpen}
-          disableElevation
-        >
-          Create Board
-        </Button>
-      </Grid>
-      <Dialog open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
-        <Typography variant="h5" className={classes.dialogTitle}>
-          Create new board
-        </Typography>
-        <Formik
-          initialValues={{ name: '' }}
-          onSubmit={(values: Values) => console.log(values.name, 'sinal')}
-          validationSchema={Yup.object().shape({
-            name: Yup.string().required(`Insert the board's name`).min(2).max(50),
-          })}
-        >
-          <form onSubmit={formik.handleSubmit}>
-            <Grid container spacing={2} className={classes.formGrid}>
-              <Grid item>
-                <TextField
-                  name="name"
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
-                  fullWidth
-                  placeholder="Add Title"
-                  variant="outlined"
-                  InputProps={{
-                    classes: { input: classes.inputs },
-                  }}
-                  className={classes.textField}
-                />
+    <>
+      <Button
+        color="primary"
+        variant="contained"
+        size="large"
+        startIcon={<AddOutlinedIcon />}
+        onClick={handleClickOpen}
+        disableElevation
+      >
+        Create Board
+      </Button>
+      <StyledDialog
+        open={open}
+        buttonText="Create Board"
+        title="Create New Board"
+        toggleFunction={setOpen}
+        component={
+          <Formik
+            initialValues={{ name: '' }}
+            onSubmit={(values: Values) => console.log(values.name, 'sinal')}
+            validationSchema={Yup.object().shape({
+              name: Yup.string().required(`Insert the board's name`).min(2).max(50),
+            })}
+          >
+            <form onSubmit={formik.handleSubmit}>
+              <Grid container spacing={2} className={classes.formGrid}>
+                <Grid item>
+                  <TextField
+                    name="name"
+                    value={formik.values.name}
+                    onChange={formik.handleChange}
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
+                    fullWidth
+                    placeholder="Add Title"
+                    variant="outlined"
+                    InputProps={{
+                      classes: { input: classes.inputs },
+                    }}
+                    className={classes.textField}
+                  />
+                </Grid>
               </Grid>
-              <Grid item>
-                <Button
-                  type="submit"
-                  className={classes.dialogButton}
-                  color="primary"
-                  variant="contained"
-                  size="large"
-                  disableElevation
-                >
-                  Create
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        </Formik>
-        <DialogActions>
-          <IconButton className={classes.topRight} onClick={handleClose}>
-            <ClearIcon />
-          </IconButton>
-        </DialogActions>
-      </Dialog>
-    </Box>
+            </form>
+          </Formik>
+        }
+      />
+    </>
   );
 };
 
