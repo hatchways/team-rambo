@@ -49,7 +49,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
         aria-label="show auth menu"
         aria-controls="auth-menu"
         aria-haspopup="true"
-        className={classes.medium}
+        className={classes.large}
         onClick={handleClick}
       ></Avatar>
       <Menu
