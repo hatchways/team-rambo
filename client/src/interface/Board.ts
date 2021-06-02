@@ -1,11 +1,11 @@
-import { Column } from './Column';
-import { Card } from './Card';
+import { IColumn } from './Column';
+import { ICard } from './Card';
 
 export interface IBoard {
   _id: string;
   name: string;
-  columns: Array<Column>;
-  cards: Array<Card>;
+  columns: Array<IColumn>;
+  cards: Array<ICard>;
   user: string;
   createdAt: string;
 }
@@ -13,4 +13,9 @@ export interface IBoard {
 export interface BoardApiData {
   boards: Array<IBoard>;
   error?: { message: string };
+}
+
+export interface NewBoardApiData {
+  board: IBoard;
+  error?: { messge: string };
 }

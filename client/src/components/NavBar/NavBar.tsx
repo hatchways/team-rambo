@@ -1,26 +1,24 @@
-import { User } from '../../interface/User';
-import useStyles from './useStyles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import { AppBar, Toolbar, Typography, IconButton, Grid, Button, Container } from '@material-ui/core/';
+import useStyles from './navBarStyles';
 import MenuIcon from '@material-ui/icons/Menu';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
-import logo from '../../Images/logo.png';
+import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
+import NotificationCenter from './Notifications/NotificationCenter/NotificationCenter';
+import { testNotifications } from './Notifications/sampleNotificationData';
+import logo from '../../Images/logo.png';
+import { IUser, IBoard } from '../../interface/';
+import { useKanban } from '../../context';
 
 interface Props {
-  loggedInUser: User;
+  loggedInUser: IUser;
   handleDrawerToggle: () => void;
 }
 
 const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
   const classes = useStyles();
+  const { activeBoard } = useKanban();
 
   return (
     <Container className={classes.root}>
@@ -47,6 +45,9 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
             <Grid item>
+              <NotificationCenter loggedInUser={loggedInUser} notifications={testNotifications} />
+            </Grid>
+            <Grid item>
               <AddBoardDialog />
             </Grid>
             <Grid item>
@@ -58,7 +59,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            My School Board
+            {activeBoard.name}
           </Typography>
           <IconButton
             onClick={handleDrawerToggle}

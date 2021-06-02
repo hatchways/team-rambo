@@ -1,8 +1,7 @@
-import { AuthApiData } from '../../interface/AuthApiData';
-import { FetchOptions } from '../../interface/FetchOptions';
+import { IFetchOptions, IAuthApiData } from '../../interface/';
 
-const login = async (email: string, password: string): Promise<AuthApiData> => {
-  const fetchOptions: FetchOptions = {
+const login = async (email: string, password: string): Promise<IAuthApiData> => {
+  const fetchOptions: IFetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),

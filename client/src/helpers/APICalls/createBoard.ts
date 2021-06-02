@@ -1,16 +1,16 @@
-import { FetchOptions } from '../../interface/FetchOptions';
-import { IBoard } from '../../interface/Board';
+import { IFetchOptions, NewBoardApiData } from '../../interface/';
 
-const createBoard = async (): Promise<IBoard> => {
-  const fetchOptions: FetchOptions = {
+const createBoard = async (name: string): Promise<NewBoardApiData> => {
+  const fetchOptions: IFetchOptions = {
     method: 'POST',
+    body: JSON.stringify({ name }),
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   };
-  return fetch(`/users/board`, fetchOptions)
+  return await fetch(`/boards`, fetchOptions)
     .then((res) => res.json())
-    .catch((err) => ({
-      error: { error: err, message: 'Unable to connect to server. Please try again' },
+    .catch(() => ({
+      error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
 

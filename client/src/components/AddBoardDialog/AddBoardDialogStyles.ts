@@ -4,7 +4,6 @@ const addBoardDialogStyles = makeStyles((theme) => ({
   textField: {
     display: 'flex',
     textAlign: 'center',
-    width: '80%',
   },
   paper: {
     minWidth: '30%',
@@ -59,6 +58,10 @@ const addBoardDialogStyles = makeStyles((theme) => ({
     position: 'absolute',
     left: '85%',
     top: '2%',
+  },
+  formGrid: {
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 }));
 

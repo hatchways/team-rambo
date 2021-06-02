@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
-const cardDialogStyles = makeStyles(() => ({
+const cardDialogStyles = makeStyles((theme: Theme) => ({
   textField: {
     display: 'flex',
     width: '100%',
@@ -29,7 +29,7 @@ const cardDialogStyles = makeStyles(() => ({
     display: 'inline',
   },
   dialogSubTitle: {
-    color: '#9ba9cc',
+    color: theme.palette.secondary.main,
     margin: '2px 0 5px 6%',
   },
   dialogHeading: {
@@ -37,19 +37,7 @@ const cardDialogStyles = makeStyles(() => ({
     fontWeight: 'bold',
     marginTop: '4%',
   },
-  date: {
-    textDecoration: 'underline',
-    marginLeft: '6%',
-  },
   dialogButton: { padding: '5px 20px', margin: '0 0 0 6.5%' },
-  columnButton: {
-    backgroundColor: '#F4F6FF',
-    color: '#9ba9cc',
-    padding: '5px 0',
-    margin: '2px 5px',
-    border: 'none',
-    width: '90px',
-  },
   buttonContainer: { display: 'flex', alignItems: 'center', justify: 'flex-start', padding: '18px 0px 0 25px' },
   buttonGroup: { paddingTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'left' },
   topRight: {
@@ -58,7 +46,7 @@ const cardDialogStyles = makeStyles(() => ({
     top: '1%',
   },
   buttonColumnTitle: {
-    color: '#9ba9cc',
+    color: theme.palette.secondary.main,
     margin: '0 5px',
   },
   divider: {
@@ -75,6 +63,11 @@ const cardDialogStyles = makeStyles(() => ({
     height: 8,
     borderRadius: 9999,
     marginLeft: '15px',
+  },
+  cardTagCentered: {
+    width: 50,
+    height: 8,
+    borderRadius: 9999,
   },
 }));
 
