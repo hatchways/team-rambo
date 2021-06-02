@@ -5,8 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
-import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
-import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
 import { IconButton } from '@material-ui/core';
 import { Clear } from '@material-ui/icons/';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -15,27 +13,21 @@ import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import useStyles from './PictureModalStyles';
-import React from 'react';
 import Dropzone, { DropzoneState } from 'react-dropzone';
 import uploadImage from '../../helpers/APICalls/uploadImage';
 import { useState } from 'react';
+import { useSnackBar } from '../../context/useSnackbarContext';
 
 interface Props {
   open: boolean;
-  setOpen: () => void;
+  onClose: () => void;
 }
 
-interface IAlert {
-  open: boolean;
-  severity?: Color;
-  message?: string;
-}
-
-const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
+const PictureModal = ({ open, onClose }: Props): JSX.Element => {
   const classes = useStyles();
   const maxFileSize = 5e8;
   const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
-  const [alert, setOpenAlert] = useState<IAlert>({ open: false });
+  const { updateSnackBarMessage } = useSnackBar();
   const [preview, setPreview] = useState<string>('');
   const [image, setImage] = useState<Blob>(new Blob());
 
@@ -44,7 +36,7 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
     const currentFile = [...files].shift();
 
     if (!currentFile) {
-      setOpenAlert({ open: true, message: 'Insert a valid image file!', severity: 'error' });
+      updateSnackBarMessage('Insert a valid image file!', 'error');
       return;
     }
 
@@ -64,35 +56,21 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
 
     const { error } = await uploadImage(form);
     if (error) {
-      setOpenAlert({ open: true, message: 'Insert a valid image file!', severity: 'error' });
+      updateSnackBarMessage('Insert a valid image file!', 'error');
       return;
     }
-    setOpenAlert({ open: true, message: 'Image saved!', severity: 'success' });
-    setOpen();
-  };
-
-  const handleAlertClose = (
-    event: React.SyntheticEvent<Event> | React.SyntheticEvent<Element, Event>,
-    reason?: SnackbarCloseReason,
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenAlert({ open: false });
-  };
-
-  const Alert = (props: AlertProps) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
+    updateSnackBarMessage('Image saved!', 'success');
+    onClose();
   };
 
   return (
     <>
-      <Dialog open={open} onClose={setOpen} className={classes.root}>
+      <Dialog open={open} onClose={onClose} className={classes.root}>
         <DialogTitle disableTypography>
           <Typography variant="h6" className={classes.title}>
             Upload profile picture
           </Typography>
-          <IconButton onClick={setOpen} className={classes.closeButton}>
+          <IconButton onClick={onClose} className={classes.closeButton}>
             <Clear />
           </IconButton>
         </DialogTitle>
@@ -139,11 +117,6 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
           </Grid>
         </DialogContent>
       </Dialog>
-      <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleAlertClose}>
-        <Alert onClose={handleAlertClose} elevation={7} severity={alert.severity}>
-          {alert.message}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

@@ -23,6 +23,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    closeImageModal();
   };
 
   const handleLogout = () => {
@@ -31,8 +32,12 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
   };
 
   const handleProfile = () => {
-    setOpenImageModal((prevOpen) => !prevOpen);
+    setOpenImageModal(true);
     // To do: implement component for profile page and backend routing
+  };
+
+  const closeImageModal = () => {
+    setOpenImageModal(false);
   };
 
   return (
@@ -61,7 +66,7 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
         <MenuItem onClick={handleProfile}>Profile</MenuItem>
       </Menu>
-      <PictureModal open={openImageModal} setOpen={handleProfile} />
+      <PictureModal open={openImageModal} onClose={closeImageModal} />
     </div>
   );
 };

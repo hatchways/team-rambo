@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
     '&:hover': {
       background: '#CECECE',
+      cursor: 'pointer',
     },
   },
   uploadIcon: {
