@@ -5,8 +5,8 @@ import ClearIcon from '@material-ui/icons/Clear';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
-import INotificationItem from '../../../../interface/Notification';
 import { testNotifications } from '../sampleNotificationData';
+import { INotificationItem } from '../../../../interface/';
 
 type NotificationItemProps = INotificationItem;
 

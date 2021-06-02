@@ -1,6 +1,6 @@
-import { IDialogItem } from './DialogItem';
+import { IDialogItem } from './';
 
-export interface IDialogItemContext {
+export default interface IDialogItemContext {
   items: IDialogItem[];
   addItem: (item: IDialogItem) => void;
   removeItem: (itemId: string) => void;

@@ -1,4 +1,4 @@
-import { IUser } from './User';
+import { IUser } from './';
 
 export interface IAuthApiDataSuccess {
   message: string;
