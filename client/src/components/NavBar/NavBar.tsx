@@ -1,25 +1,21 @@
 import { User } from '../../interface/User';
-import useStyles from './useStyles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import useStyles from './navBarStyles';
+import { AppBar, Toolbar, Typography, IconButton, Container, Grid, Button } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import logo from '../../Images/logo.png';
 import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
+import NotificationCenter from './Notifications/NotificationCenter/NotificationCenter';
+import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
+import { testNotifications } from './Notifications/sampleNotificationData';
 import { IBoard } from '../../interface/Board';
 
-interface Props {
+type Props = {
   loggedInUser: User;
   handleDrawerToggle: () => void;
   onAddNewBoard: (board: IBoard) => void;
-}
+};
 
 const NavBar = ({ loggedInUser, handleDrawerToggle, onAddNewBoard }: Props): JSX.Element => {
   const classes = useStyles();
@@ -48,6 +44,9 @@ const NavBar = ({ loggedInUser, handleDrawerToggle, onAddNewBoard }: Props): JSX
         </Grid>
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
+            <Grid item>
+              <NotificationCenter loggedInUser={loggedInUser} notifications={testNotifications} />
+            </Grid>
             <Grid item>
               <AddBoardDialog onAddNewBoard={onAddNewBoard} />
             </Grid>
