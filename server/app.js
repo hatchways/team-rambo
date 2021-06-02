@@ -25,6 +25,10 @@ const queue = initializeQueue({
   name: 'rambo',
 }, [{ name: 'deadlineReminders', jobHandlerPath: './queue/jobs/deadline.js' }]);
 
+// Passing null data as there is no need to track any data from database.
+queue.add('deadlineReminders', null, { cron: '0 0 * * *' }); // everyday at 12am.
+
+
 const io = socketio(server, {
   cors: {
     origin: "*",
