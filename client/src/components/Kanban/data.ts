@@ -1,9 +1,10 @@
-import { IColumn } from '../../context/types/kanban';
+import { IColumn } from '../../interface/Column';
 
 export const columnData: IColumn[] = [
   {
     id: 'col-1',
     name: 'Philosophy',
+    createdAt: new Date(),
     cards: [
       {
         id: 'car-1',
@@ -16,6 +17,7 @@ export const columnData: IColumn[] = [
   {
     id: 'col-2',
     name: 'Math',
+    createdAt: new Date(),
     cards: [
       {
         id: 'car-2',
@@ -29,10 +31,11 @@ export const columnData: IColumn[] = [
   {
     id: 'col-3',
     name: 'In Progress',
+    createdAt: new Date(),
     cards: [
       {
         id: 'car-3',
-        columnId: 'car-3',
+        columnId: 'col-3',
         name: 'Homework',
         tag: 'red',
         // other data (assignees, due dates, etc.)
@@ -42,6 +45,7 @@ export const columnData: IColumn[] = [
   {
     id: 'col-4',
     name: 'Done',
+    createdAt: new Date(),
     cards: [
       {
         id: 'car-4',

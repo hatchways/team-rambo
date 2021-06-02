@@ -1,12 +1,10 @@
-import Avatar from '@material-ui/core/Avatar';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import PictureModal from '../PictureModal/PictureModal';
-import useStyles from './useStyles';
-import { User } from '../../interface/User';
 import { useState, MouseEvent } from 'react';
+import { Avatar, Menu, MenuItem } from '@material-ui/core';
 import { useAuth } from '../../context/useAuthContext';
+import PictureModal from '../PictureModal/PictureModal';
+import { User } from '../../interface/User';
 import { useUser } from '../../context/useUserContext';
+import useStyles from './useStyles';
 
 interface Props {
   loggedIn: boolean;

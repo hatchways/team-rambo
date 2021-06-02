@@ -5,7 +5,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -13,13 +12,16 @@ import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import logo from '../../Images/logo.png';
+import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
+import { IBoard } from '../../interface/Board';
 
 interface Props {
   loggedInUser: User;
-  handleDrawerToggle?: () => void;
+  handleDrawerToggle: () => void;
+  onAddNewBoard: (board: IBoard) => void;
 }
 
-const NavBar = ({ loggedInUser }: Props): JSX.Element => {
+const NavBar = ({ loggedInUser, handleDrawerToggle, onAddNewBoard }: Props): JSX.Element => {
   const classes = useStyles();
 
   return (
@@ -47,9 +49,7 @@ const NavBar = ({ loggedInUser }: Props): JSX.Element => {
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
             <Grid item>
-              <Button color="primary" variant="contained" size="large" startIcon={<AddOutlinedIcon />} disableElevation>
-                Create Board
-              </Button>
+              <AddBoardDialog onAddNewBoard={onAddNewBoard} />
             </Grid>
             <Grid item>
               <AvatarDisplay loggedIn user={loggedInUser} />
@@ -62,7 +62,13 @@ const NavBar = ({ loggedInUser }: Props): JSX.Element => {
           <Typography variant="h6" className={classes.title}>
             My School Board
           </Typography>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton
+            onClick={handleDrawerToggle}
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
             <MenuIcon />
           </IconButton>
         </Toolbar>

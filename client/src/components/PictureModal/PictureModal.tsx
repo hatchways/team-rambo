@@ -12,8 +12,8 @@ import {
 } from '@material-ui/core';
 import { Save, CloudUpload } from '@material-ui/icons';
 import useStyles from './PictureModalStyles';
-import React, { useState } from 'react';
-import Dropzone from 'react-dropzone';
+import { useState } from 'react';
+import Dropzone, { DropzoneState } from 'react-dropzone';
 import uploadImage from '../../helpers/APICalls/uploadImage';
 import { useUser } from '../../context/useUserContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
@@ -21,11 +21,6 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 interface Props {
   open: boolean;
   setOpen: () => void;
-}
-
-interface UploadProps {
-  getRootProps: () => Event[];
-  getInputProps: () => React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 }
 
 const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
@@ -94,7 +89,7 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
                 accept={acceptedFileTypes}
                 onDrop={(acceptedFiles: File[]) => handleFile(acceptedFiles)}
               >
-                {({ getRootProps, getInputProps }: UploadProps) => (
+                {({ getRootProps, getInputProps }: DropzoneState) => (
                   <Paper {...getRootProps()} className={classes.dropZonePaper}>
                     <Box>
                       <CloudUpload className={classes.uploadIcon} />
