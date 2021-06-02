@@ -36,9 +36,10 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const buttonClasses = dialogActionButtonStyles(); //to be removed in Dialog Actions PR
   const theme = useTheme();
   const { updateSnackBarMessage } = useSnackBar();
-  const { resetOpenCard, getColumnById } = useKanban();
+  const { resetOpenCard, getColumnById, columns } = useKanban();
   const { items, resetItems } = useDialog();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
   const [tagColor, setTagColor] = useState(tag);
 
   const handleClose = () => {
@@ -46,13 +47,22 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
     setOpen(false);
     resetItems();
   };
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleClick2 = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl2(event.currentTarget);
   };
 
   const handleMenuClose = (tag: string) => {
     setAnchorEl(null);
     setTagColor(tag);
+  };
+
+  const handleMenuClose2 = () => {
+    setAnchorEl2(null);
   };
 
   useEffect(() => {
@@ -68,7 +78,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   }, []);
 
   return (
-    <Box>
+    <>
       <Dialog scroll="paper" open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
         <Grid container spacing={3} className={classes.hasMargin}>
           <Grid item xs={12}>
@@ -121,7 +131,24 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
                   <Typography variant="caption" className={classes.buttonColumnTitle}>
                     ACTIONS:
                   </Typography>
-                  <Button className={buttonClasses.columnButton}>Move</Button>
+                  <Button className={buttonClasses.columnButton} onClick={handleClick2}>
+                    Move
+                  </Button>
+                  <Menu
+                    id="move-menu"
+                    anchorEl={anchorEl2}
+                    keepMounted
+                    open={Boolean(anchorEl2)}
+                    onClose={handleMenuClose2}
+                  >
+                    {columns.map((column) => {
+                      return (
+                        <MenuItem onClick={handleMenuClose2} key={`${column.name}-${column.id}`}>
+                          {column.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Menu>
                   <Button className={buttonClasses.columnButton}>Copy</Button>
                   <Button className={buttonClasses.columnButton}>Share</Button>
                   <Button className={buttonClasses.columnButton}>Delete</Button>
@@ -136,7 +163,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
           </IconButton>
         </DialogActions>
       </Dialog>
-    </Box>
+    </>
   );
 };
 
