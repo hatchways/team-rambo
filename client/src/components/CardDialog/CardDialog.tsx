@@ -78,7 +78,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
               <IconButton onClick={handleClick}>
                 <SettingsIcon className={classes.icons} />
               </IconButton>
-              <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose}>
+              <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose}>
                 {Object.keys(theme.palette.tags).map((tag: string): JSX.Element => {
                   return (
                     <MenuItem onClick={() => handleMenuClose(tag)} key={`${columnId}-${tag}`}>
@@ -98,31 +98,35 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
         </Grid>
         <Divider className={classes.divider} />
         <DialogContent dividers={false}>
-          <Grid container xs={12} className={classes.hasMargin}>
-            <DialogItemGroup items={items} />
-            <Grid container xs={2} direction="column" className={classes.buttonContainer}>
-              <Grid item>
-                <Box className={classes.buttonGroup}>
-                  <Typography variant="caption" className={classes.buttonColumnTitle}>
-                    SECTIONS:
-                  </Typography>
-                  <DialogActionButton title="Description" content="description" icon="contacts" />
-                  <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
-                  <DialogActionButton title="Comment" content="comment" icon="bubble" />
-                  <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
-                  <DialogActionButton title="Checklist" content="checklist" icon="checklist" />
-                </Box>
-              </Grid>
-              <Grid item>
-                <Box className={classes.buttonGroup}>
-                  <Typography variant="caption" className={classes.buttonColumnTitle}>
-                    ACTIONS:
-                  </Typography>
-                  <Button className={buttonClasses.columnButton}>Move</Button>
-                  <Button className={buttonClasses.columnButton}>Copy</Button>
-                  <Button className={buttonClasses.columnButton}>Share</Button>
-                  <Button className={buttonClasses.columnButton}>Delete</Button>
-                </Box>
+          <Grid container className={classes.hasMargin}>
+            <Grid item xs={10}>
+              <DialogItemGroup items={items} />
+            </Grid>
+            <Grid item xs={2}>
+              <Grid container direction="column" className={classes.buttonContainer}>
+                <Grid item>
+                  <Box className={classes.buttonGroup}>
+                    <Typography variant="caption" className={classes.buttonColumnTitle}>
+                      SECTIONS:
+                    </Typography>
+                    <DialogActionButton title="Description" content="description" icon="contacts" />
+                    <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
+                    <DialogActionButton title="Comment" content="comment" icon="bubble" />
+                    <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
+                    <DialogActionButton title="Checklist" content="checklist" icon="checklist" />
+                  </Box>
+                </Grid>
+                <Grid item>
+                  <Box className={classes.buttonGroup}>
+                    <Typography variant="caption" className={classes.buttonColumnTitle}>
+                      ACTIONS:
+                    </Typography>
+                    <Button className={buttonClasses.columnButton}>Move</Button>
+                    <Button className={buttonClasses.columnButton}>Copy</Button>
+                    <Button className={buttonClasses.columnButton}>Share</Button>
+                    <Button className={buttonClasses.columnButton}>Delete</Button>
+                  </Box>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

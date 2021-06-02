@@ -1,12 +1,14 @@
 import { AppBar, Toolbar, Typography, IconButton, Grid, Button, Container } from '@material-ui/core/';
+import useStyles from './navBarStyles';
 import MenuIcon from '@material-ui/icons/Menu';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
+import NotificationCenter from './Notifications/NotificationCenter/NotificationCenter';
+import { testNotifications } from './Notifications/sampleNotificationData';
 import logo from '../../Images/logo.png';
-import { IUser } from '../../interface/';
-import useStyles from './useStyles';
+import { IUser, IBoard } from '../../interface/';
 import { useKanban } from '../../context';
 
 interface Props {
@@ -42,6 +44,9 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
         </Grid>
         <Grid item xs={4}>
           <Grid container spacing={3} alignItems="center" justify="space-evenly">
+            <Grid item>
+              <NotificationCenter loggedInUser={loggedInUser} notifications={testNotifications} />
+            </Grid>
             <Grid item>
               <AddBoardDialog />
             </Grid>
