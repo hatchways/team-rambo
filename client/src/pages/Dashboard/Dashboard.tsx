@@ -5,7 +5,6 @@ import { DialogProvider } from '../../context/useDialogContext';
 import { KanbanProvider } from '../../context/useKanbanContext';
 import getUserBoards from '../../helpers/APICalls/getUserBoards';
 import { useAuth } from '../../context/useAuthContext';
-import { useSocket } from '../../context/useSocketContext';
 import { IBoard } from '../../interface/Board';
 import Board from '../../components/Kanban/Board';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
@@ -16,7 +15,6 @@ import useStyles from './dashboardStyles';
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
-  const { initSocket } = useSocket();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [boards, setBoards] = useState<Array<IBoard>>([]);
   const history = useHistory();
@@ -33,10 +31,6 @@ export default function Dashboard(): JSX.Element {
   useEffect(() => {
     getAllUserBoards();
   }, []);
-
-  useEffect(() => {
-    initSocket();
-  }, [initSocket]);
 
   const toggleDrawer = (): void => {
     setOpenDrawer((prevOpen) => !prevOpen);

@@ -91,7 +91,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
               <IconButton onClick={handleClick}>
                 <SettingsIcon className={classes.icons} />
               </IconButton>
-              <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose}>
+              <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose}>
                 {Object.keys(theme.palette.tags).map((tag: string): JSX.Element => {
                   return (
                     <MenuItem onClick={() => handleMenuClose(tag)} key={`${columnId}-${tag}`}>

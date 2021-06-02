@@ -1,7 +1,7 @@
 import { useState, useContext, createContext, FunctionComponent } from 'react';
-import { cardDialogItems } from '../components/CardDialog';
 import { IDialogItem } from '../interface/DialogItem';
 import { IDialogItemContext } from '../interface/DialogItemContext';
+import cardDialogItems from '../components/CardDialog/initialDialogData';
 
 export const DialogContext = createContext<IDialogItemContext>({} as IDialogItemContext);
 
@@ -25,7 +25,6 @@ export const DialogProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const removeItem = (itemId: string): void => {
     const remaining = items.filter((item) => item.id !== itemId);
-    console.log(remaining);
     setItems(remaining);
   };
 
