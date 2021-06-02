@@ -7,6 +7,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
+import { IconButton } from '@material-ui/core';
+import { Clear } from '@material-ui/icons/';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
@@ -85,15 +87,18 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
 
   return (
     <>
-      <Dialog open={open} onClose={setOpen}>
-        <DialogTitle disableTypography className={classes.root}>
+      <Dialog open={open} onClose={setOpen} className={classes.root}>
+        <DialogTitle disableTypography>
           <Typography variant="h6" className={classes.title}>
             Upload profile picture
           </Typography>
+          <IconButton onClick={setOpen} className={classes.closeButton}>
+            <Clear />
+          </IconButton>
         </DialogTitle>
         <Divider />
-        <DialogContent>
-          <Grid container direction="column" justify="center" alignItems="center" spacing={1}>
+        <DialogContent className={classes.dialogContent}>
+          <Grid container direction="column" alignItems="center" spacing={4}>
             <Grid item>
               <Box className={classes.avatarBox}>
                 <Typography variant="h6">Preview</Typography>

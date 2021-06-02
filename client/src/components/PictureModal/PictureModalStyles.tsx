@@ -39,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
     height: 100,
     width: 100,
   },
+  dialogContent: {
+    height: 'auto',
+    padding: 20,
+  },
 }));
 
 export default useStyles;
