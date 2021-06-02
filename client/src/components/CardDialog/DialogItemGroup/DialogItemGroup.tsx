@@ -1,5 +1,5 @@
 import { Grid } from '@material-ui/core';
-import { IDialogItem } from '../../../interface/DialogItem';
+import { IDialogItem } from '../../../interface';
 import DialogItem from '../DialogItem/DialogItem';
 
 type DialogItemGroupProps = {

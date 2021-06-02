@@ -1,7 +1,6 @@
 import { useState, useContext, createContext, FunctionComponent } from 'react';
-import { IDialogItem } from '../interface/DialogItem';
-import { IDialogItemContext } from '../interface/DialogItemContext';
-import cardDialogItems from '../components/CardDialog/initialDialogData';
+import { cardDialogItems } from '../components/CardDialog/';
+import { IDialogItemContext, IDialogItem } from '../interface';
 
 export const DialogContext = createContext<IDialogItemContext>({} as IDialogItemContext);
 
@@ -12,15 +11,11 @@ export const DialogProvider: FunctionComponent = ({ children }): JSX.Element => 
     return items.findIndex((item: IDialogItem) => item.content === itemContent) > -1 ? true : false;
   };
 
-  const resetItems = (): void => {
-    setItems(cardDialogItems);
-  };
+  const resetItems = (): void => setItems(cardDialogItems);
 
   const addItem = (item: IDialogItem): void => {
-    if (!hasItem(item.content)) {
-      const itemsPlusOne = [...items, item];
-      setItems(itemsPlusOne);
-    }
+    const itemsPlusOne = [...items, item];
+    setItems(itemsPlusOne);
   };
 
   const removeItem = (itemId: string): void => {
@@ -45,8 +40,7 @@ export const DialogProvider: FunctionComponent = ({ children }): JSX.Element => 
 
 export function useDialog(): IDialogItemContext {
   const ctx = useContext(DialogContext);
-  if (!ctx) {
-    throw new Error('useDialog must be used within DialogProvider');
-  }
+  if (!ctx) throw new Error('useDialog must be used within DialogProvider');
+
   return ctx;
 }

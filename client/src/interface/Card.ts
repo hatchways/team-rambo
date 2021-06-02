@@ -1,5 +1,5 @@
 export interface ICard {
-  id: string;
+  _id: string;
   columnId: string;
   name: string;
   tag?: string;

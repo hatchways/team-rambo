@@ -14,12 +14,8 @@ import {
   useTheme,
 } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
-import SettingsIcon from '@material-ui/icons/Settings';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
-import { useSnackBar } from '../../context/useSnackbarContext';
-import { useKanban } from '../../context/useKanbanContext';
-import { useDialog } from '../../context/useDialogContext';
-import { IColumn } from '../../interface/Column';
+import SettingsIcon from '@material-ui/icons/Settings';
 import {
   cardDialogStyles,
   DialogItemGroup,
@@ -27,13 +23,15 @@ import {
   dialogActionButtonStyles,
   DialogMenuButton,
 } from '../CardDialog';
+import { useSnackBar, useDialog, useKanban } from '../../context/';
+import { IColumn } from '../../interface/';
 
-type DialogProps = {
+interface DialogProps {
   name: string;
   tag: string;
   columnId: string;
   id: string;
-};
+}
 
 const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
@@ -42,10 +40,9 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const buttonClasses = dialogActionButtonStyles(); //to be removed in Dialog Actions PR
   const theme = useTheme();
   const { updateSnackBarMessage } = useSnackBar();
-  const { resetOpenCard, getColumnById, columns } = useKanban();
+  const { resetOpenCard, getColumnById } = useKanban();
   const { items, resetItems } = useDialog();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
   const [tagColor, setTagColor] = useState(tag);
 
   const handleClose = () => {
@@ -58,30 +55,20 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClick2 = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl2(event.currentTarget);
-    updateSnackBarMessage('Choose a board to move current card to');
-  };
-
   const handleMenuClose = (tag: string) => {
     setAnchorEl(null);
     setTagColor(tag);
   };
 
-  const handleMenuClose2 = () => {
-    setAnchorEl2(null);
-  };
-
   useEffect(() => {
     const column = getColumnById(columnId);
     if (!column) {
-      updateSnackBarMessage('Column does not exist anymore');
+      updateSnackBarMessage('Column does not exist');
       handleClose();
     }
     setColumn(column);
-    return () => {
-      setColumn(null);
-    };
+
+    return () => setColumn(null);
   }, []);
 
   return (

@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Popover, IconButton } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { User } from '../../../../interface/User';
 import NotificationItem from '../NotificationItem/NotificationItem';
-import INotificationItem from '../../../../interface/Notification';
 import { StyledBadge } from './notificationCenterStyles';
+import INotificationItem from '../../../../interface/Notification';
+import { IUser } from '../../../../interface/';
 
 type NotificationProps = {
-  loggedInUser: User;
+  loggedInUser: IUser;
   notifications: INotificationItem[];
 };
 

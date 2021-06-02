@@ -1,8 +1,8 @@
-export interface User {
+export interface IUser {
   email: string;
 }
 
-export interface SearchUsersApiData {
-  users?: User[];
+export interface ISearchUsersApiData {
+  users?: IUser[];
   error?: { message: string };
 }

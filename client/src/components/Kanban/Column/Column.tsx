@@ -1,16 +1,17 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import { ICard } from '../../../interface/Card';
-import { IColumn } from '../../../interface/Column';
+import { ICard, IColumn } from '../../../interface/';
 import Card from '../Card/Card';
 import CardForm from '../CardForm/CardForm';
 import useStyles from './useStyles';
 
 type ColumnProps = IColumn & { index: number };
-const Column = ({ id, name, cards, index }: ColumnProps): JSX.Element => {
+
+const Column = ({ _id, name, cards, index }: ColumnProps): JSX.Element => {
   const classes = useStyles();
+
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={_id} index={index}>
       {(provided) => {
         return (
           <Grid
@@ -28,24 +29,22 @@ const Column = ({ id, name, cards, index }: ColumnProps): JSX.Element => {
                   {name}
                 </Typography>
               </Box>
-              <Droppable droppableId={id} type="card">
+              <Droppable droppableId={_id} type="card">
                 {(provided) => {
                   return (
                     <Grid container {...provided.droppableProps} ref={provided.innerRef} direction="column">
-                      {cards.map((card: ICard, index: number) => {
-                        return (
-                          <Card
-                            key={card.id}
-                            id={card.id}
-                            columnId={card.columnId}
-                            name={card.name}
-                            tag={card.tag || 'white'}
-                            index={index}
-                          />
-                        );
-                      })}
+                      {cards.map((card: ICard, index: number) => (
+                        <Card
+                          key={card._id}
+                          id={card._id}
+                          columnId={card.columnId}
+                          name={card.name}
+                          tag={card.tag || 'white'}
+                          index={index}
+                        />
+                      ))}
                       {provided.placeholder}
-                      <CardForm columnId={id} />
+                      <CardForm columnId={_id} />
                     </Grid>
                   );
                 }}

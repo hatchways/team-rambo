@@ -1,22 +1,24 @@
-import Dialog from '@material-ui/core/Dialog';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
-import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
+import React, { useState } from 'react';
+import {
+  Dialog,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Avatar,
+  Divider,
+  Snackbar,
+  SnackbarCloseReason,
+  DialogTitle,
+  DialogContent,
+  Typography,
+} from '@material-ui/core';
 import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import useStyles from './PictureModalStyles';
-import React from 'react';
 import Dropzone, { DropzoneState } from 'react-dropzone';
-import uploadImage from '../../helpers/APICalls/uploadImage';
-import { useState } from 'react';
+import useStyles from './PictureModalStyles';
+import { uploadImage } from '../../helpers/';
 
 interface Props {
   open: boolean;

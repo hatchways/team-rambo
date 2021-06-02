@@ -1,16 +1,9 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import Divider from '@material-ui/core/Divider';
+import { CssBaseline, Paper, Box, Grid, Link, Divider, Typography } from '@material-ui/core';
 import { FormikHelpers } from 'formik';
-import Typography from '@material-ui/core/Typography';
 import useStyles from './signUpStyles';
-import register from '../../helpers/APICalls/register';
+import { register } from '../../helpers/';
 import SignUpForm from './SignUpForm/SignUpForm';
-import { useAuth } from '../../context/useAuthContext';
-import { useSnackBar } from '../../context/useSnackbarContext';
+import { useAuth, useSnackBar } from '../../context/';
 
 export default function Register(): JSX.Element {
   const classes = useStyles();
