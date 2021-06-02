@@ -1,10 +1,8 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Typography, ListItem, ListItemText, ListItemIcon, List, Divider, Drawer } from '@material-ui/core';
 import SwapHorizontalCircleOutlinedIcon from '@material-ui/icons/SwapHorizontalCircleOutlined';
 import useStyles from './optionsDrawerStyles';
-import { getUserBoards } from '../../helpers/';
-import { useKanban } from '../../context/useKanbanContext';
-import { IBoard } from '../../interface/';
+import { useKanban } from '../../context/';
 
 interface Props {
   open: boolean;
@@ -13,23 +11,7 @@ interface Props {
 
 const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
   const classes = useStyles();
-  const [boards, setBoards] = useState<Array<IBoard>>([]);
-  const { fetchBoard } = useKanban();
-
-  const getAllUserBoards = async () => {
-    const { boards } = await getUserBoards();
-    if (boards) setBoards(boards);
-
-    return undefined;
-  };
-
-  const fetchAndSet = async (board: IBoard) => {
-    fetchBoard(board._id).then(() => setOpen((prevOpen) => !prevOpen));
-  };
-
-  useEffect(() => {
-    getAllUserBoards();
-  }, []);
+  const { fetchBoard, userBoards } = useKanban();
 
   return (
     <Drawer anchor={'right'} open={open} onClose={setOpen}>
@@ -41,8 +23,15 @@ const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
           />
         </ListItem>
         <Divider />
-        {boards.map((board) => (
-          <ListItem key={board._id} button onClick={() => fetchAndSet(board)}>
+        {userBoards.map((board) => (
+          <ListItem
+            key={board._id}
+            button
+            onClick={() => {
+              fetchBoard(board._id);
+              setOpen(false);
+            }}
+          >
             <ListItemIcon>
               <SwapHorizontalCircleOutlinedIcon className={classes.icon} />
             </ListItemIcon>

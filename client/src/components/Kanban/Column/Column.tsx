@@ -1,7 +1,7 @@
 import { useState, MouseEvent } from 'react';
 import { Box, Grid, Typography } from '@material-ui/core';
-import { Droppable } from 'react-beautiful-dnd';
-import { ICard } from '../../../interface/';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { ICard, IColumn } from '../../../interface/';
 import Card from '../Card/Card';
 import CardForm from '../CardForm/CardForm';
 import GearButton from './GearButton';
@@ -9,14 +9,9 @@ import NameForm from './NameForm';
 import ConfirmDelete from './ConfirmDelete';
 import useStyles from './useStyles';
 
-interface ColumnProps {
-  id: string;
-  name: string;
-  cards: ICard[];
-  createdAt?: Date;
-}
+type ColumnProps = IColumn & { index: number };
 
-const Column = ({ id, name, cards }: ColumnProps): JSX.Element => {
+const Column = ({ _id, name, cards, index }: ColumnProps): JSX.Element => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
@@ -40,33 +35,39 @@ const Column = ({ id, name, cards }: ColumnProps): JSX.Element => {
   };
 
   return (
-    <Grid item>
-      <Box className={classes.columnWrapper}>
-        <Box>
-          <Box className={classes.typographyWrapper}>
-            {isRenaming ? (
-              <NameForm id={id} name={name} setIsRenaming={setIsRenaming} />
-            ) : (
-              <Typography className={classes.typography} variant="h5">
-                {name}
-              </Typography>
-            )}
-            <GearButton
-              anchorEl={anchorEl}
-              openConfirm={openConfirm}
-              openMenu={openMenu}
-              closeMenu={closeMenu}
-              toggleRenaming={toggleRenaming}
-            />
-          </Box>
-          <ConfirmDelete id={id} isDeleting={isDeleting} closeConfirm={closeConfirm} />
-        </Box>
-        <Droppable droppableId={id}>
-          {(provided) => {
-            return (
-              <Grid container {...provided.droppableProps} ref={provided.innerRef} direction="column">
-                {cards.map((card: ICard, index: number) => {
-                  return (
+    <Draggable draggableId={_id} index={index}>
+      {(provided) => (
+        <Grid
+          xs={12}
+          md={6}
+          lg="auto"
+          item
+          className={classes.columnGridItem}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+        >
+          <Box className={classes.columnWrapper} {...provided.dragHandleProps}>
+            <Box className={classes.typographyWrapper}>
+              {isRenaming ? (
+                <NameForm id={_id} name={name} setIsRenaming={setIsRenaming} />
+              ) : (
+                <Typography className={classes.typography} variant="h5">
+                  {name}
+                </Typography>
+              )}
+              <GearButton
+                anchorEl={anchorEl}
+                openConfirm={openConfirm}
+                openMenu={openMenu}
+                closeMenu={closeMenu}
+                toggleRenaming={toggleRenaming}
+              />
+            </Box>
+            <ConfirmDelete id={_id} isDeleting={isDeleting} closeConfirm={closeConfirm} />
+            <Droppable droppableId={_id} type="card">
+              {(provided) => (
+                <Grid container {...provided.droppableProps} ref={provided.innerRef} direction="column">
+                  {cards.map((card: ICard, index: number) => (
                     <Card
                       key={card._id}
                       id={card._id}
@@ -75,16 +76,16 @@ const Column = ({ id, name, cards }: ColumnProps): JSX.Element => {
                       tag={card.tag || 'white'}
                       index={index}
                     />
-                  );
-                })}
-                {provided.placeholder}
-                <CardForm columnId={id} />
-              </Grid>
-            );
-          }}
-        </Droppable>
-      </Box>
-    </Grid>
+                  ))}
+                  {provided.placeholder}
+                  <CardForm columnId={_id} />
+                </Grid>
+              )}
+            </Droppable>
+          </Box>
+        </Grid>
+      )}
+    </Draggable>
   );
 };
 

@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const { User } = require("../models/User");
 const Board = require("../models/Board");
 const { v4: uuidv4, v4 } = require("uuid");
 
@@ -21,7 +20,6 @@ exports.getBoard = asyncHandler(async (req, res) => {
   }
 });
 
-// createBoard should be in boards controller + routes instead of users
 exports.createBoard = asyncHandler(async (req, res) => {
   const { name } = req.body;
   const newBoard = await Board.create({
@@ -74,7 +72,6 @@ exports.createBoard = asyncHandler(async (req, res) => {
 });
 
 exports.updateBoard = asyncHandler(async (req, res, next) => {
-  // This needs to be fixed according to a non-double-stringified body from frontend
   const { _id, name, user, columns, createdAt } = req.body;
 
   try {
@@ -91,7 +88,6 @@ exports.updateBoard = asyncHandler(async (req, res, next) => {
       new: true,
     });
 
-    //@ts-ignore
     const newBoard = board.removePassword();
 
     return res.status(200).json(newBoard);

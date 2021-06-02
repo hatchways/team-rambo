@@ -1,11 +1,6 @@
-import { IFetchOptions, IBoard } from '../../interface/';
+import { IFetchOptions, BoardApiData } from '../../interface/';
 
-interface BoardApiData {
-  boards: Array<IBoard>;
-  error?: { message: string };
-}
-
-export const getUserBoards = async (): Promise<BoardApiData> => {
+const getUserBoards = async (): Promise<BoardApiData> => {
   const fetchOptions: IFetchOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
@@ -17,3 +12,5 @@ export const getUserBoards = async (): Promise<BoardApiData> => {
       error: { error: err, message: 'Unable to connect to server. Please try again' },
     }));
 };
+
+export default getUserBoards;

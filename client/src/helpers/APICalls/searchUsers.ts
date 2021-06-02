@@ -5,7 +5,7 @@ interface Props {
 }
 
 // Why does the search need to be deconstructed? Is this from starting code?
-export const searchUsers = async ({ search }: Props): Promise<ISearchUsersApiData> => {
+const searchUsers = async ({ search }: Props): Promise<ISearchUsersApiData> => {
   const fetchOptions: IFetchOptions = {
     method: 'GET',
     credentials: 'include',
@@ -16,3 +16,5 @@ export const searchUsers = async ({ search }: Props): Promise<ISearchUsersApiDat
       error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
+
+export default searchUsers;

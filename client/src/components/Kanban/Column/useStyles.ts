@@ -14,14 +14,11 @@ const useStyles = makeStyles((theme) => ({
   columnWrapper: {
     padding: 16,
     backgroundColor: theme.palette.secondary.light,
-    marginRight: 20,
-    width: 440,
     borderRadius: 8,
   },
   inputBox: {
     width: '40%',
   },
-
   formGrid: {
     justifyContent: 'space-between',
     width: '100%',
@@ -37,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'rgb(255, 93, 72)',
     '&:hover': {
       backgroundColor: 'rgb(225, 73, 52)',
+    },
+  },
+  columnGridItem: {
+    [theme.breakpoints.up('lg')]: {
+      flex: 1,
     },
   },
 }));

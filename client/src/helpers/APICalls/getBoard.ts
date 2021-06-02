@@ -1,6 +1,6 @@
 import { IFetchOptions, IBoard } from '../../interface/';
 
-export const getBoard = async (id: string): Promise<IBoard> => {
+const getBoard = async (id: string): Promise<IBoard> => {
   const fetchOptions: IFetchOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
@@ -12,3 +12,5 @@ export const getBoard = async (id: string): Promise<IBoard> => {
       error: { error: err, message: 'Unable to connect to server. Please try again' },
     }));
 };
+
+export default getBoard;
