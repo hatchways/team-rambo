@@ -1,8 +1,7 @@
-import { AuthApiData } from '../../interface/AuthApiData';
-import { FetchOptions } from '../../interface/FetchOptions';
+import { IFetchOptions, IAuthApiData } from '../../interface/';
 
-const logout = async (): Promise<AuthApiData> => {
-  const fetchOptions: FetchOptions = {
+const logout = async (): Promise<IAuthApiData> => {
+  const fetchOptions: IFetchOptions = {
     method: 'GET',
     credentials: 'include',
   };

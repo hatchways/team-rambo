@@ -1,7 +1,7 @@
 import { ICard } from './Card';
 
 export interface IColumn {
-  id: string;
+  _id: string;
   name: string;
   cards: Array<ICard>;
   createdAt: Date;

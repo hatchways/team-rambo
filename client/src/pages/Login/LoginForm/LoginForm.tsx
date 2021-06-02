@@ -1,12 +1,9 @@
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
+import { Button, Box, CircularProgress, TextField } from '@material-ui/core';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import useStyles from './loginFormStyles';
-import { CircularProgress } from '@material-ui/core';
-import login from '../../../helpers/APICalls/login';
-import { useAuth } from '../../../context/useAuthContext';
+import { login } from '../../../helpers/';
+import { useAuth } from '../../../context/';
 
 interface Props {
   handleSubmit: (

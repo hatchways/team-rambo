@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const { columnSchema } = require("./Column");
-const { userSchema } = require("./User");
 
 const boardSchema = new mongoose.Schema({
   name: {
@@ -8,7 +6,7 @@ const boardSchema = new mongoose.Schema({
     required: true,
   },
   columns: {
-    type: [columnSchema],
+    type: Array,
     required: false,
   },
   user: {
@@ -28,4 +26,5 @@ boardSchema.methods.removePassword = function () {
   return object;
 };
 
-module.exports = { Board: mongoose.model("board", boardSchema), boardSchema };
+const Board = mongoose.model("board", boardSchema);
+module.exports = Board;

@@ -1,14 +1,14 @@
 import { useState, MouseEvent } from 'react';
-import { Box, Avatar, Menu, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { Avatar, Menu, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { PowerSettingsNew, AccountCircle } from '@material-ui/icons';
-import { useAuth } from '../../context/useAuthContext';
+import { useAuth } from '../../context';
 import PictureModal from '../PictureModal/PictureModal';
-import { User } from '../../interface/User';
+import { IUser } from '../../interface';
 import useStyles from './useStyles';
 
 interface Props {
   loggedIn: boolean;
-  user: User;
+  user: IUser;
 }
 
 const AvatarDisplay = ({ user }: Props): JSX.Element => {

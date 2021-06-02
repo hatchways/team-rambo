@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import { AuthContext } from '../context/useAuthContext';
+import { AuthContext } from '../context/';
 import { mockLoggedInUser } from './mockUser';
 
 const MockUseAuthProvider: FunctionComponent = ({ children }) => {

@@ -1,4 +1,4 @@
-export interface ImageUploadData {
+export interface IImageUploadData {
   asset_id: string;
   public_id: string;
   version: number;

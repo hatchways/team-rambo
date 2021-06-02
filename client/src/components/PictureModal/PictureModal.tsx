@@ -1,22 +1,22 @@
-import Dialog from '@material-ui/core/Dialog';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
-import { IconButton } from '@material-ui/core';
-import { Clear } from '@material-ui/icons/';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import Typography from '@material-ui/core/Typography';
-import SaveIcon from '@material-ui/icons/Save';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import useStyles from './PictureModalStyles';
+import React, { useState } from 'react';
+import {
+  Dialog,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Avatar,
+  Divider,
+  DialogTitle,
+  DialogContent,
+  Typography,
+  IconButton,
+} from '@material-ui/core';
+import { Save, Clear, CloudUpload } from '@material-ui/icons';
 import Dropzone, { DropzoneState } from 'react-dropzone';
-import uploadImage from '../../helpers/APICalls/uploadImage';
-import { useState } from 'react';
-import { useSnackBar } from '../../context/useSnackbarContext';
+import useStyles from './PictureModalStyles';
+import { uploadImage } from '../../helpers/';
+import { useSnackBar } from '../../context';
 
 interface Props {
   open: boolean;
@@ -93,7 +93,7 @@ const PictureModal = ({ open, onClose }: Props): JSX.Element => {
                 {({ getRootProps, getInputProps }: DropzoneState) => (
                   <Paper {...getRootProps()} className={classes.dropZonePaper}>
                     <Box>
-                      <CloudUploadIcon className={classes.uploadIcon} />
+                      <CloudUpload className={classes.uploadIcon} />
                       <input type="file" {...getInputProps()} />
                     </Box>
                     <Typography variant="subtitle2" className={classes.text}>
@@ -109,7 +109,7 @@ const PictureModal = ({ open, onClose }: Props): JSX.Element => {
                 variant="contained"
                 color="primary"
                 size="large"
-                startIcon={<SaveIcon />}
+                startIcon={<Save />}
               >
                 Save
               </Button>

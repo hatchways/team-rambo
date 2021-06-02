@@ -1,59 +1,118 @@
-import { useState, useContext, createContext, FunctionComponent } from 'react';
+import { useState, useContext, createContext, FunctionComponent, useEffect, Dispatch, SetStateAction } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
-import { columnData } from '../components/Kanban/data';
-import { IKanbanContext } from '../interface/KanbanContext';
-import { IColumn } from '../interface/Column';
-import { ICard } from '../interface/Card';
 import cloneDeep from 'lodash.clonedeep';
-import { useSnackBar } from './useSnackbarContext';
+import { getBoard, getUserBoards, updateBoard, createBoard } from '../helpers/';
+import { useSnackBar, useAuth } from './';
+import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
 export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => {
-  const [columns, setColumns] = useState<Array<IColumn>>(columnData);
+  const [activeBoard, setActiveBoard] = useState<IBoard>({
+    _id: 'Initial',
+    name: 'Initial',
+    columns: [],
+    cards: [],
+    user: 'Initial',
+    createdAt: 'Initial',
+  });
+  const [userBoards, setUserBoards] = useState<IBoard[]>([]);
+  const [columns, setColumns] = useState<IColumn[]>(activeBoard.columns);
   const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
   const { updateSnackBarMessage } = useSnackBar();
+  const { loggedInUser } = useAuth();
+
+  useEffect(() => {
+    if (loggedInUser) getFirstBoard();
+
+    return;
+  }, [loggedInUser]);
+
+  const getFirstBoard = async (): Promise<IBoard> => {
+    const request = await getUserBoards();
+    const board = request.boards[0];
+    setActiveBoard(board);
+    setUserBoards(request.boards);
+    setColumns(board.columns);
+
+    return board;
+  };
+
+  const fetchBoard = async (id: string): Promise<IBoard> => {
+    const board = await getBoard(id);
+    setActiveBoard(board);
+    setColumns(board.columns);
+
+    return board;
+  };
+
+  const createNewBoard = async (name: string): Promise<NewBoardApiData> => {
+    const request = await createBoard(name);
+    if (request.board) setUserBoards((boards) => [...boards, request.board]);
+
+    return request;
+  };
+
   const handleDragEnd = (result: DropResult): void => {
+    if (!result.destination) return;
+
     const { destination, source, draggableId, type } = result;
-    if (!destination) return;
+
+    const dupBoard = Object.assign({}, activeBoard);
     const columnsCopy: IColumn[] = cloneDeep(columns);
-    const colIndex = columns.findIndex((col) => col.id === source.droppableId);
+    const colIndex = columns.findIndex((col) => col._id === source.droppableId);
 
     if (type === 'column') {
       // reorder the column.
       const reorderedColumns = swapColumns(columnsCopy, source, destination);
+      dupBoard.columns = reorderedColumns;
+
+      updateBoard(dupBoard);
+
+      setActiveBoard(dupBoard);
+
       setColumns(reorderedColumns);
+
       return;
     }
 
-    if (source.droppableId === destination.droppableId) {
-      if (colIndex > -1) {
-        const cards = Array.from(columnsCopy[colIndex].cards);
-        const newCards = swapCards(cards, source, destination, draggableId);
-        columnsCopy[colIndex].cards = newCards;
-        setColumns(columnsCopy);
-        return;
-      }
+    if (source.droppableId === destination.droppableId && colIndex > -1) {
+      const cards = Array.from(columnsCopy[colIndex].cards);
+      const newCards = swapCards(cards, source, destination, draggableId);
+      columnsCopy[colIndex].cards = newCards;
+      dupBoard.columns = columnsCopy;
+
+      updateBoard(dupBoard);
+
+      setActiveBoard(dupBoard);
+      setColumns(columnsCopy);
+
+      return;
     }
 
     if (source.droppableId !== destination.droppableId) {
-      const targetColumnIndex = columnsCopy.findIndex((col) => col.id === destination.droppableId);
+      const targetColumnIndex = columnsCopy.findIndex((col) => col._id === destination.droppableId);
       if (targetColumnIndex > -1) {
         const targetColumn = columnsCopy[targetColumnIndex];
         const originalColumn = columnsCopy[colIndex];
         const [card] = originalColumn.cards.splice(source.index, 1);
-        card.columnId = targetColumn.id;
+        card.columnId = targetColumn._id;
         targetColumn.cards.splice(destination.index, 0, card);
       }
     }
 
+    dupBoard.columns = columnsCopy;
+
+    updateBoard(dupBoard);
+
+    setActiveBoard(dupBoard);
     setColumns(columnsCopy);
-    return;
   };
 
   const swapColumns = (columns: IColumn[], source: DraggableLocation, destination: DraggableLocation): IColumn[] => {
     const [sourceCol] = columns.splice(source.index, 1);
     columns.splice(destination.index, 0, sourceCol);
+
     return columns;
   };
 
@@ -64,57 +123,115 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     draggableId: string,
   ): ICard[] => {
     const cardsCopy = [...cards];
-    const cardIndex = cardsCopy.findIndex((card: ICard) => card.id === draggableId);
+    const cardIndex = cardsCopy.findIndex((card: ICard) => card._id === draggableId);
     if (cardIndex > -1) {
       const [card] = cardsCopy.splice(source.index, 1);
       cardsCopy.splice(destination.index, 0, card);
+
       return cardsCopy;
     }
+
     return cards;
   };
 
   const addCard = (card: ICard): boolean => {
     if (card.name === '') {
       updateSnackBarMessage('Please enter a card name');
+
       return false;
     }
 
     const columnsCopy = cloneDeep(columns);
-    const columnIndex = columnsCopy.findIndex((col) => col.id === card.columnId);
+    const columnIndex = columnsCopy.findIndex((col) => col._id === card.columnId);
     if (columnIndex > -1) {
       const columnCopy = cloneDeep(columns[columnIndex]);
       columnCopy.cards.push(card);
       columnsCopy[columnIndex] = columnCopy;
+      const copyBoard = Object.assign({}, activeBoard);
+      copyBoard.columns = columnsCopy;
+
+      updateBoard(copyBoard);
+
+      setActiveBoard(copyBoard);
       setColumns(columnsCopy);
+
       return true;
     }
+
     return false;
   };
 
-  const setOpenCard = (card: ICard): void => {
-    setFocusedCard(card);
+  const renameColumn = (
+    columnId: string,
+    name: string,
+    setIsRenaming: Dispatch<SetStateAction<boolean>>,
+    setSubmitting: (isSubmitting: boolean) => void,
+  ): undefined => {
+    const colId = columns.findIndex((col) => col._id === columnId);
+
+    if (colId < 0) return undefined;
+
+    const dupColumns = cloneDeep(columns);
+    const dupBoard = Object.assign({}, activeBoard);
+
+    dupColumns[colId].name = name;
+    dupBoard.columns = dupColumns;
+
+    updateBoard(dupBoard).then(() => {
+      setSubmitting(false);
+      setIsRenaming((prev) => !prev);
+    });
+
+    setActiveBoard(dupBoard);
+    setColumns(dupColumns);
+
+    return undefined;
   };
+
+  const removeColumn = (columnId: string): undefined => {
+    const colId = columns.findIndex((col) => col._id === columnId);
+
+    if (colId < 0) return undefined;
+
+    const dupBoard = Object.assign({}, activeBoard);
+    const dupColumnsArray = dupBoard.columns.slice();
+    const newColumns = dupColumnsArray.slice(0, colId).concat(dupColumnsArray.slice(colId + 1));
+    dupBoard.columns = newColumns;
+
+    updateBoard(dupBoard);
+    setActiveBoard(dupBoard);
+    setColumns(newColumns);
+
+    return undefined;
+  };
+
+  const setOpenCard = (card: ICard): void => setFocusedCard(card);
+
   const resetOpenCard = (): void => setFocusedCard(null);
 
   const getColumnById = (columnId: string): IColumn | null => {
-    if (!columnId) return null;
-    const colIndex = columns.findIndex((col) => col.id === columnId);
-    if (colIndex > -1) {
-      return columns[colIndex];
-    }
+    const colIndex = columns.findIndex((col) => col._id === columnId);
+    if (colIndex > -1) return columns[colIndex];
+
     return null;
   };
 
   return (
     <KanbanContext.Provider
       value={{
-        columns,
+        activeBoard,
         focusedCard,
-        handleDragEnd,
+        userBoards,
         addCard,
         setOpenCard,
         resetOpenCard,
         getColumnById,
+        handleDragEnd,
+        setActiveBoard,
+        renameColumn,
+        removeColumn,
+        fetchBoard,
+        createNewBoard,
       }}
     >
       {children}
@@ -124,8 +241,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
 export function useKanban(): IKanbanContext {
   const ctx = useContext(KanbanContext);
-  if (!ctx) {
-    throw new Error('useKanban must be used within KanbanProvider');
-  }
+  if (!ctx) throw new Error('useKanban must be used within KanbanProvider');
+
   return ctx;
 }
