@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Button, IconButton, Box, Grid, Dialog, TextField, Typography, DialogActions } from '@material-ui/core';
+import { Button, TextField, Grid, Box } from '@material-ui/core';
 import addColumnDialogStyles from './AddColumnDialogStyles';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import ClearIcon from '@material-ui/icons/Clear';
 import StyledDialog from '../StyledDialog/StyledDialog';
 
 const AddColumnDialog = (): JSX.Element => {
@@ -11,10 +10,6 @@ const AddColumnDialog = (): JSX.Element => {
 
   const handleClickOpen = () => {
     setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   return (
