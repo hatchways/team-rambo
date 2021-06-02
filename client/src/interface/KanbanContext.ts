@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
 import { IBoard, NewBoardApiData, ICard, IColumn } from './';
 
-export interface IKanbanContext {
+export default interface IKanbanContext {
   activeBoard: IBoard;
   focusedCard: ICard | null;
   userBoards: IBoard[];

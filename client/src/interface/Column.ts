@@ -1,6 +1,6 @@
-import { ICard } from './Card';
+import { ICard } from './';
 
-export interface IColumn {
+export default interface IColumn {
   _id: string;
   name: string;
   cards: Array<ICard>;
