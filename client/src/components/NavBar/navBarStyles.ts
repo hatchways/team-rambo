@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       flexGrow: 1,
+      fontWeight: 'bold',
+      fontSize: 24,
+      paddingLeft: 5,
     },
   }),
 );
