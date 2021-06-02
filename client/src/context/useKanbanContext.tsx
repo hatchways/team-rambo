@@ -1,4 +1,4 @@
-import { useState, useContext, createContext, FunctionComponent, useEffect } from 'react';
+import { useState, useContext, createContext, FunctionComponent, useEffect, Dispatch, SetStateAction } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
 import { getBoard, getUserBoards, updateBoard, createBoard } from '../helpers/';
@@ -104,6 +104,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     dupBoard.columns = columnsCopy;
 
     updateBoard(dupBoard);
+
     setActiveBoard(dupBoard);
     setColumns(columnsCopy);
   };
@@ -146,11 +147,13 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       const columnCopy = cloneDeep(columns[columnIndex]);
       columnCopy.cards.push(card);
       columnsCopy[columnIndex] = columnCopy;
-      activeBoard.columns = columnsCopy;
+      const copyBoard = Object.assign({}, activeBoard);
+      copyBoard.columns = columnsCopy;
 
+      updateBoard(copyBoard);
+
+      setActiveBoard(copyBoard);
       setColumns(columnsCopy);
-
-      updateBoard(activeBoard);
 
       return true;
     }
@@ -158,22 +161,46 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return false;
   };
 
-  const renameColumn = (columnId: string): undefined => {
-    const columnsCopy = cloneDeep(columns);
+  const renameColumn = (
+    columnId: string,
+    name: string,
+    setIsRenaming: Dispatch<SetStateAction<boolean>>,
+    setSubmitting: (isSubmitting: boolean) => void,
+  ): undefined => {
+    const colId = columns.findIndex((col) => col._id === columnId);
 
-    // setColumns(columnsCopy);
+    if (colId < 0) return undefined;
 
-    // updateBoard(activeBoard);
+    const dupColumns = cloneDeep(columns);
+    const dupBoard = Object.assign({}, activeBoard);
+
+    dupColumns[colId].name = name;
+    dupBoard.columns = dupColumns;
+
+    updateBoard(dupBoard).then(() => {
+      setSubmitting(false);
+      setIsRenaming((prev) => !prev);
+    });
+
+    setActiveBoard(dupBoard);
+    setColumns(dupColumns);
 
     return undefined;
   };
 
   const removeColumn = (columnId: string): undefined => {
-    const columnsCopy = cloneDeep(columns);
+    const colId = columns.findIndex((col) => col._id === columnId);
 
-    // setColumns(columnsCopy);
+    if (colId < 0) return undefined;
 
-    // updateBoard(activeBoard);
+    const dupBoard = Object.assign({}, activeBoard);
+    const dupColumnsArray = dupBoard.columns.slice();
+    const newColumns = dupColumnsArray.slice(0, colId).concat(dupColumnsArray.slice(colId + 1));
+    dupBoard.columns = newColumns;
+
+    updateBoard(dupBoard);
+    setActiveBoard(dupBoard);
+    setColumns(newColumns);
 
     return undefined;
   };
