@@ -20,7 +20,13 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 import { useKanban } from '../../context/useKanbanContext';
 import { useDialog } from '../../context/useDialogContext';
 import { IColumn } from '../../interface/Column';
-import { cardDialogStyles, DialogItemGroup, DialogActionButton, dialogActionButtonStyles } from '../CardDialog';
+import {
+  cardDialogStyles,
+  DialogItemGroup,
+  DialogActionButton,
+  dialogActionButtonStyles,
+  DialogMenuButton,
+} from '../CardDialog';
 
 type DialogProps = {
   name: string;
@@ -54,6 +60,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
 
   const handleClick2 = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl2(event.currentTarget);
+    updateSnackBarMessage('Choose a board to move current card to');
   };
 
   const handleMenuClose = (tag: string) => {
@@ -111,48 +118,35 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
         </Grid>
         <Divider className={classes.divider} />
         <DialogContent dividers={false}>
-          <Grid container xs={12} className={classes.hasMargin}>
-            <DialogItemGroup items={items} />
-            <Grid container xs={2} direction="column" className={classes.buttonContainer}>
-              <Grid item>
-                <Box className={classes.buttonGroup}>
-                  <Typography variant="caption" className={classes.buttonColumnTitle}>
-                    SECTIONS:
-                  </Typography>
-                  <DialogActionButton title="Description" content="description" icon="contacts" />
-                  <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
-                  <DialogActionButton title="Comment" content="comment" icon="bubble" />
-                  <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
-                  <DialogActionButton title="Checklist" content="checklist" icon="checklist" />
-                </Box>
-              </Grid>
-              <Grid item>
-                <Box className={classes.buttonGroup}>
-                  <Typography variant="caption" className={classes.buttonColumnTitle}>
-                    ACTIONS:
-                  </Typography>
-                  <Button className={buttonClasses.columnButton} onClick={handleClick2}>
-                    Move
-                  </Button>
-                  <Menu
-                    id="move-menu"
-                    anchorEl={anchorEl2}
-                    keepMounted
-                    open={Boolean(anchorEl2)}
-                    onClose={handleMenuClose2}
-                  >
-                    {columns.map((column) => {
-                      return (
-                        <MenuItem onClick={handleMenuClose2} key={`${column.name}-${column.id}`}>
-                          {column.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Menu>
-                  <Button className={buttonClasses.columnButton}>Copy</Button>
-                  <Button className={buttonClasses.columnButton}>Share</Button>
-                  <Button className={buttonClasses.columnButton}>Delete</Button>
-                </Box>
+          <Grid container className={classes.hasMargin}>
+            <Grid item xs={10}>
+              <DialogItemGroup items={items} />
+            </Grid>
+            <Grid item xs={2}>
+              <Grid container direction="column" className={classes.buttonContainer}>
+                <Grid item>
+                  <Box className={classes.buttonGroup}>
+                    <Typography variant="caption" className={classes.buttonColumnTitle}>
+                      SECTIONS:
+                    </Typography>
+                    <DialogActionButton title="Description" content="description" icon="contacts" />
+                    <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
+                    <DialogActionButton title="Comment" content="comment" icon="bubble" />
+                    <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
+                    <DialogActionButton title="Checklist" content="checklist" icon="checklist" />
+                  </Box>
+                </Grid>
+                <Grid item>
+                  <Box className={classes.buttonGroup}>
+                    <Typography variant="caption" className={classes.buttonColumnTitle}>
+                      ACTIONS:
+                    </Typography>
+                    <DialogMenuButton columns={columns} name="Move" />
+                    <DialogMenuButton columns={columns} name="Copy" />
+                    <DialogMenuButton columns={columns} name="Share" />
+                    <Button className={buttonClasses.columnButton}>Delete</Button>
+                  </Box>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

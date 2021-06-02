@@ -8,3 +8,4 @@ export { default as datePickerStyles } from './DatePicker/datePickerStyles';
 export { default as cardDialogItems } from './initialDialogData';
 export { default as DialogActionButton } from './DialogActionButton/DialogActionButton';
 export { default as dialogActionButtonStyles } from './DialogActionButton/dialogActionButtonStyles';
+export { default as DialogMenuButton } from './DialogMenuButton/DialogMenuButton';
