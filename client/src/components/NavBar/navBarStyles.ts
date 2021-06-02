@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#FFFFFF',
     },
     menuButton: {
-      marginRight: theme.spacing(2),
+      marginRight: 12,
     },
     statusBar: {
       padding: '2% 2%',

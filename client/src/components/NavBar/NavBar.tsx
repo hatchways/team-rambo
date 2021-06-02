@@ -23,13 +23,13 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
   return (
     <Container className={classes.root}>
       <Grid container spacing={4} direction="row" alignItems="center" justify="center" className={classes.statusBar}>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <Grid container spacing={1} direction="row" alignItems="center" justify="flex-start">
             <img alt="Kanban logo" src={logo} />
           </Grid>
         </Grid>
-        <Grid item xs={4}>
-          <Grid container spacing={3} alignItems="center" justify="space-evenly">
+        <Grid item xs={6}>
+          <Grid container spacing={3} alignItems="center" justify="flex-end">
             <Grid item>
               <Button size="large" color="secondary" startIcon={<CalendarTodayOutlinedIcon />}>
                 Dashboard
@@ -40,10 +40,6 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
                 Calendar
               </Button>
             </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={4}>
-          <Grid container spacing={3} alignItems="center" justify="space-evenly">
             <Grid item>
               <NotificationCenter loggedInUser={loggedInUser} notifications={testNotifications} />
             </Grid>
