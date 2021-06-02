@@ -68,10 +68,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 exports.loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  // Sending email using templated Email through SendGrid
-
-  await sendEmail();
-
   const user = await User.findOne({ email }).select("+password");
 
   if (user && (await user.matchPassword(password))) {

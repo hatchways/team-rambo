@@ -9,13 +9,15 @@ import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
 import NotificationCenter from './Notifications/NotificationCenter/NotificationCenter';
 import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import { testNotifications } from './Notifications/sampleNotificationData';
+import { IBoard } from '../../interface/Board';
 
 type Props = {
   loggedInUser: User;
   handleDrawerToggle: () => void;
+  onAddNewBoard: (board: IBoard) => void;
 };
 
-const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
+const NavBar = ({ loggedInUser, handleDrawerToggle, onAddNewBoard }: Props): JSX.Element => {
   const classes = useStyles();
 
   return (
@@ -46,7 +48,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
               <NotificationCenter loggedInUser={loggedInUser} notifications={testNotifications} />
             </Grid>
             <Grid item>
-              <AddBoardDialog />
+              <AddBoardDialog onAddNewBoard={onAddNewBoard} />
             </Grid>
             <Grid item>
               <AvatarDisplay loggedIn user={loggedInUser} />
