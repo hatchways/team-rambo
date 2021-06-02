@@ -1,4 +1,4 @@
-export interface FetchOptions {
+export interface IFetchOptions {
   method: string;
   headers?: {
     'Content-Type': string;

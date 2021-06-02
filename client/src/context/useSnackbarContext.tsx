@@ -1,7 +1,6 @@
 import { useState, useContext, createContext, FunctionComponent, SyntheticEvent, useCallback } from 'react';
-import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
+import { IconButton, Snackbar, SnackbarCloseReason } from '@material-ui/core';
 import MuiAlert, { Color, AlertProps } from '@material-ui/lab/Alert';
-import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 interface ISnackBarContext {

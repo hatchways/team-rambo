@@ -7,20 +7,18 @@ import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import AttachFileOutlinedIcon from '@material-ui/icons/AttachFileOutlined';
-import { IDialogItem } from '../../../interface/DialogItem';
-import { useDialog } from '../../../context/useDialogContext';
 import CheckList from '../CheckList/CheckList';
-import DatePicker from '../DatePicker/DatePicker';
 import dialogItemStyles from './dialogItemStyles';
-
-type ItemProps = IDialogItem;
+import { useDialog } from '../../../context/';
+import { IDialogItem } from '../../../interface';
+import { DatePicker } from '..';
 
 const DialogItem = ({
   title = 'blank',
   content = 'description',
   icon = 'clear',
   id = 'testId',
-}: ItemProps): JSX.Element => {
+}: IDialogItem): JSX.Element => {
   const classes = dialogItemStyles();
   const { removeItem } = useDialog();
 

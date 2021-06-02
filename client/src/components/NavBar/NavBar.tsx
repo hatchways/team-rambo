@@ -1,24 +1,24 @@
-import { User } from '../../interface/User';
+import { AppBar, Toolbar, Typography, IconButton, Grid, Button, Container } from '@material-ui/core/';
 import useStyles from './navBarStyles';
-import { AppBar, Toolbar, Typography, IconButton, Container, Grid, Button } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
-import logo from '../../Images/logo.png';
+import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
 import NotificationCenter from './Notifications/NotificationCenter/NotificationCenter';
-import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import { testNotifications } from './Notifications/sampleNotificationData';
-import { IBoard } from '../../interface/Board';
+import logo from '../../Images/logo.png';
+import { IUser, IBoard } from '../../interface/';
+import { useKanban } from '../../context';
 
-type Props = {
-  loggedInUser: User;
+interface Props {
+  loggedInUser: IUser;
   handleDrawerToggle: () => void;
-  onAddNewBoard: (board: IBoard) => void;
-};
+}
 
-const NavBar = ({ loggedInUser, handleDrawerToggle, onAddNewBoard }: Props): JSX.Element => {
+const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
   const classes = useStyles();
+  const { activeBoard } = useKanban();
 
   return (
     <Container className={classes.root}>
@@ -48,7 +48,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle, onAddNewBoard }: Props): JSX
               <NotificationCenter loggedInUser={loggedInUser} notifications={testNotifications} />
             </Grid>
             <Grid item>
-              <AddBoardDialog onAddNewBoard={onAddNewBoard} />
+              <AddBoardDialog />
             </Grid>
             <Grid item>
               <AvatarDisplay loggedIn user={loggedInUser} />
@@ -59,7 +59,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle, onAddNewBoard }: Props): JSX
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            My School Board
+            {activeBoard.name}
           </Typography>
           <IconButton
             onClick={handleDrawerToggle}

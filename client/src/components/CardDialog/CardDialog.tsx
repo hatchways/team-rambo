@@ -14,20 +14,18 @@ import {
   useTheme,
 } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
-import SettingsIcon from '@material-ui/icons/Settings';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
-import { useSnackBar } from '../../context/useSnackbarContext';
-import { useKanban } from '../../context/useKanbanContext';
-import { useDialog } from '../../context/useDialogContext';
-import { IColumn } from '../../interface/Column';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { cardDialogStyles, DialogItemGroup, DialogActionButton, dialogActionButtonStyles } from '../CardDialog';
+import { useSnackBar, useDialog, useKanban } from '../../context/';
+import { IColumn } from '../../interface/';
 
-type DialogProps = {
+interface DialogProps {
   name: string;
   tag: string;
   columnId: string;
   id: string;
-};
+}
 
 const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
@@ -58,13 +56,12 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   useEffect(() => {
     const column = getColumnById(columnId);
     if (!column) {
-      updateSnackBarMessage('Column does not exist anymore');
+      updateSnackBarMessage('Column does not exist');
       handleClose();
     }
     setColumn(column);
-    return () => {
-      setColumn(null);
-    };
+
+    return () => setColumn(null);
   }, []);
 
   return (
