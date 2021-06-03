@@ -128,20 +128,24 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   };
 
   const moveCard = (destination: IColumn): void => {
-    const source = getColumnById(focusedCard?.columnId as string);
+    if (!focusedCard) {
+      updateSnackBarMessage('No focus card found!', 'error');
+      return;
+    }
+
     const dupBoard = Object.assign({}, activeBoard);
     const columnsCopy: IColumn[] = cloneDeep(columns);
 
-    const colIndex = columns.findIndex((col) => col._id === source._id);
+    const colIndex = columns.findIndex((col) => col._id === focusedCard.columnId);
 
-    if (source._id !== destination._id) {
+    if (focusedCard.columnId !== destination._id) {
       const targetColumnIndex = columnsCopy.findIndex((col) => col._id === destination._id);
       if (targetColumnIndex > -1) {
         const targetColumn = columnsCopy[targetColumnIndex];
         const originalColumn = columnsCopy[colIndex];
-        const [card] = originalColumn.cards.splice(colIndex, 1);
-        card.columnId = targetColumn._id;
-        targetColumn.cards.push(card);
+        columnsCopy[colIndex].cards = originalColumn.cards.splice(colIndex, 1);
+        focusedCard.columnId = targetColumn._id;
+        targetColumn.cards.push(focusedCard);
       }
     }
 
