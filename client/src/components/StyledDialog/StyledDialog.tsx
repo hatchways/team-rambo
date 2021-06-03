@@ -8,13 +8,19 @@ type Props = {
   buttonText: string;
   title: string;
   toggleFunction: React.Dispatch<React.SetStateAction<boolean>>;
+  buttonFunction?: () => void;
   component: JSX.Element;
 };
 
-const StyledDialog = ({ open, buttonText, title, toggleFunction, component }: Props): JSX.Element => {
+const StyledDialog = ({ open, buttonText, title, toggleFunction, buttonFunction, component }: Props): JSX.Element => {
   const classes = styledDialogStyles();
 
   const handleClose = () => {
+    toggleFunction(false);
+  };
+
+  const handleSubmit = () => {
+    buttonFunction && buttonFunction();
     toggleFunction(false);
   };
 
@@ -28,6 +34,7 @@ const StyledDialog = ({ open, buttonText, title, toggleFunction, component }: Pr
         <Button
           type="submit"
           className={classes.dialogButton}
+          onClick={handleSubmit}
           color="primary"
           variant="contained"
           size="large"
