@@ -10,4 +10,5 @@ export interface IUploadOptions {
 export interface IUploadProfilePicture {
   error?: { message: string };
   url: string;
+  etag: string;
 }

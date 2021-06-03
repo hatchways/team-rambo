@@ -32,10 +32,12 @@ exports.setProfilePicture = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  if (user) return res.status(200).send({ url: user.picture });
+  if (user)
+    return res
+      .status(200)
+      .send({ url: req.picture.url, etag: req.picture.etag });
 
-  res.status(400);
-  throw new Error("Could not retrieve user!");
+  return res.status(400).send({ error: "Could not retrieve user!" });
 });
 
 exports.createBoard = asyncHandler(async (req, res) => {
