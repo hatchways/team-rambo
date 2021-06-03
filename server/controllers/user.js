@@ -20,7 +20,6 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
     throw new Error("No users found in search");
   }
 
-<<<<<<< HEAD
   res.status(200).json({ users: users });
 });
 
@@ -61,9 +60,6 @@ exports.createBoard = asyncHandler(async (req, res) => {
   });
 
   return res.status(200).json({ board: newBoard });
-=======
-  return res.status(200).json({ users: users });
->>>>>>> origin/main
 });
 
 exports.getUserBoards = asyncHandler(async (req, res, next) => {
