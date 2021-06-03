@@ -9,7 +9,7 @@ interface TourProviderProps {
 }
 
 export const TourProvider = ({ steps, children }: PropsWithChildren<TourProviderProps>): JSX.Element => {
-  const [isTourMode, setIsTourMode] = useState<boolean>(true);
+  const [isTourMode, setIsTourMode] = useState<boolean>(false);
   const [hasSeenTour, setHasSeenTour] = useState<boolean>(false);
   const [tourSteps] = useState<ReactourStep[]>(steps || []);
 
@@ -40,7 +40,7 @@ export const TourProvider = ({ steps, children }: PropsWithChildren<TourProvider
   );
 };
 
-export function useTour() {
+export function useTour(): ITourContext {
   const ctx = useContext(TourContext);
   if (!ctx) throw new Error('useTour must be used within TourProvider');
   return ctx;

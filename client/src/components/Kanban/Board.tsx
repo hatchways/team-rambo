@@ -1,13 +1,14 @@
-import { Grid, Box } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { DragDropContext, Droppable, DroppableProvided } from 'react-beautiful-dnd';
 import { FocusCard } from './FocusCard/FocusCard';
 import Column from './Column/Column';
 import { IBoard } from '../../interface/';
-import { useKanban } from '../../context/';
+import { useKanban, useTour } from '../../context/';
 import { TourGuide } from '../TourGuide/TourGuide';
 
 const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element => {
   const { handleDragEnd } = useKanban();
+  const { isTourMode } = useTour();
 
   return (
     <>
@@ -31,7 +32,7 @@ const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element => {
           )}
         </Droppable>
       </DragDropContext>
-      <TourGuide />
+      {isTourMode && <TourGuide />}
     </>
   );
 };

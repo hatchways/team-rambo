@@ -11,7 +11,7 @@ export const TourGuide = (): JSX.Element => {
       isOpen={isTourMode}
       steps={tourSteps}
       onRequestClose={tourModeEndHandler}
-      onAfterOpen={(_) => (document.body.style.overflowY = 'hidden')}
+      onAfterOpen={() => (document.body.style.overflowY = 'hidden')}
       rounded={5}
       maskSpace={12}
       disableInteraction
