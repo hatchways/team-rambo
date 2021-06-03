@@ -57,6 +57,7 @@ const AddBoardDialog = (): JSX.Element => {
         startIcon={<AddOutlinedIcon />}
         onClick={handleClickOpen}
         disableElevation
+        data-tour="add-board-step"
       >
         Create Board
       </Button>

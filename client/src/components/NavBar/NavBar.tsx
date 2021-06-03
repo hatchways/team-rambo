@@ -68,7 +68,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
             color="inherit"
             aria-label="menu"
           >
-            <MenuIcon />
+            <MenuIcon data-tour="show-boards-step" />
           </IconButton>
         </Toolbar>
       </AppBar>

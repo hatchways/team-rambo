@@ -45,6 +45,7 @@ const Column = ({ _id, name, cards, index }: ColumnProps): JSX.Element => {
           className={classes.columnGridItem}
           ref={provided.innerRef}
           {...provided.draggableProps}
+          data-tour="column-step"
         >
           <Box className={classes.columnWrapper} {...provided.dragHandleProps}>
             <Box className={classes.typographyWrapper}>
