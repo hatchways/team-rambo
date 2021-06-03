@@ -65,6 +65,7 @@ const AddBoardDialog = (): JSX.Element => {
         buttonText="Create Board"
         title="Create New Board"
         toggleFunction={setOpen}
+        buttonFunction={formik.handleSubmit}
         component={
           <Formik
             initialValues={{ name: '' }}
