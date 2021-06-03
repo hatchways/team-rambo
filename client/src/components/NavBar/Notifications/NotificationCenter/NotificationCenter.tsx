@@ -3,8 +3,7 @@ import { Popover, IconButton } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import NotificationItem from '../NotificationItem/NotificationItem';
 import { StyledBadge } from './notificationCenterStyles';
-import INotificationItem from '../../../../interface/Notification';
-import { IUser } from '../../../../interface/';
+import { IUser, INotificationItem } from '../../../../interface/';
 
 type NotificationProps = {
   loggedInUser: IUser;
