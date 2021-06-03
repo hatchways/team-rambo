@@ -1,6 +1,7 @@
 import { useState, useContext, createContext, FunctionComponent, useEffect, Dispatch, SetStateAction } from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
+import { v4 as uuidv4 } from 'uuid';
 import { getBoard, getUserBoards, updateBoard, createBoard } from '../helpers/';
 import { useSnackBar, useAuth } from './';
 import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
@@ -143,9 +144,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       if (targetColumnIndex > -1) {
         const targetColumn = columnsCopy[targetColumnIndex];
         const originalColumn = columnsCopy[colIndex];
-        columnsCopy[colIndex].cards = originalColumn.cards.splice(colIndex, 1);
-        focusedCard.columnId = targetColumn._id;
-        targetColumn.cards.push(focusedCard);
+        const cardIndex = originalColumn.cards.findIndex((card) => card._id === focusedCard._id);
+        const [card] = originalColumn.cards.splice(cardIndex, 1);
+        card.columnId = targetColumn._id;
+        targetColumn.cards.push(card);
       }
     }
 
@@ -154,6 +156,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     updateBoard(dupBoard);
     setActiveBoard(dupBoard);
     setColumns(columnsCopy);
+    resetOpenCard();
   };
 
   const copyCard = (destination: IColumn): void => {
@@ -161,7 +164,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       updateSnackBarMessage('No focus card found!', 'error');
       return;
     }
-    const source = getColumnById(focusedCard?.columnId as string);
+    const source = getColumnById(focusedCard?.columnId);
     const dupBoard = Object.assign({}, activeBoard);
     const columnsCopy: IColumn[] = cloneDeep(columns);
 
@@ -169,8 +172,8 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       const targetColumnIndex = columnsCopy.findIndex((col) => col._id === destination._id);
       if (targetColumnIndex > -1) {
         const targetColumn = columnsCopy[targetColumnIndex];
-        const card = focusedCard;
-        card._id = `item-${Math.floor(Math.random() * 999999)}`;
+        const card = Object.assign({}, focusedCard);
+        card._id = uuidv4();
         card.columnId = targetColumn._id;
         targetColumn.cards.push(card);
       }
@@ -199,7 +202,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       copyBoard.columns = columnsCopy;
 
       updateBoard(copyBoard);
-
       setActiveBoard(copyBoard);
       setColumns(columnsCopy);
 
@@ -221,9 +223,9 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       copyBoard.columns = columnsCopy;
 
       updateBoard(copyBoard);
-
       setActiveBoard(copyBoard);
       setColumns(columnsCopy);
+      resetOpenCard();
     }
   };
 
@@ -280,7 +282,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const addColumn = (columnName: string, side: string): void => {
     const blankColumn: IColumn = {
-      _id: `item-${Math.floor(Math.random() * 999999)}`,
+      _id: uuidv4(),
       name: columnName,
       cards: [],
       createdAt: new Date(),
