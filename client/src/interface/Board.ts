@@ -2,7 +2,7 @@ import { IColumn } from './Column';
 import { ICard } from './Card';
 
 export interface IBoard {
-  id: string;
+  _id: string;
   name: string;
   columns: Array<IColumn>;
   cards: Array<ICard>;

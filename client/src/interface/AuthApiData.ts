@@ -1,12 +1,12 @@
-import { User } from './User';
+import { IUser } from './User';
 
-export interface AuthApiDataSuccess {
+export interface IAuthApiDataSuccess {
   message: string;
-  user: User;
+  user: IUser;
   token: string;
 }
 
-export interface AuthApiData {
+export interface IAuthApiData {
   error?: { message: string };
-  success?: AuthApiDataSuccess;
+  success?: IAuthApiDataSuccess;
 }

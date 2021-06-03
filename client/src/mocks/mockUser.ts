@@ -1,19 +1,19 @@
-import { User } from '../interface/User';
+import { IUser } from '../interface/';
 
-const mockLoggedInUser: User = {
+const mockLoggedInUser: IUser = {
   email: 'mockLoggedInUser@gmail.com',
 };
 
-const mockOtherUser1: User = {
+const mockOtherUser1: IUser = {
   email: 'mockTestUser1@gmail.com',
 };
-const mockOtherUser2: User = {
+const mockOtherUser2: IUser = {
   email: 'mockTestUser2@gmail.com',
 };
-const mockOtherUser3: User = {
+const mockOtherUser3: IUser = {
   email: 'mockTestUser3@gmail.com',
 };
 
-const mockOtherUsers: User[] = [mockOtherUser1, mockOtherUser2, mockOtherUser3];
+const mockOtherUsers: IUser[] = [mockOtherUser1, mockOtherUser2, mockOtherUser3];
 
 export { mockLoggedInUser, mockOtherUsers };

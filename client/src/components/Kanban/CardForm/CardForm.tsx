@@ -1,6 +1,6 @@
+import { useState, useEffect } from 'react';
 import { Box, Button } from '@material-ui/core';
 import { InnerForm } from './InnerForm/InnerForm';
-import { useState, useEffect } from 'react';
 import useStyles from './useStyles';
 
 type CardFormProps = {
@@ -20,6 +20,7 @@ const CardForm = ({ columnId }: CardFormProps): JSX.Element => {
     }
   };
 
+  // Can we handle the eventListeners in a more React manner here
   useEffect(() => {
     document.addEventListener('keydown', handleClose, false);
     return () => {
@@ -29,7 +30,7 @@ const CardForm = ({ columnId }: CardFormProps): JSX.Element => {
 
   return (
     <Box>
-      {formIsOpen ? <InnerForm columnId={columnId} formAction={setFormIsOpen} /> : null}
+      {formIsOpen && <InnerForm columnId={columnId} formAction={setFormIsOpen} />}
       {!formIsOpen && (
         <Button
           onClick={openForm}

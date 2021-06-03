@@ -14,20 +14,18 @@ import {
   useTheme,
 } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
-import SettingsIcon from '@material-ui/icons/Settings';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
-import { useSnackBar } from '../../context/useSnackbarContext';
-import { useKanban } from '../../context/useKanbanContext';
-import { useDialog } from '../../context/useDialogContext';
-import { IColumn } from '../../interface/Column';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { cardDialogStyles, DialogItemGroup, DialogActionButton, dialogActionButtonStyles } from '../CardDialog';
+import { useSnackBar, useDialog, useKanban } from '../../context/';
+import { IColumn } from '../../interface/';
 
-type DialogProps = {
+interface DialogProps {
   name: string;
   tag: string;
   columnId: string;
   id: string;
-};
+}
 
 const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
@@ -58,13 +56,12 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   useEffect(() => {
     const column = getColumnById(columnId);
     if (!column) {
-      updateSnackBarMessage('Column does not exist anymore');
+      updateSnackBarMessage('Column does not exist');
       handleClose();
     }
     setColumn(column);
-    return () => {
-      setColumn(null);
-    };
+
+    return () => setColumn(null);
   }, []);
 
   return (
@@ -81,7 +78,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
               <IconButton onClick={handleClick}>
                 <SettingsIcon className={classes.icons} />
               </IconButton>
-              <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose}>
+              <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose}>
                 {Object.keys(theme.palette.tags).map((tag: string): JSX.Element => {
                   return (
                     <MenuItem onClick={() => handleMenuClose(tag)} key={`${columnId}-${tag}`}>
@@ -101,31 +98,35 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
         </Grid>
         <Divider className={classes.divider} />
         <DialogContent dividers={false}>
-          <Grid container xs={12} className={classes.hasMargin}>
-            <DialogItemGroup items={items} />
-            <Grid container xs={2} direction="column" className={classes.buttonContainer}>
-              <Grid item>
-                <Box className={classes.buttonGroup}>
-                  <Typography variant="caption" className={classes.buttonColumnTitle}>
-                    SECTIONS:
-                  </Typography>
-                  <DialogActionButton title="Description" content="description" icon="contacts" />
-                  <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
-                  <DialogActionButton title="Comment" content="comment" icon="bubble" />
-                  <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
-                  <DialogActionButton title="Checklist" content="checklist" icon="checklist" />
-                </Box>
-              </Grid>
-              <Grid item>
-                <Box className={classes.buttonGroup}>
-                  <Typography variant="caption" className={classes.buttonColumnTitle}>
-                    ACTIONS:
-                  </Typography>
-                  <Button className={buttonClasses.columnButton}>Move</Button>
-                  <Button className={buttonClasses.columnButton}>Copy</Button>
-                  <Button className={buttonClasses.columnButton}>Share</Button>
-                  <Button className={buttonClasses.columnButton}>Delete</Button>
-                </Box>
+          <Grid container className={classes.hasMargin}>
+            <Grid item xs={10}>
+              <DialogItemGroup items={items} />
+            </Grid>
+            <Grid item xs={2}>
+              <Grid container direction="column" className={classes.buttonContainer}>
+                <Grid item>
+                  <Box className={classes.buttonGroup}>
+                    <Typography variant="caption" className={classes.buttonColumnTitle}>
+                      SECTIONS:
+                    </Typography>
+                    <DialogActionButton title="Description" content="description" icon="contacts" />
+                    <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
+                    <DialogActionButton title="Comment" content="comment" icon="bubble" />
+                    <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
+                    <DialogActionButton title="Checklist" content="checklist" icon="checklist" />
+                  </Box>
+                </Grid>
+                <Grid item>
+                  <Box className={classes.buttonGroup}>
+                    <Typography variant="caption" className={classes.buttonColumnTitle}>
+                      ACTIONS:
+                    </Typography>
+                    <Button className={buttonClasses.columnButton}>Move</Button>
+                    <Button className={buttonClasses.columnButton}>Copy</Button>
+                    <Button className={buttonClasses.columnButton}>Share</Button>
+                    <Button className={buttonClasses.columnButton}>Delete</Button>
+                  </Box>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

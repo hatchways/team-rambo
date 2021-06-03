@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   Dialog,
   Box,
@@ -11,12 +12,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Save, CloudUpload } from '@material-ui/icons';
-import useStyles from './PictureModalStyles';
-import { useState } from 'react';
 import Dropzone, { DropzoneState } from 'react-dropzone';
+import { useUser, useSnackBar } from '../../context';
 import uploadImage from '../../helpers/APICalls/uploadImage';
-import { useUser } from '../../context/useUserContext';
-import { useSnackBar } from '../../context/useSnackbarContext';
+import useStyles from './PictureModalStyles';
 
 interface Props {
   open: boolean;

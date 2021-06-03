@@ -1,16 +1,9 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
-import Link from '@material-ui/core/Link';
+import { CssBaseline, Paper, Box, Grid, Divider, Link, Typography } from '@material-ui/core';
 import { FormikHelpers } from 'formik';
-import Typography from '@material-ui/core/Typography';
 import useStyles from './loginStyles';
-import login from '../../helpers/APICalls/login';
+import { login } from '../../helpers/';
 import LoginForm from './LoginForm/LoginForm';
-import { useAuth } from '../../context/useAuthContext';
-import { useSnackBar } from '../../context/useSnackbarContext';
+import { useAuth, useSnackBar } from '../../context/';
 
 export default function Login(): JSX.Element {
   const classes = useStyles();

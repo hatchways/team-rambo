@@ -1,26 +1,21 @@
 import { useState } from 'react';
 import { Button, IconButton, Box, Grid, Dialog, TextField, Typography, DialogActions } from '@material-ui/core';
-import addBoardDialogStyles from './AddBoardDialogStyles';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import ClearIcon from '@material-ui/icons/Clear';
 import * as Yup from 'yup';
 import { Formik, useFormik } from 'formik';
-import createBoard from '../../helpers/APICalls/createBoard';
-import { IBoard } from '../../interface/Board';
-import { useSnackBar } from '../../context/useSnackbarContext';
-
-interface Props {
-  onAddNewBoard: (board: IBoard) => void;
-}
+import addBoardDialogStyles from './AddBoardDialogStyles';
+import { useKanban, useSnackBar } from '../../context/';
 
 interface Values {
   name: string;
 }
 
-const AddBoardDialog = ({ onAddNewBoard }: Props): JSX.Element => {
+const AddBoardDialog = (): JSX.Element => {
   const [open, setOpen] = useState(false);
   const classes = addBoardDialogStyles();
   const { updateSnackBarMessage } = useSnackBar();
+  const { createNewBoard } = useKanban();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,11 +25,10 @@ const AddBoardDialog = ({ onAddNewBoard }: Props): JSX.Element => {
     setOpen(false);
   };
 
-  const handleSubmit = async ({ name }: Values) => {
-    const { board, error } = await createBoard(name);
+  const handleSubmit = async ({ name }: Values): Promise<void> => {
+    const { error } = await createNewBoard(name);
     if (!error) {
       updateSnackBarMessage('Board created', 'success');
-      onAddNewBoard(board);
       handleClose();
       return;
     }
