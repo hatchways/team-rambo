@@ -21,7 +21,12 @@ const Card = ({ id, name, tag = 'white', columnId, index }: CardProps): JSX.Elem
     <Draggable draggableId={id} index={index}>
       {(provided, snapshot) => {
         return (
-          <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+          <div
+            ref={provided.innerRef}
+            {...provided.dragHandleProps}
+            {...provided.draggableProps}
+            className="first-step"
+          >
             <Box
               onClick={() => {
                 setOpenCard({
