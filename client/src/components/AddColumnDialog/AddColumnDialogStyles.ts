@@ -8,24 +8,10 @@ const addColumnDialogStyles = makeStyles((theme) => ({
   textField: {
     display: 'flex',
     textAlign: 'center',
-    width: '80%',
-  },
-  paper: {
-    minWidth: '30%',
-    minHeight: '40%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '20px 10px',
-  },
-  dialogTitle: {
-    fontWeight: 'bold',
-    paddingTop: '40px',
   },
   inputs: {
     height: '3rem',
-    padding: '5px',
+    padding: '5px 60px',
     background: 'white',
     textAlign: 'center',
     borderRadius: '5px',
