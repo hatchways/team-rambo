@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { columnSchema } = require("./Column");
-const { userSchema } = require("./User");
 
 const boardSchema = new mongoose.Schema({
   name: {
@@ -15,12 +14,8 @@ const boardSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "user",
     required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 boardSchema.methods.removePassword = function () {
   const object = this.toObject();

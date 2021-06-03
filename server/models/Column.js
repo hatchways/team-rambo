@@ -10,11 +10,7 @@ const columnSchema = new mongoose.Schema({
     type: [cardSchema],
     required: false,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+}, { timestamps: true });
 
 module.exports = {
   Column: mongoose.model("column", columnSchema),

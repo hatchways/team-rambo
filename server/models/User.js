@@ -10,12 +10,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-  },
-  registerDate: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);

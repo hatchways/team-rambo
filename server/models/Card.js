@@ -8,11 +8,7 @@ const cardSchema = new mongoose.Schema({
   description: {
     type: String,
     required: false,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 module.exports = { Card: mongoose.model("card", cardSchema), cardSchema };
