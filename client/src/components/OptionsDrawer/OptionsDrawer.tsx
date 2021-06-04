@@ -1,23 +1,17 @@
-import Typography from '@material-ui/core/Typography';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import Drawer from '@material-ui/core/Drawer';
-import React from 'react';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+import { Dispatch, SetStateAction } from 'react';
+import { Typography, ListItem, ListItemText, ListItemIcon, List, Divider, Drawer } from '@material-ui/core';
 import SwapHorizontalCircleOutlinedIcon from '@material-ui/icons/SwapHorizontalCircleOutlined';
 import useStyles from './optionsDrawerStyles';
-import { IBoard } from '../../interface/Board';
+import { useKanban } from '../../context/';
 
 interface Props {
   open: boolean;
-  boards: Array<IBoard>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const OptionsDrawer = ({ open, boards, setOpen }: Props): JSX.Element => {
+const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
   const classes = useStyles();
+  const { fetchBoard, userBoards } = useKanban();
 
   return (
     <Drawer anchor={'right'} open={open} onClose={setOpen}>
@@ -29,8 +23,15 @@ const OptionsDrawer = ({ open, boards, setOpen }: Props): JSX.Element => {
           />
         </ListItem>
         <Divider />
-        {boards.map((board) => (
-          <ListItem key={board.id} button>
+        {userBoards.map((board) => (
+          <ListItem
+            key={board._id}
+            button
+            onClick={() => {
+              fetchBoard(board._id);
+              setOpen(false);
+            }}
+          >
             <ListItemIcon>
               <SwapHorizontalCircleOutlinedIcon className={classes.icon} />
             </ListItemIcon>

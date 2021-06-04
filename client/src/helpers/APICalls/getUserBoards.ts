@@ -1,8 +1,7 @@
-import { FetchOptions } from '../../interface/FetchOptions';
-import { BoardApiData } from '../../interface/Board';
+import { IFetchOptions, BoardApiData } from '../../interface/';
 
 const getUserBoards = async (): Promise<BoardApiData> => {
-  const fetchOptions: FetchOptions = {
+  const fetchOptions: IFetchOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',

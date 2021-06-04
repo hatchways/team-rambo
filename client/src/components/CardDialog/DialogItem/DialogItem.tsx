@@ -1,23 +1,24 @@
 import { cloneElement } from 'react';
-import { Button, IconButton, Grid, TextField, Typography } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear';
+import { Button, IconButton, Grid, Box, TextField, Typography } from '@material-ui/core';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
+import ClearIcon from '@material-ui/icons/Clear';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import AttachFileOutlinedIcon from '@material-ui/icons/AttachFileOutlined';
+import CheckList from '../CheckList/CheckList';
 import dialogItemStyles from './dialogItemStyles';
-import { IDialogItem } from '../../../context/types/detail';
-import DatePicker from '../../DatePicker/DatePicker';
-import { useDialog } from '../../../context/useDetailContext';
-
-type ItemProps = IDialogItem;
+import { useDialog } from '../../../context/';
+import { IDialogItem } from '../../../interface';
+import { DatePicker } from '..';
 
 const DialogItem = ({
   title = 'blank',
   content = 'description',
   icon = 'clear',
   id = 'testId',
-}: ItemProps): JSX.Element => {
+}: IDialogItem): JSX.Element => {
   const classes = dialogItemStyles();
   const { removeItem } = useDialog();
 
@@ -41,6 +42,10 @@ const DialogItem = ({
         return <ScheduleIcon />;
       case 'bubble':
         return <ChatBubbleOutlineIcon />;
+      case 'attachment':
+        return <AttachFileOutlinedIcon />;
+      case 'checklist':
+        return <CheckBoxOutlinedIcon />;
       default:
         return <ClearIcon />;
     }
@@ -75,9 +80,13 @@ const DialogItem = ({
       case 'tag':
         break;
       case 'checklist':
-        break;
+        return <CheckList />;
       case 'attachment':
-        break;
+        return (
+          <Box>
+            <input multiple type="file" className={classes.dialogButton} />
+          </Box>
+        );
       case 'cover':
         break;
       default:

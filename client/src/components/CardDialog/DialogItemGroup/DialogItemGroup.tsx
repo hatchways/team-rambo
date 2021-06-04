@@ -1,14 +1,13 @@
 import { Grid } from '@material-ui/core';
-import { IDialogItem } from '../../../context/types/detail';
+import { IDialogItem } from '../../../interface';
 import DialogItem from '../DialogItem/DialogItem';
 
-//type DialogItemGroupProps = IDialogItemGroup;
 type DialogItemGroupProps = {
   items: IDialogItem[];
 };
 const DialogItemGroup = ({ items }: DialogItemGroupProps): JSX.Element => {
   return (
-    <Grid container xs={10}>
+    <Grid container>
       {items.map((item: IDialogItem) => {
         return <DialogItem key={item.id} title={item.title} content={item.content} icon={item.icon} id={item.id} />;
       })}

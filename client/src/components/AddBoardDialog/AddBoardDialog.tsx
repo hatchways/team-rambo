@@ -1,12 +1,21 @@
 import { useState } from 'react';
 import { Button, IconButton, Box, Grid, Dialog, TextField, Typography, DialogActions } from '@material-ui/core';
-import addBoardDialogStyles from './AddBoardDialogStyles';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import ClearIcon from '@material-ui/icons/Clear';
+import * as Yup from 'yup';
+import { Formik, useFormik } from 'formik';
+import addBoardDialogStyles from './AddBoardDialogStyles';
+import { useKanban, useSnackBar } from '../../context/';
+
+interface Values {
+  name: string;
+}
 
 const AddBoardDialog = (): JSX.Element => {
   const [open, setOpen] = useState(false);
   const classes = addBoardDialogStyles();
+  const { updateSnackBarMessage } = useSnackBar();
+  const { createNewBoard } = useKanban();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -15,6 +24,29 @@ const AddBoardDialog = (): JSX.Element => {
   const handleClose = async () => {
     setOpen(false);
   };
+
+  const handleSubmit = async ({ name }: Values): Promise<void> => {
+    const { error } = await createNewBoard(name);
+    if (!error) {
+      updateSnackBarMessage('Board created', 'success');
+      handleClose();
+      return;
+    }
+    updateSnackBarMessage('Could not create board!', 'error');
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+    },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .min(3, 'Minimum of 3 characters length!')
+        .max(50, 'Maximum of 50 characters length!')
+        .required('Required field!'),
+    }),
+    onSubmit: (values) => handleSubmit(values),
+  });
 
   return (
     <Box>
@@ -34,30 +66,50 @@ const AddBoardDialog = (): JSX.Element => {
         <Typography variant="h5" className={classes.dialogTitle}>
           Create new board
         </Typography>
-        <TextField
-          required
-          fullWidth
-          placeholder="Add Title"
-          variant="outlined"
-          InputProps={{
-            classes: { input: classes.inputs },
-          }}
-          className={classes.textField}
-        />
+        <Formik
+          initialValues={{ name: '' }}
+          onSubmit={(values: Values) => console.log(values.name, 'sinal')}
+          validationSchema={Yup.object().shape({
+            name: Yup.string().required(`Insert the board's name`).min(2).max(50),
+          })}
+        >
+          <form onSubmit={formik.handleSubmit}>
+            <Grid container spacing={2} className={classes.formGrid}>
+              <Grid item>
+                <TextField
+                  name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
+                  fullWidth
+                  placeholder="Add Title"
+                  variant="outlined"
+                  InputProps={{
+                    classes: { input: classes.inputs },
+                  }}
+                  className={classes.textField}
+                />
+              </Grid>
+              <Grid item>
+                <Button
+                  type="submit"
+                  className={classes.dialogButton}
+                  color="primary"
+                  variant="contained"
+                  size="large"
+                  disableElevation
+                >
+                  Create
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Formik>
         <DialogActions>
           <IconButton className={classes.topRight} onClick={handleClose}>
             <ClearIcon />
           </IconButton>
-          <Button
-            onClick={handleClose}
-            className={classes.dialogButton}
-            color="primary"
-            variant="contained"
-            size="large"
-            disableElevation
-          >
-            Create
-          </Button>
         </DialogActions>
       </Dialog>
     </Box>

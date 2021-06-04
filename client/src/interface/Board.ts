@@ -2,7 +2,7 @@ import { IColumn } from './Column';
 import { ICard } from './Card';
 
 export interface IBoard {
-  id: string;
+  _id: string;
   name: string;
   columns: Array<IColumn>;
   cards: Array<ICard>;
@@ -13,4 +13,9 @@ export interface IBoard {
 export interface BoardApiData {
   boards: Array<IBoard>;
   error?: { message: string };
+}
+
+export interface NewBoardApiData {
+  board: IBoard;
+  error?: { messge: string };
 }
