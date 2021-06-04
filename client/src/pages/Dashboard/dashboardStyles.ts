@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   board: {
-    marginTop: 30,
+    marginTop: 20,
   },
   buttonOverlay: {
     position: 'absolute',
@@ -23,6 +23,18 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: '300px',
     },
+  },
+  changeDisplay: {
+    marginBlock: 30,
+    width: '83%',
+    margin: '0 auto',
+  },
+  calendar: {
+    width: '83%',
+    margin: '0 auto',
+  },
+  calendarEvent: {
+    height: '100px',
   },
 }));
 
