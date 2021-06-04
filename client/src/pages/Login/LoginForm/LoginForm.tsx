@@ -3,7 +3,7 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import useStyles from './loginFormStyles';
 import { login } from '../../../helpers/';
-import { useAuth } from '../../../context/';
+import { useAuth, useKanban, useSnackBar } from '../../../context/';
 
 interface Props {
   handleSubmit: (
@@ -25,15 +25,18 @@ interface Props {
 }
 
 export default function Login({ handleSubmit }: Props): JSX.Element {
-  const { updateLoginContext } = useAuth();
   const classes = useStyles();
+  const { updateLoginContext } = useAuth();
+  const { sendToFirstBoard } = useKanban();
+  const { updateSnackBarMessage } = useSnackBar();
 
   const demoUser = () => {
     login('demo@user.ca', 'demouser').then((data) => {
       if (data.success) {
         updateLoginContext(data.success);
+        sendToFirstBoard();
       } else {
-        console.error({ data });
+        updateSnackBarMessage('Could not login', 'error');
       }
     });
   };
