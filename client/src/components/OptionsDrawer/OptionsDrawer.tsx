@@ -13,7 +13,7 @@ interface Props {
 const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
-  const { fetchBoard, userBoards } = useKanban();
+  const { userBoards } = useKanban();
 
   return (
     <Drawer anchor={'right'} open={open} onClose={setOpen}>
@@ -30,7 +30,6 @@ const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
             key={board._id}
             button
             onClick={() => {
-              //fetchBoard(board._id);
               history.push(`/dashboard/board/${board._id}`);
               setOpen(false);
             }}
