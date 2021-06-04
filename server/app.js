@@ -13,7 +13,11 @@ const cors = require("cors");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const fileRouter = require("./routes/file");
+<<<<<<< HEAD
+const notificationRouter = require("./routes/notification");
+=======
 const boardsRouter = require("./routes/board");
+>>>>>>> origin/main
 
 const { json, urlencoded } = express;
 
@@ -48,7 +52,11 @@ app.use((req, res, next) => {
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/files", fileRouter);
+<<<<<<< HEAD
+app.use("/notifications/", notificationRouter);
+=======
 app.use("/boards", boardsRouter);
+>>>>>>> origin/main
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
