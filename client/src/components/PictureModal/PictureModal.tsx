@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   Box,
@@ -28,6 +28,7 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
   const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
   const [preview, setPreview] = useState<string>('');
   const [image, setImage] = useState<Blob>(new Blob());
+  const [canUpload, setCanUpload] = useState<boolean>(false);
   const { updatePicture } = useUser();
   const { updateSnackBarMessage } = useSnackBar();
 
@@ -36,7 +37,7 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
     const currentFile = [...files].shift();
 
     if (!currentFile) {
-      updateSnackBarMessage('Insert a valid image file!');
+      updateSnackBarMessage('Insert a valid image file!', 'error');
       return;
     }
 
@@ -48,25 +49,33 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
       }
     };
     reader.readAsDataURL(currentFile);
+    setCanUpload(true);
   };
 
   const handleUpload = async (file: Blob) => {
     const form = new FormData();
     form.append('image', file);
 
-    const { error, url } = await uploadImage(form);
+    const { error, picture } = await uploadImage(form);
     if (error) {
-      updateSnackBarMessage('Insert a valid image file!');
+      updateSnackBarMessage('Insert a valid image file!', 'error');
       return;
     }
-    updatePicture(url);
+    updatePicture(picture);
     updateSnackBarMessage('Image saved!');
+    handleClose();
+  };
+
+  const handleClose = () => {
     setOpen();
+    setCanUpload(false);
+    setImage(new Blob());
+    setPreview('');
   };
 
   return (
     <>
-      <Dialog open={open} onClose={setOpen}>
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle disableTypography className={classes.root}>
           <Typography variant="h6" className={classes.title}>
             Upload profile picture
@@ -108,6 +117,7 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
                 color="primary"
                 size="large"
                 startIcon={<Save />}
+                disabled={!canUpload}
               >
                 Save
               </Button>

@@ -1,5 +1,4 @@
-import { IUploadProfilePicture } from '../../interface/File';
-import { IUploadOptions } from '../../interface/File';
+import { IUploadProfilePicture, IUploadOptions } from '../../interface';
 
 const uploadImage = async (form: FormData): Promise<IUploadProfilePicture> => {
   const fetchOptions: IUploadOptions = {

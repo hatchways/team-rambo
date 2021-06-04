@@ -26,16 +26,15 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
 exports.setProfilePicture = asyncHandler(async (req, res) => {
   if (!req.picture) return res.status(404).send("Picture not found");
 
+  const picture = { url: req.picture.url };
+
   const user = await User.findOneAndUpdate(
     { _id: req.user.id },
-    { $set: { picture: req.picture.url } },
+    { $set: { picture: picture } },
     { new: true }
   );
 
-  if (user)
-    return res
-      .status(200)
-      .send({ url: req.picture.url, etag: req.picture.etag });
+  if (user) return res.status(200).send({ picture });
 
   return res.status(400).send({ error: "Could not retrieve user!" });
 });
@@ -66,5 +65,5 @@ exports.getUserBoards = asyncHandler(async (req, res, next) => {
   //@ts-ignore
   const boards = await Board.find({ user: req.user.id });
 
-  return res.status(200).send({ boards: boards });
+  return res.status(200).send({ boards });
 });

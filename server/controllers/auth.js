@@ -18,9 +18,15 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     throw new Error("A user with that email already exists");
   }
 
+  const picture = {
+    url: `https://robohash.org/${email}.png`,
+    etag: "",
+  };
+
   const user = await User.create({
     email,
     password,
+    picture,
   });
 
   if (user) {
@@ -53,6 +59,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         user: {
           id: user._id,
           email: user.email,
+          picture: user.picture,
         },
       },
     });

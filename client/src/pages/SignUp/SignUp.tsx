@@ -21,6 +21,7 @@ export default function Register(): JSX.Element {
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
         updateLoginContext(data.success);
+        debugger;
       } else {
         // should not get here from backend but this catch is for an unknown issue
         console.error({ data });

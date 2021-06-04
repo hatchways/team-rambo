@@ -1,7 +1,6 @@
 const multer = require("multer");
 const streamifier = require("streamifier");
 const cloudinary = require("cloudinary").v2;
-const { v4: uuidv4 } = require("uuid");
 
 cloudinary.config(process.env.CLOUDINARY_URL);
 
@@ -37,13 +36,16 @@ const streamUpload = (req, res) => {
   if (!req.file) return res.status(404).send({ error: "File not found!" });
 
   return new Promise((resolve, reject) => {
-    let stream = cloudinary.uploader.upload_stream((error, result) => {
-      if (result) {
-        resolve(result);
-      } else {
-        reject(error);
+    let stream = cloudinary.uploader.upload_stream(
+      { public_id: req.user.id },
+      (error, result) => {
+        if (result) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
       }
-    });
+    );
     streamifier.createReadStream(req.file.buffer).pipe(stream);
   });
 };
