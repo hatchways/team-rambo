@@ -44,9 +44,15 @@ const Dashboard = (): JSX.Element => {
         <AddColumnDialog />
       </Box>
       <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
-        <Grid item xs={10}>
-          <Board activeBoard={activeBoard} />
-        </Grid>
+        {activeBoard._id != 'Initial' ? (
+          <Grid item xs={10}>
+            <Board activeBoard={activeBoard} />
+          </Grid>
+        ) : (
+          <Grid xs={12} className={classes.loading}>
+            <CircularProgress size={150} />
+          </Grid>
+        )}
       </Grid>
     </Box>
   );

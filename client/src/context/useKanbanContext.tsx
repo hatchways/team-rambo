@@ -21,7 +21,7 @@ export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext)
 export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [activeBoard, setActiveBoard] = useState<IBoard>({
     _id: 'Initial',
-    name: 'Initial',
+    name: '',
     columns: [],
     cards: [],
     user: 'Initial',

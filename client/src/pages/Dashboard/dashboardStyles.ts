@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
   },
   board: {
     marginTop: 30,
+    minHeight: '40vh',
   },
   buttonOverlay: {
     position: 'absolute',
@@ -23,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: '300px',
     },
+  },
+  loading: {
+    textAlign: 'center',
   },
 }));
 
