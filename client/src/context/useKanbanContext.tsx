@@ -39,25 +39,11 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return;
   }, [history, loggedInUser]);
 
-  //useEffect(() => {
-  //  if (loggedInUser) getFirstBoard();
-
-  //  return;
-  //}, [loggedInUser]);
-
-  const getFirstBoard = async (): Promise<IBoard> => {
-    const request = await getUserBoards();
-    const board = request.boards[0];
-    setActiveBoard(board);
-    setUserBoards(request.boards);
-    setColumns(board.columns);
-
-    return board;
-  };
-
   const sendToFirstBoard = useCallback(async () => {
-    const id = await getFirstBoard();
-    history.push(`/dashboard/board/${id}`);
+    const { boards } = await getUserBoards();
+    const firstBoard = [...boards].shift();
+
+    if (firstBoard) history.push(`/dashboard/board/${firstBoard._id}`);
   }, []);
 
   const getAllBoards = async (): Promise<void> => {
@@ -68,6 +54,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const fetchBoard = async (id: string): Promise<IBoard> => {
     const board = await getBoard(id);
     setActiveBoard(board);
+    debugger;
     setColumns(board.columns);
     return board;
   };
