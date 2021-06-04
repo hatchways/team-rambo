@@ -2,6 +2,7 @@ import { useState, useContext, createContext, FunctionComponent, useEffect, useC
 import { useHistory } from 'react-router-dom';
 import { IUser, IAuthApiData, IAuthApiDataSuccess } from '../interface/';
 import { loginWithCookies, logout as logoutApi } from '../helpers/';
+import { getUserBoards } from '../helpers';
 
 interface IAuthContext {
   loggedInUser: IUser | null | undefined;
@@ -16,15 +17,19 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [loggedInUser, setLoggedInUser] = useState<IUser | null | undefined>();
   const history = useHistory();
 
-  const updateLoginContext = useCallback(
-    (data: IAuthApiDataSuccess) => {
-      setLoggedInUser(data.user);
-      history.push('/dashboard');
+  const getFirstBoard = async (): Promise<string> => {
+    const request = await getUserBoards();
+    const board = request.boards[0];
+    return board._id;
+  };
 
-      return;
-    },
-    [history],
-  );
+  const updateLoginContext = useCallback(async (data: IAuthApiDataSuccess) => {
+    setLoggedInUser(data.user);
+    const id = await getFirstBoard();
+    history.push(`/dashboard/board/${id}`);
+
+    return;
+  }, []);
 
   const logout = useCallback(async () => {
     // needed to remove token cookie
@@ -44,7 +49,6 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
       loginWithCookies().then((data: IAuthApiData) => {
         if (data.success) {
           updateLoginContext(data.success);
-          history.push('/dashboard');
 
           return;
         }

@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getBoard, getUserBoards, updateBoard, createBoard } from '../helpers/';
 import { useSnackBar, useAuth } from './';
 import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
+import { useHistory } from 'react-router-dom';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
@@ -22,12 +23,18 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
   const { updateSnackBarMessage } = useSnackBar();
   const { loggedInUser } = useAuth();
+  const history = useHistory();
 
-  useEffect(() => {
-    if (loggedInUser) getFirstBoard();
+  //useEffect(() => {
+  //  if (loggedInUser) fetchBoardFromUrl();
+  //  return;
+  //}, [history, loggedInUser]);
 
-    return;
-  }, [loggedInUser]);
+  //useEffect(() => {
+  //  if (loggedInUser) getFirstBoard();
+
+  //  return;
+  //}, [loggedInUser]);
 
   const getFirstBoard = async (): Promise<IBoard> => {
     const request = await getUserBoards();
@@ -43,7 +50,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     const board = await getBoard(id);
     setActiveBoard(board);
     setColumns(board.columns);
-
+    console.log(board, 'bizolha');
     return board;
   };
 

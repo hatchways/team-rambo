@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, TextField, Grid, Box } from '@material-ui/core';
-import { useKanban } from '../../context/useKanbanContext';
+import { useKanban } from '../../context';
 import addColumnDialogStyles from './AddColumnDialogStyles';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import StyledDialog from '../StyledDialog/StyledDialog';

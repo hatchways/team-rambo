@@ -1,19 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Grid, CssBaseline, CircularProgress } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 import Board from '../../components/Kanban/Board';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import { useAuth, useKanban } from '../../context/';
 import useStyles from './dashboardStyles';
+import { useParams, useHistory } from 'react-router-dom';
+
+interface IBoardParams {
+  id: string;
+}
 
 const Dashboard = (): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
   const { loggedInUser } = useAuth();
-  const { activeBoard } = useKanban();
+  const { fetchBoard, activeBoard } = useKanban();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const { id } = useParams<IBoardParams>();
 
   const toggleDrawer = (): void => setOpenDrawer((prevOpen) => !prevOpen);
 
@@ -22,6 +27,10 @@ const Dashboard = (): JSX.Element => {
 
     return <CircularProgress />;
   }
+
+  useEffect(() => {
+    fetchBoard(id);
+  }, [history]);
 
   return (
     <Box>

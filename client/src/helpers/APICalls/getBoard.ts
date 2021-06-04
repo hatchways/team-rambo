@@ -6,7 +6,7 @@ const getBoard = async (id: string): Promise<IBoard> => {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   };
-  return await fetch(`boards/${id}`, fetchOptions)
+  return fetch(`/boards/${id}`, fetchOptions)
     .then((res) => res.json())
     .catch((err) => ({
       error: { error: err, message: 'Unable to connect to server. Please try again' },
