@@ -1,6 +1,6 @@
-import { IImageUploadData, IUploadOptions } from '../../interface/';
+import { IUploadProfilePicture, IUploadOptions } from '../../interface';
 
-const uploadImage = async (form: FormData): Promise<IImageUploadData> => {
+const uploadImage = async (form: FormData): Promise<IUploadProfilePicture> => {
   const fetchOptions: IUploadOptions = {
     method: 'POST',
     body: form,
