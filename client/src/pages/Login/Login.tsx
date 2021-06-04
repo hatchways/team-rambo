@@ -3,12 +3,13 @@ import { FormikHelpers } from 'formik';
 import useStyles from './loginStyles';
 import { login } from '../../helpers/';
 import LoginForm from './LoginForm/LoginForm';
-import { useAuth, useSnackBar } from '../../context/';
+import { useAuth, useSnackBar, useKanban } from '../../context/';
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
+  const { sendToFirstBoard } = useKanban();
 
   const handleSubmit = (
     { email, password }: { email: string; password: string },
@@ -20,6 +21,7 @@ export default function Login(): JSX.Element {
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
         updateLoginContext(data.success);
+        sendToFirstBoard();
       } else {
         // should not get here from backend but this catch is for an unknown issue
         console.error({ data });

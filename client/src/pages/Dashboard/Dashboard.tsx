@@ -5,8 +5,8 @@ import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import { useAuth, useKanban } from '../../context/';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import useStyles from './dashboardStyles';
-import { useParams, useHistory } from 'react-router-dom';
 
 interface IBoardParams {
   id: string;
@@ -19,6 +19,7 @@ const Dashboard = (): JSX.Element => {
   const { fetchBoard, activeBoard } = useKanban();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const { id } = useParams<IBoardParams>();
+  const location = useLocation();
 
   const toggleDrawer = (): void => setOpenDrawer((prevOpen) => !prevOpen);
 
@@ -30,7 +31,7 @@ const Dashboard = (): JSX.Element => {
 
   useEffect(() => {
     fetchBoard(id);
-  }, [history]);
+  }, [location]);
 
   return (
     <Box>

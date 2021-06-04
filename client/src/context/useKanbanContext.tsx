@@ -1,4 +1,13 @@
-import { useState, useContext, createContext, FunctionComponent, useEffect, Dispatch, SetStateAction } from 'react';
+import {
+  useState,
+  useContext,
+  createContext,
+  FunctionComponent,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+} from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,10 +34,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const { loggedInUser } = useAuth();
   const history = useHistory();
 
-  //useEffect(() => {
-  //  if (loggedInUser) fetchBoardFromUrl();
-  //  return;
-  //}, [history, loggedInUser]);
+  useEffect(() => {
+    if (loggedInUser) getAllBoards();
+    return;
+  }, [history, loggedInUser]);
 
   //useEffect(() => {
   //  if (loggedInUser) getFirstBoard();
@@ -46,11 +55,20 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return board;
   };
 
+  const sendToFirstBoard = useCallback(async () => {
+    const id = await getFirstBoard();
+    history.push(`/dashboard/board/${id}`);
+  }, []);
+
+  const getAllBoards = async (): Promise<void> => {
+    const { boards } = await getUserBoards();
+    setUserBoards(boards);
+  };
+
   const fetchBoard = async (id: string): Promise<IBoard> => {
     const board = await getBoard(id);
     setActiveBoard(board);
     setColumns(board.columns);
-    console.log(board, 'bizolha');
     return board;
   };
 
@@ -334,6 +352,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         copyCard,
         removeActiveCard,
         addColumn,
+        sendToFirstBoard,
       }}
     >
       {children}
