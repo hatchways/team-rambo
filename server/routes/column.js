@@ -6,11 +6,15 @@ const {
   createColumn,
   getColumn,
   updateColumn,
+  reOrderColumn,
 } = require("../controllers/column");
 
-router.route("/").get(protect, getColumns);
-router.route("/").post(protect, createColumn);
-router.route("/:id").get(protect, getColumn);
-router.route("/:id").patch(protect, updateColumn);
+router.use(protect);
+
+router.route("/").get(getColumns);
+router.route("/").post(createColumn);
+router.route("/:id").get(getColumn);
+router.route("/:id").patch(updateColumn);
+router.route("/:id").patch(reOrderColumn);
 
 module.exports = router;

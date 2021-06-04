@@ -8,7 +8,7 @@ import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
 import NotificationCenter from './Notifications/NotificationCenter/NotificationCenter';
 import { testNotifications } from './Notifications/sampleNotificationData';
 import logo from '../../Images/logo.png';
-import { IUser, IBoard } from '../../interface/';
+import { IUser } from '../../interface/';
 import { useKanban } from '../../context';
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
 
 const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
   const classes = useStyles();
-  const { activeBoard } = useKanban();
+  const { activeBoard, createNewColumn } = useKanban();
 
   return (
     <Container className={classes.root}>
@@ -33,6 +33,16 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
             <Grid item>
               <Button size="large" color="secondary" startIcon={<CalendarTodayOutlinedIcon />}>
                 Dashboard
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                size="large"
+                color="secondary"
+                onClick={() => createNewColumn('test column', 'left')}
+                startIcon={<CalendarTodayOutlinedIcon />}
+              >
+                test card
               </Button>
             </Grid>
             <Grid item>

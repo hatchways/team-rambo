@@ -8,3 +8,5 @@ export { default as loginWithCookies } from './APICalls/loginWithCookies';
 export { default as getBoard } from './APICalls/getBoard';
 export { default as getUserBoards } from './APICalls/getUserBoards';
 export { default as createBoard } from './APICalls/createBoard';
+export { default as createCard } from './APICalls/createCard';
+export { default as createColumn } from './APICalls/createColumn';

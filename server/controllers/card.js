@@ -1,23 +1,18 @@
 const asyncHandler = require("express-async-handler");
 const Card = require("../models/Card");
-const { v4: uuidv4, v4 } = require("uuid");
 
 exports.getCards = asyncHandler(async (req, res) => {
-  const Cards = await Card.find();
+  const cards = await Card.find();
 
-  return res.json(Cards);
+  return res.json(cards);
 });
 
 exports.getCard = asyncHandler(async (req, res) => {
-  try {
-    const Card = await Card.findById(req.params.id);
+  const card = await Card.findById(req.params.id);
 
-    if (!Card) res.status(404).json({ error: "Card not found" });
+  if (!card) res.status(404).json({ error: "Card not found" });
 
-    return res.status(200).json(Card);
-  } catch (error) {
-    return res.json(error);
-  }
+  return res.status(200).json(card);
 });
 
 exports.createCard = asyncHandler(async (req, res) => {
@@ -26,8 +21,6 @@ exports.createCard = asyncHandler(async (req, res) => {
     name: name,
     tag: tag,
     columnId: columnId,
-    _id: v4(),
-    createdAt: Date.now(),
   });
 
   return res.status(200).json({ Card: newCard });
@@ -44,34 +37,25 @@ exports.updateCard = asyncHandler(async (req, res, next) => {
     attachment,
     checklist,
     columnId,
-    index,
-    createdAt,
   } = req.body;
 
-  try {
-    const filter = { _id };
-    const update = {
-      _id,
-      name,
-      tag,
-      description,
-      deadline,
-      comment,
-      attachment,
-      checklist,
-      columnId,
-      index,
-      createdAt,
-    };
+  const filter = { _id };
+  const update = {
+    name,
+    tag,
+    description,
+    deadline,
+    comment,
+    attachment,
+    checklist,
+    columnId,
+  };
 
-    const Card = await Card.findOneAndUpdate(filter, update, {
-      new: true,
-    });
+  const card = await Card.findOneAndUpdate(filter, update, {
+    new: true,
+  });
 
-    const newCard = Card.removePassword();
+  const newCard = card.removePassword();
 
-    return res.status(200).json(newCard);
-  } catch (error) {
-    return res.json(error);
-  }
+  return res.status(200).json(newCard);
 });

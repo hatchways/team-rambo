@@ -8,9 +8,11 @@ const {
   updateCard,
 } = require("../controllers/card");
 
-router.route("/").get(protect, getCards);
-router.route("/").post(protect, createCard);
-router.route("/:id").get(protect, getCard);
-router.route("/:id").patch(protect, updateCard);
+router.use(protect);
+
+router.route("/").get(getCards);
+router.route("/").post(createCard);
+router.route("/:id").get(getCard);
+router.route("/:id").patch(updateCard);
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import { ICard } from './';
 
-export default interface IColumn {
+export interface IColumn {
   _id: string;
   name: string;
   cards: Array<ICard>;
@@ -12,7 +12,7 @@ export interface ColumnApiData {
   error?: { message: string };
 }
 
-export interface NewCardApiData {
+export interface NewColumnApiData {
   column: IColumn;
   error?: { messge: string };
 }
