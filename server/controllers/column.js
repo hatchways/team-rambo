@@ -42,3 +42,12 @@ exports.updateColumn = asyncHandler(async (req, res, next) => {
 
   return res.status(200).json(newColumn);
 });
+
+exports.reorderColumn = asyncHandler(async (req, res) => {
+  //to be completed
+  const column = await Column.findById(req.params.id);
+
+  if (!column) res.status(404).json({ error: "Column not found" });
+
+  return res.status(200).json(column);
+});

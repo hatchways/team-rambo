@@ -95,3 +95,13 @@ exports.updateBoard = asyncHandler(async (req, res, next) => {
     return res.json(error);
   }
 });
+
+exports.reorderBoard = asyncHandler(async (req, res) => {
+  //to be completed
+
+  const board = await Board.findById(req.params.id);
+
+  if (!board) res.status(404).json({ error: "Board not found" });
+
+  return res.status(200).json(board);
+});

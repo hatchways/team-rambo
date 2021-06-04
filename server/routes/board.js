@@ -6,7 +6,7 @@ const {
   createBoard,
   getBoard,
   updateBoard,
-  reOrderBoard,
+  reorderBoard,
 } = require("../controllers/board");
 
 router.use(protect);
@@ -14,6 +14,6 @@ router.route("/").get(getBoards);
 router.route("/").post(createBoard);
 router.route("/:id").get(getBoard);
 router.route("/:id").patch(updateBoard);
-router.route("/:id").patch(reOrderBoard);
+router.route("/:id").patch(reorderBoard);
 
 module.exports = router;

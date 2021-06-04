@@ -47,9 +47,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const createNewColumn = async (name: string): Promise<NewColumnApiData> => {
     const request = await createColumn(name);
-    const column = request.column;
-    if (column) addColumn(column.name, 'left');
-    console.log(column);
+    if (request.column) {
+      console.log('got column!');
+      addColumn(request.column.name, 'left');
+    }
     return request;
   };
 
@@ -74,7 +75,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const createNewBoard = async (name: string): Promise<NewBoardApiData> => {
     const request = await createBoard(name);
     if (request.board) setUserBoards((boards) => [...boards, request.board]);
-
     return request;
   };
 
