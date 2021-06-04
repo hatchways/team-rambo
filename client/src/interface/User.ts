@@ -1,6 +1,6 @@
 export interface IUser {
   email: string;
-  picture: { url: string; etag: string };
+  picture: { url: string };
 }
 
 export interface ISearchUsersApiData {
