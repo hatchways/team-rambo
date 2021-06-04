@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
+<<<<<<< HEAD
 const { columnSchema } = require("./Column");
+=======
+>>>>>>> feat-be-task-queues
 
 const boardSchema = new mongoose.Schema(
   {
@@ -17,8 +20,25 @@ const boardSchema = new mongoose.Schema(
       required: true,
     },
   },
+<<<<<<< HEAD
   { timestamps: true }
 );
+=======
+  columns: {
+    type: Array,
+    required: false,
+  },
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+>>>>>>> feat-be-task-queues
 
 boardSchema.methods.removePassword = function () {
   const object = this.toObject();
@@ -26,4 +46,5 @@ boardSchema.methods.removePassword = function () {
   return object;
 };
 
-module.exports = { Board: mongoose.model("board", boardSchema), boardSchema };
+const Board = mongoose.model("board", boardSchema);
+module.exports = Board;

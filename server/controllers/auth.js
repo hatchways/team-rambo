@@ -1,4 +1,4 @@
-const { Board } = require("../models/Board");
+const Board = require("../models/Board");
 const { User } = require("../models/User");
 
 const asyncHandler = require("express-async-handler");
@@ -67,10 +67,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 // @access Public
 exports.loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
-
-  // Sending email using templated Email through SendGrid
-
-  await sendEmail();
 
   const user = await User.findOne({ email }).select("+password");
 

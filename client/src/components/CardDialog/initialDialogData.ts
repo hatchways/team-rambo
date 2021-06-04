@@ -1,4 +1,4 @@
-import { IDialogItem } from '../../interface/DialogItem';
+import { IDialogItem } from '../../interface';
 
 const cardDialogItems: IDialogItem[] = [
   {

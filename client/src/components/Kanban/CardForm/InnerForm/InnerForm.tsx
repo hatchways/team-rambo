@@ -9,12 +9,14 @@ type InnerFormProps = {
   formAction: Dispatch<SetStateAction<boolean>>;
 };
 
+// IMPORTANT TODO - Change this to a formik form instead (see login/signup forms) to keep consistent cross app
 export const InnerForm = ({ columnId, formAction }: InnerFormProps): JSX.Element => {
   const [name, setName] = useState<string>('');
   const [selectedTagColor, setTagColor] = useState<string>('white');
   const { addCard } = useKanban();
   const theme = useTheme();
   const classes = useStyles();
+
   return (
     <>
       <Box className={classes.cardFormWrapper}>
@@ -56,12 +58,12 @@ export const InnerForm = ({ columnId, formAction }: InnerFormProps): JSX.Element
           const isSuccess = addCard({
             name,
             columnId: columnId,
-            id: `card-${Math.floor(Math.random() * 999999)}`,
+            _id: `card-${Math.floor(Math.random() * 999999)}`,
             tag: selectedTagColor,
           });
-          if (isSuccess) {
-            formAction(false);
-          }
+          if (isSuccess) formAction(false);
+
+          return undefined;
         }}
         variant="contained"
         size="large"
