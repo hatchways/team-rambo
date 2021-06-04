@@ -1,14 +1,17 @@
 const mongoose = require("mongoose");
 
-const cardSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const cardSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: false,
+    },
   },
-  description: {
-    type: String,
-    required: false,
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 module.exports = { Card: mongoose.model("card", cardSchema), cardSchema };

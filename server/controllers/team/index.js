@@ -1,3 +1,3 @@
 module.exports = {
-  teamController: require('./team/team'),
-}
+  teamController: require("./team"),
+};

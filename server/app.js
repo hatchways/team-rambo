@@ -13,7 +13,7 @@ const cors = require("cors");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const fileRouter = require("./routes/file");
-const teamRouter = require('./routes/team/team/team');
+const teamRouter = require("./routes/team/team/");
 
 const { json, urlencoded } = express;
 
@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/files", fileRouter);
-app.use('/team', teamRouter);
+app.use("/team", teamRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
