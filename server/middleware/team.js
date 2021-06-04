@@ -10,6 +10,7 @@ exports.hasAccessToTeam = asyncHandler(async (req, res, next) => {
     throw new Error("Unable to find team");
   }
   if (team.owner == req.user.id || team.collaborators.includes(req.user.id)) {
+    req.team = team._id;
     return next();
   }
 

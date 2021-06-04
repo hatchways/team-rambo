@@ -29,4 +29,9 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+userSchema.statics.getEmail = async function (userId) {
+  const { email } = await this.findOne({ _id: userId });
+  return email;
+};
+
 module.exports = { User: mongoose.model("user", userSchema), userSchema };

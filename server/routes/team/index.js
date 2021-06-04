@@ -2,16 +2,18 @@ const express = require("express");
 const { body, param } = require("express-validator");
 const protect = require("../../middleware/auth");
 const { hasAccessToTeam } = require("../../middleware/team");
-const { teamController } = require("../../controllers/team");
+const { teamController } = require("../../controllers/teamController");
 
 const router = express.Router();
 
 const inviteRoute = require("./invite");
 
 router.use(protect);
+
 router.use(
-  "/:teamId/invite",
+  "/:teamId",
   param("teamId").isMongoId().withMessage("Please provide a proper team id"),
+  hasAccessToTeam,
   inviteRoute
 );
 
@@ -36,12 +38,17 @@ router.patch(
   teamController.updateTeam
 );
 
+// catch express-validation errors;
 router.use((error, req, res, next) => {
   const { errors } = error;
   if (errors && Array.isArray(errors)) {
-    const { msg } = errors[0];
     res.status(400);
-    throw new Error(msg);
+    const error = errors[0];
+    if (error.nestedErrors) {
+      const { msg } = error.nestedErrors[0];
+      throw new Error(msg);
+    }
+    throw new Error(error.msg);
   }
   return next(error);
 });

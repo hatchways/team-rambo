@@ -1,21 +1,38 @@
 const express = require("express");
-const { body, param } = require("express-validator");
+const { body, param, oneOf } = require("express-validator");
 const protect = require("../../../middleware/auth");
-const { inviteController } = require("../../../controllers/team");
+const { inviteController } = require("../../../controllers/teamController");
 
 const router = express.Router();
 
 router.use(protect);
 
 router.post(
-  "/",
-  body("recipient").not().isEmpty().withMessage("Name must not be empty"),
-  body("recipient")
-    .isEmail()
-    .isMongoId()
-    .withMessage("Name must be an email or proper id"),
+  "/invite",
+  body("recipient").not().isEmpty().withMessage("Recipient must not be empty"),
+  oneOf([
+    body("recipient")
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("Please provide a proper email address or ID"),
+    body("recipient")
+      .isMongoId()
+      .withMessage("Please provide a proper email address or ID"),
+  ]),
   body("sender").isMongoId().withMessage("Please provide a proper sender id"),
   inviteController.createInvite
+);
+
+router.get(
+  "/invite/:inviteId",
+  param("inviteId").isMongoId().withMessage("Please provide a valid ID"),
+  inviteController.getInvite
+);
+
+router.delete(
+  "/invite/:inviteId/revoke",
+  param("inviteId").isMongoId().withMessage("Please provide a valid ID"),
+  inviteController.revokeInvite
 );
 
 module.exports = router;

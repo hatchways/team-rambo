@@ -31,12 +31,16 @@ const teamSchema = new mongoose.Schema(
 );
 
 /**
- * After a user accepts invite invoke this method to add the user to the team as a collaborator.
+ * Determine if the user id owns the team resource.
  *
  * @param   {MongoId}  userId
  *
  * @return  {Boolean}          True - Successful, False - Unsuccessful
  */
-teamSchema.methods.addMemberToTeam = (userId) => {};
+teamSchema.statics.isOwner = async function (teamId, userId) {
+  const team = await this.findOne({ _id: teamId, owner: userId });
+  if (!team) return false;
+  return true;
+};
 
 module.exports = { Team: mongoose.model("team", teamSchema), teamSchema };
