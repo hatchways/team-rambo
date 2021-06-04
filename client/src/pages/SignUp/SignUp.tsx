@@ -18,7 +18,7 @@ export default function Register(): JSX.Element {
     register(email, password).then((data) => {
       if (data.error) {
         setSubmitting(false);
-        updateSnackBarMessage(data.error.message, 'error');
+        updateSnackBarMessage(data.error, 'error');
       } else if (data.success) {
         updateLoginContext(data.success);
         sendToFirstBoard();
