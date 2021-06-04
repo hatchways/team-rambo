@@ -9,7 +9,7 @@ export default interface IKanbanContext {
   addCard: (card: ICard) => boolean;
   setOpenCard: (card: ICard) => void;
   resetOpenCard: () => void;
-  getColumnById: (columnId: string) => IColumn | null;
+  getColumnById: (columnId: string) => IColumn;
   handleDragEnd: (result: DropResult) => void;
   setActiveBoard: (board: IBoard) => void;
   renameColumn: (
@@ -21,4 +21,8 @@ export default interface IKanbanContext {
   removeColumn: (columnId: string) => void;
   fetchBoard: (id: string) => Promise<IBoard>;
   createNewBoard: (name: string) => Promise<NewBoardApiData>;
+  moveCard: (destination: IColumn) => void;
+  copyCard: (destination: IColumn) => void;
+  removeActiveCard: () => void;
+  addColumn: (columnName: string, side: string) => void;
 }
