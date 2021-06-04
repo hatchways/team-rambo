@@ -1,4 +1,4 @@
-import INotificationItem from '../../../interface/Notification';
+import { INotificationItem } from '../../../interface/';
 
 export const testNotifications: INotificationItem[] = [
   {

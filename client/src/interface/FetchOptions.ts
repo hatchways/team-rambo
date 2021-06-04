@@ -1,4 +1,4 @@
-export interface IFetchOptions {
+export default interface IFetchOptions {
   method: string;
   headers?: {
     'Content-Type': string;

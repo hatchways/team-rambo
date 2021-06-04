@@ -1,5 +1,4 @@
-import { IColumn } from './Column';
-import { ICard } from './Card';
+import { IColumn, ICard } from './';
 
 export interface IBoard {
   _id: string;
