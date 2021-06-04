@@ -27,7 +27,7 @@ export default function Login(): JSX.Element {
         console.error({ data });
 
         setSubmitting(false);
-        updateSnackBarMessage('An unexpected error occurred. Please try again');
+        updateSnackBarMessage('An unexpected error occurred. Please try again', 'error');
       }
     });
   };
