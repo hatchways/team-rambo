@@ -67,11 +67,14 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
   };
 
   const handleClose = () => {
+    setPreview('');
+  };
+
+  useEffect(() => {
     setOpen();
     setCanUpload(false);
     setImage(new Blob());
-    setPreview('');
-  };
+  }, []);
 
   return (
     <>
