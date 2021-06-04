@@ -1,23 +1,22 @@
 const express = require("express");
 const { body, param } = require("express-validator");
 const protect = require("../../../middleware/auth");
-const { hasAccessToTeam } = require("../../../middleware/team");
-const { teamController } = require("../../../controllers/team");
+const { inviteController } = require("../../../controllers/team");
 
 const router = express.Router();
 
 router.use(protect);
+
 router.post(
   "/",
-  body("name").not().isEmpty().withMessage("Name must not be empty"),
-  teamController.createTeam
-);
-
-router.get(
-  "/:teamId",
-  hasAccessToTeam,
-  param("teamId").isMongoId().withMessage("Please provide a valid ID"),
-  teamController.getTeam
+  param("team").isMongoId().withMessage("Please provide a proper team id"),
+  body("recipient").not().isEmpty().withMessage("Name must not be empty"),
+  body("recipient")
+    .isEmail()
+    .isMongoId()
+    .withMessage("Name must be an email or proper id"),
+  body("sender").isMongoId().withMessage("Please provide a proper sender id"),
+  inviteController.createInvite
 );
 
 module.exports = router;
