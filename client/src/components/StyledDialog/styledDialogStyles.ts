@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const addBoardDialogStyles = makeStyles(() => ({
+const styledDialogStyles = makeStyles(() => ({
   textField: {
     display: 'flex',
     textAlign: 'center',
@@ -38,4 +38,4 @@ const addBoardDialogStyles = makeStyles(() => ({
   },
 }));
 
-export default addBoardDialogStyles;
+export default styledDialogStyles;

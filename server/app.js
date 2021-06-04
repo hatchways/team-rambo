@@ -9,16 +9,13 @@ const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-const initializeQueue = require('./queue/initialize');
+const initializeQueue = require("./queue/initialize");
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const fileRouter = require("./routes/file");
-<<<<<<< HEAD
-const teamRouter = require("./routes/team/team/");
-=======
+const teamRouter = require("./routes/team/");
 const boardsRouter = require("./routes/board");
->>>>>>> feat-be-task-queues
 
 const { json, urlencoded } = express;
 
@@ -26,13 +23,15 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 
-const queue = initializeQueue({
-  name: 'rambo',
-}, [{ name: 'deadlineReminders', jobHandlerPath: './queue/jobs/deadline.js' }]);
+const queue = initializeQueue(
+  {
+    name: "rambo",
+  },
+  [{ name: "deadlineReminders", jobHandlerPath: "./queue/jobs/deadline.js" }]
+);
 
 // Passing null data as there is no need to track any data from database.
-queue.add('deadlineReminders', null, { cron: '0 0 * * *' }); // everyday at 12am.
-
+queue.add("deadlineReminders", null, { cron: "0 0 * * *" }); // everyday at 12am.
 
 const io = socketio(server, {
   cors: {
@@ -61,11 +60,8 @@ app.use((req, res, next) => {
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/files", fileRouter);
-<<<<<<< HEAD
 app.use("/team", teamRouter);
-=======
 app.use("/boards", boardsRouter);
->>>>>>> feat-be-task-queues
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));

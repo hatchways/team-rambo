@@ -1,4 +1,5 @@
 import { Button } from '@material-ui/core';
+import { v4 as uuidv4 } from 'uuid';
 import { useDialog } from '../../../context/useDialogContext';
 import dialogActionButtonStyles from './dialogActionButtonStyles';
 
@@ -21,7 +22,7 @@ const DialogActionButton = ({ title, content, icon }: Props): JSX.Element => {
           title: `${title}:`,
           content: content,
           icon: icon,
-          id: `item-${Math.floor(Math.random() * 999999)}`,
+          id: uuidv4(),
         });
       }}
     >

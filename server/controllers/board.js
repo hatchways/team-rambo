@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Board = require("../models/Board");
+const { v4: uuidv4, v4 } = require("uuid");
 
 exports.getBoards = asyncHandler(async (req, res) => {
   const boards = await Board.find();
@@ -34,6 +35,7 @@ exports.createBoard = asyncHandler(async (req, res) => {
             tag: "green",
           },
         ],
+        _id: v4(),
         createdAt: Date.now(),
       },
       {
@@ -53,9 +55,11 @@ exports.createBoard = asyncHandler(async (req, res) => {
             tag: "red",
           },
         ],
+        _id: v4(),
         createdAt: Date.now(),
       },
       {
+        _id: v4(),
         name: "Completed",
         cards: [],
         createdAt: Date.now(),

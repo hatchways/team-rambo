@@ -1,4 +1,4 @@
-export interface ICard {
+export default interface ICard {
   _id: string;
   columnId: string;
   name: string;

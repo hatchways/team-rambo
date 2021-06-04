@@ -9,7 +9,6 @@ router.use(protect);
 
 router.post(
   "/",
-  param("team").isMongoId().withMessage("Please provide a proper team id"),
   body("recipient").not().isEmpty().withMessage("Name must not be empty"),
   body("recipient")
     .isEmail()

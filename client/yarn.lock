@@ -2740,14 +2740,11 @@ atob@^2.1.2:
   resolved "https://registry.npmjs.org/atob/-/atob-2.1.2.tgz"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-<<<<<<< HEAD
-=======
 attr-accept@^2.2.1:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/attr-accept/-/attr-accept-2.2.2.tgz#646613809660110749e92f2c10833b70968d929b"
   integrity sha512-7prDjvt9HmqiZ0cl5CRjtS84sEyhsHP2coDkaZKRKVfCDo9s7iw7ChVmar78Gu9pC4SoR/28wFu/G5JJhTnqEg==
 
->>>>>>> main
 autoprefixer@^9.6.1:
   version "9.8.6"
   resolved "https://registry.npmjs.org/autoprefixer/-/autoprefixer-9.8.6.tgz"
@@ -3580,15 +3577,9 @@ cloudinary-core@^2.10.2:
   integrity sha512-F1BZczD6f5mB73D0c8gl/iuacVQQO+UhckNZxeeS9ZIVeIHbsfqwWiAZMQmIvEb7Wti/9MLU0xVwaWOak2THHA==
 
 cloudinary@^1.25.1:
-<<<<<<< HEAD
-  version "1.25.2"
-  resolved "https://registry.yarnpkg.com/cloudinary/-/cloudinary-1.25.2.tgz#e17aa610d25f3e63a7492aa79261e34a659a4a7c"
-  integrity sha512-HlGxLdE1Q5mq/RlUIXmh4EroahwEnk27bu9j7T+2bjnSy6lmTBvxxYkTauZ2bJyKCbd4D1JhVACrBSrL8JmWxQ==
-=======
   version "1.25.1"
   resolved "https://registry.yarnpkg.com/cloudinary/-/cloudinary-1.25.1.tgz#a6bba2529691e73673cd16e4ac96360a573a98e0"
   integrity sha512-8iyMyOrRhRudJabdNc34GU/Vnr/ltDRq8gmkwQ4NpuJ1lD5Qw88DJGBNeODZnGSNXIPTLln708gsADVKe0AQMw==
->>>>>>> main
   dependencies:
     cloudinary-core "^2.10.2"
     core-js "3.6.5"
@@ -5327,8 +5318,6 @@ file-loader@6.1.1:
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
 
-<<<<<<< HEAD
-=======
 file-selector@^0.2.2:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/file-selector/-/file-selector-0.2.4.tgz#7b98286f9dbb9925f420130ea5ed0a69238d4d80"
@@ -5336,7 +5325,6 @@ file-selector@^0.2.2:
   dependencies:
     tslib "^2.0.3"
 
->>>>>>> main
 file-uri-to-path@1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz"
@@ -9706,8 +9694,6 @@ react-dom@^17.0.1:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-<<<<<<< HEAD
-=======
 react-dropzone@^11.3.2:
   version "11.3.2"
   resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-11.3.2.tgz#2efb6af800a4779a9daa1e7ba1f8d51d0ab862d7"
@@ -9717,7 +9703,6 @@ react-dropzone@^11.3.2:
     file-selector "^0.2.2"
     prop-types "^15.7.2"
 
->>>>>>> main
 react-error-overlay@^6.0.9:
   version "6.0.9"
   resolved "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.9.tgz"

@@ -7,7 +7,7 @@ const { Invite } = require("../../../models/Invite");
  * @route POST /team/:teamId/invite
  * @returns {Object} A message and payload
  */
-exports.createinvite = asyncHandler(async (req, res, next) => {
+exports.createInvite = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return next(errors);
   const { recipient, sender } = req.body;
