@@ -67,18 +67,18 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
   };
 
   const handleClose = () => {
+    setOpen();
+  };
+
+  const resetDialog = () => {
+    setCanUpload(false);
+    setImage(new Blob());
     setPreview('');
   };
 
-  useEffect(() => {
-    setOpen();
-    setCanUpload(false);
-    setImage(new Blob());
-  }, []);
-
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} onExited={resetDialog}>
         <DialogTitle disableTypography className={classes.root}>
           <Typography variant="h6" className={classes.title}>
             Upload profile picture
