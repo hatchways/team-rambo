@@ -54,7 +54,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const fetchBoard = async (id: string): Promise<IBoard> => {
     const board = await getBoard(id);
     setActiveBoard(board);
-    debugger;
     setColumns(board.columns);
     return board;
   };
