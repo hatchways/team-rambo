@@ -1,4 +1,4 @@
-export default interface ICard {
+export interface ICard {
   _id: string;
   columnId: string;
   name: string;
@@ -6,4 +6,14 @@ export default interface ICard {
   dueDate?: Date;
   description?: string;
   createdAt?: Date;
+}
+
+export interface CardApiData {
+  cards: Array<ICard>;
+  error?: { message: string };
+}
+
+export interface NewCardApiData {
+  card: ICard;
+  error?: { messge: string };
 }
