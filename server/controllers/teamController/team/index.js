@@ -32,9 +32,7 @@ exports.getTeam = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return next(errors);
 
-  const team = await Team.findById(req.params.teamId);
-
-  return res.status(200).json(team);
+  return res.status(200).json(req.team);
 });
 
 /**

@@ -7,6 +7,7 @@ const { teamController } = require("../../controllers/teamController");
 const router = express.Router();
 
 const inviteRoute = require("./invite");
+const collaboratorRoute = require("./collaborator");
 
 router.use(protect);
 
@@ -15,6 +16,13 @@ router.use(
   param("teamId").isMongoId().withMessage("Please provide a proper team id"),
   hasAccessToTeam,
   inviteRoute
+);
+
+router.use(
+  "/:teamId/collaborators",
+  param("teamId").isMongoId().withMessage("Please provide a proper team id"),
+  hasAccessToTeam,
+  collaboratorRoute
 );
 
 router.post(

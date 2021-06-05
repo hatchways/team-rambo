@@ -29,6 +29,12 @@ router.get(
   inviteController.getInvite
 );
 
+router.get(
+  "/invite/:inviteId/accept",
+  param("inviteId").isMongoId().withMessage("Please provide a valid ID"),
+  inviteController.acceptInvite
+);
+
 router.delete(
   "/invite/:inviteId/revoke",
   param("inviteId").isMongoId().withMessage("Please provide a valid ID"),
