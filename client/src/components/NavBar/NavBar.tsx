@@ -59,7 +59,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            {activeBoard.name}
+            {activeBoard._id != 'Initial' && activeBoard.name}
           </Typography>
           <IconButton
             onClick={handleDrawerToggle}

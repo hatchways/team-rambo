@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
   },
   board: {
     marginTop: 30,
-    minHeight: '40vh',
   },
   buttonOverlay: {
     position: 'absolute',
