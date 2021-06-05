@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+      select: false,
     },
   },
   { timestamps: true }
@@ -30,8 +31,9 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.statics.getEmail = async function (userId) {
-  const { email } = await this.findOne({ _id: userId });
-  return email;
+  const user = await this.findOne({ _id: userId });
+  if (!user) return null;
+  return user.email;
 };
 
 module.exports = { User: mongoose.model("user", userSchema), userSchema };

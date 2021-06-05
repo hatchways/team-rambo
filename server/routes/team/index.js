@@ -25,6 +25,8 @@ router.use(
   collaboratorRoute
 );
 
+router.get("/", teamController.getUsersTeams);
+
 router.post(
   "/",
   body("name").not().isEmpty().withMessage("Name must not be empty"),

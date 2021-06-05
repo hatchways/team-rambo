@@ -8,7 +8,8 @@ const inviteSchema = new mongoose.Schema(
       required: [true, "Team is required for sending invites"],
     },
     recipient: {
-      type: mongoose.SchemaTypes.Mixed,
+      type: mongoose.Types.ObjectId,
+      ref: "user",
       required: [true, "Recipient is required for sending invites"],
     },
     sender: {

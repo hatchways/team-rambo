@@ -11,7 +11,9 @@ exports.getCollaborators = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return next(errors);
 
-  const { collaborators } = await req.team.populate("collaborators");
+  const { collaborators } = await Team.findOne({ _id: req.team._id })
+    .populate("collaborators")
+    .select("-password");
 
   return res.status(200).json(collaborators);
 });
@@ -24,12 +26,13 @@ exports.getCollaborators = asyncHandler(async (req, res, next) => {
 exports.removeCollaborator = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return next(errors);
+  const { collaboratorId } = req.params;
   const { team } = req;
 
-  const isOwner = team.owner === req.user.id;
+  const isOwner = team.owner.toString() === req.user.id;
 
-  if (isOwner) {
-    const collaboratorIndex = team.collaborators.indexOf(req.params.userId);
+  if (isOwner || collaboratorId === req.user.id) {
+    const collaboratorIndex = team.collaboratorIndexPosition(collaboratorId);
     if (collaboratorIndex > -1) {
       team.collaborators.splice(collaboratorIndex, 1);
       await team.save();

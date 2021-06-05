@@ -10,15 +10,9 @@ router.use(protect);
 router.post(
   "/invite",
   body("recipient").not().isEmpty().withMessage("Recipient must not be empty"),
-  oneOf([
-    body("recipient")
-      .isEmail()
-      .normalizeEmail()
-      .withMessage("Please provide a proper email address or ID"),
-    body("recipient")
-      .isMongoId()
-      .withMessage("Please provide a proper email address or ID"),
-  ]),
+  body("recipient")
+    .isMongoId()
+    .withMessage("Please provide a proper ID for recipient"),
   body("sender").isMongoId().withMessage("Please provide a proper sender id"),
   inviteController.createInvite
 );
@@ -28,6 +22,8 @@ router.get(
   param("inviteId").isMongoId().withMessage("Please provide a valid ID"),
   inviteController.getInvite
 );
+
+router.get("/invites", inviteController.getActiveInvites);
 
 router.get(
   "/invite/:inviteId/accept",

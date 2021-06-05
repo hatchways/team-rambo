@@ -3,8 +3,20 @@ const { validationResult } = require("express-validator");
 const { Invite } = require("../../../models/Invite");
 const { User } = require("../../../models/User");
 const sendEmail = require("../../../utils/sendEmail");
-const EMAIL_REGEX =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const invitationTemplate = (team, inviteId) => `
+  <img src="https://res.cloudinary.com/dpepwhv11/image/upload/v1622628335/logo_hgrobp.png" />
+  <div>
+    <h2>You've been invited to ${team.name}</h2>
+    <p>
+      ${team.name} would like you to join as a collaborator.
+    </p>
+    <hr />
+    <div>
+      <a style="padding: 8px 12px;background-color: #759CFC;color: white; text-decoration: none;border-radius: 8px;" href="http://localhost:3000/team/${team._id}/invite/${inviteId}/accept">Join ${team.name}</a>
+    </div>
+  <div>
+`;
 
 /**
  * Create a new invite and add the task to the queue to process emailing the recipient.
@@ -14,34 +26,46 @@ const EMAIL_REGEX =
 exports.createInvite = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return next(errors);
+  const { team } = req;
   const { recipient, sender } = req.body;
-  const senderEmail = await User.getEmail(sender);
 
-  if (recipient === senderEmail || recipient === sender) {
+  const invite = await Invite.findOne({ recipient, team: team.id });
+
+  if (invite) {
+    res.status(400);
+    throw new Error("Recipient already has been invited");
+  }
+
+  if (recipient === sender) {
     res.status(400);
     throw new Error("You cannot send an invite to yourself");
   }
 
-  const isOwner = req.team.owner.toHexString() === sender;
+  if (team.collaboratorIndexPosition(recipient) > -1) {
+    res.status(400);
+    throw new Error("That person is already in your team");
+  }
+
+  const isOwner = team.owner.toString() === sender;
 
   if (isOwner) {
     const invite = await Invite.create({
-      team: req.team,
+      team: req.team.id,
       recipient,
       sender,
     });
 
+    const recipientEmail = await User.getEmail(recipient);
+    if (!recipientEmail) {
+      res.status(400);
+      throw new Error("Recipient does not exist");
+    }
+
     const emailOptions = {
       subject: "Your invited to join a team",
-      html: "build the template",
+      html: invitationTemplate(req.team, invite._id),
     };
-
-    if (!EMAIL_REGEX.test(recipient)) {
-      const recipientEmail = await User.getEmail(recipient);
-      sendEmail(recipientEmail, emailOptions);
-    } else {
-      sendEmail(recipient, emailOptions);
-    }
+    sendEmail(recipientEmail, emailOptions);
 
     return res.status(200).json({
       message: "Invite sent",
@@ -56,22 +80,51 @@ exports.createInvite = asyncHandler(async (req, res, next) => {
 /**
  * Accepting a team invitation
  * @route GET /team/:teamId/:inviteId/accept
- * @redirect http://localhost:3000/auth/register
  */
-exports.acceptInvite = asyncHandler((req, res, next) => {
-  /*
-    get the invite
-    figure out where we are accepting this from (dashboard or email)
-    
-    if it's email
-      see if the user exists in the database, if they don't we need to have them register. 
-      Set a cookie (pendingTeamInvitation) that will be checked after they register their account.
-    
-    [it's an id]
+exports.acceptInvite = asyncHandler(async (req, res, next) => {
+  const { inviteId } = req.params;
+  const { team } = req;
+  const invite = await Invite.findOne({ _id: inviteId });
+  if (!invite) {
+    res.status(404);
+    throw new Error("That invite does not exist");
+  }
 
-    add the user as a collaborator to the team and revoke the invite and return a successful message.
+  if (invite.recipient.toString() !== req.user.id) {
+    res.status(400);
+    throw new Error("This invite is not for you");
+  }
 
-  */
+  const user = await User.findOne({ _id: invite.recipient });
+
+  if (!user) {
+    res.status(404);
+    await invite.remove(); // no need to keep the invite anymore if the recipient doesn't exist.
+    throw new Error("That user no longer exists");
+  }
+
+  team.addCollaborator(invite.recipient);
+
+  await invite.remove();
+
+  return res.status(200).json({
+    message: `Added you to ${team.name}`,
+  });
+});
+
+/**
+ * Get a list of all active invites a team has.
+ *
+ * @route GET /team/:teamId/invites/
+ * @returns {Array} A list of invite resources
+ */
+exports.getActiveInvites = asyncHandler(async (req, res, next) => {
+  const { team } = req;
+  const invites = await Invite.find({ team: team.id })
+    .populate("recipient")
+    .select("-password");
+
+  return res.status(200).json(invites);
 });
 
 /**

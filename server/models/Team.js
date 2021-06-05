@@ -38,11 +38,25 @@ const teamSchema = new mongoose.Schema(
  * @return  {[type]}          [return description]
  */
 teamSchema.methods.addCollaborator = async function (userId) {
-  if (this.collaborators.includes(userId)) return false;
-  if (userId === this.owner) return false;
+  if (this.collaborators.includes(userId)) return;
+  if (userId === this.owner) return;
 
   this.collaborators.push(userId);
+  await this.save();
   return true;
+};
+
+/**
+ * Checks if the user id given is in the list of collaborators.
+ *
+ * @param   {ObjectId}  userId  A Mongo ObjectID
+ *
+ * @return  {Number}          Index of the collaborator or -1 if not found.
+ */
+teamSchema.methods.collaboratorIndexPosition = function (userId) {
+  return this.collaborators.findIndex(
+    (collaborator) => collaborator.id === userId
+  );
 };
 
 module.exports = { Team: mongoose.model("team", teamSchema), teamSchema };

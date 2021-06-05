@@ -25,6 +25,19 @@ exports.createTeam = asyncHandler(async (req, res, next) => {
 
 /**
  * Gets the Team by ID, otherwise returns null.
+ * @route GET /team
+ * @returns {Array} A list of users team resources
+ */
+exports.getUsersTeams = asyncHandler(async (req, res, next) => {
+  const teams = await Team.find({ owner: req.user.id })
+    .populate("collaborator")
+    .select("-password");
+
+  return res.status(200).json(teams);
+});
+
+/**
+ * Gets the Team by ID, otherwise returns null.
  * @route GET /team/:teamId
  * @returns {Object} The team
  */
