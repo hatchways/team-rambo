@@ -3,8 +3,8 @@ export type { IBoard, INewBoardApiData, IBoardApiData, IBoardsApiData } from './
 export type { default as ICard } from './Card';
 export type { default as IColumn } from './Column';
 export type { IDialogItem } from './DialogItem';
+export type { IUploadProfilePicture, IUploadOptions } from './File';
 export type { default as IFetchOptions } from './FetchOptions';
-export type { IImageUploadData, IUploadOptions } from './File';
 export type { IAuthApiDataSuccess, IAuthApiData } from './AuthApiData';
 export type { default as IKanbanContext } from './KanbanContext';
 export type { default as IDialogItemContext } from './DialogItemContext';
