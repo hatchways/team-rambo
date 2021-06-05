@@ -4,6 +4,7 @@ import { theme } from './themes/theme';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
+import SplashScreen from './pages/SplashScreen/SplashScreen';
 import ProtectedRoute from '../src/components/ProtectedRoute';
 import { AuthProvider, SocketProvider, SnackBarProvider, KanbanProvider, DialogProvider } from './context/';
 
@@ -19,6 +20,7 @@ const App = (): JSX.Element => (
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/signup" component={Signup} />
                   <ProtectedRoute exact path="/dashboard/board/:id" component={Dashboard} />
+                  <ProtectedRoute exact path="/newboard" component={SplashScreen} />
                   <Route path="*">
                     <Redirect to="/login" />
                   </Route>

@@ -12,11 +12,11 @@ exports.getBoard = asyncHandler(async (req, res) => {
   try {
     const board = await Board.findById(req.params.id);
 
-    if (!board) res.status(404).json({ error: "Board not found" });
+    if (!board) return res.status(404).json({ error: "Board not found" });
 
-    return res.status(200).json(board);
+    return res.status(200).json({ board });
   } catch (error) {
-    return res.json(error);
+    return res.json({ error });
   }
 });
 

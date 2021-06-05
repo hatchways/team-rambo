@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
-import { IBoard, NewBoardApiData, ICard, IColumn } from './';
+import { IBoard, INewBoardApiData, ICard, IColumn } from './';
 
 export default interface IKanbanContext {
   activeBoard: IBoard;
@@ -19,8 +19,8 @@ export default interface IKanbanContext {
     setSubmitting: (isSubmitting: boolean) => void,
   ) => void;
   removeColumn: (columnId: string) => void;
-  fetchBoard: (id: string) => Promise<IBoard>;
-  createNewBoard: (name: string) => Promise<NewBoardApiData>;
+  fetchBoard: (id: string) => Promise<void>;
+  createNewBoard: (name: string) => Promise<INewBoardApiData>;
   moveCard: (destination: IColumn) => void;
   copyCard: (destination: IColumn) => void;
   removeActiveCard: () => void;
