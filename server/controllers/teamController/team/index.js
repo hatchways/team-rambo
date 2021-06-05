@@ -64,6 +64,7 @@ exports.updateTeam = asyncHandler(async (req, res, next) => {
     res.status(400);
     throw new Error("Name is required");
   }
+
   const team = await Team.findOneAndUpdate(
     { _id: req.params.teamId, owner: req.user.id },
     { name }

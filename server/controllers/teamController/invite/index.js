@@ -27,7 +27,7 @@ exports.createInvite = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return next(errors);
   const { team } = req;
-  const { recipient, sender } = req.body;
+  const { recipient } = req.body;
 
   const invite = await Invite.findOne({ recipient, team: team.id });
 
@@ -36,7 +36,7 @@ exports.createInvite = asyncHandler(async (req, res, next) => {
     throw new Error("Recipient already has been invited");
   }
 
-  if (recipient === sender) {
+  if (recipient === req.user.id) {
     res.status(400);
     throw new Error("You cannot send an invite to yourself");
   }
@@ -46,13 +46,13 @@ exports.createInvite = asyncHandler(async (req, res, next) => {
     throw new Error("That person is already in your team");
   }
 
-  const isOwner = team.owner.toString() === sender;
+  const isOwner = team.owner.toString() === req.user.id;
 
   if (isOwner) {
     const invite = await Invite.create({
       team: req.team.id,
       recipient,
-      sender,
+      sender: req.user.id,
     });
 
     const recipientEmail = await User.getEmail(recipient);

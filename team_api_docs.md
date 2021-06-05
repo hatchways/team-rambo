@@ -1,51 +1,274 @@
-## **Team Rambo -- Kanban API**
-
-<_Additional information about your API call. Try to use verbs that match both request type (fetching vs modifying) and plurality (one vs multiple)._>
+## **Get Users Teams**
 
 - **URL**
 
-  <_The URL Structure (path only, no root url)_>
+  _/team_
 
 - **Method:**
 
-  <_The request type_>
-
-  `GET` | `POST` | `DELETE` | `PUT`
-
-- **URL Params**
-
-  <_If URL params exist, specify them in accordance with name mentioned in URL section. Separate into optional and required. Document data constraints._>
-
-  **Required:**
-
-  `id=[integer]`
-
-  **Optional:**
-
-  `photo_id=[alphanumeric]`
-
-- **Data Params**
-
-  <_If making a post request, what should the body payload look like? URL Params rules apply here too._>
+  _`GET`_
 
 - **Success Response:**
 
-  <_What should the status code be on success and is there any returned data? This is useful when people need to to know what their callbacks should expect!_>
-
   - **Code:** 200 <br />
-    **Content:** `{ id : 12 }`
+    **Content:** `[ { _id: 'xyz', name: 'Team Name', collaborators: [ ], boards: [ ] }, . . . ]`
 
 - **Error Response:**
 
-  <_Most endpoints will have many ways they can fail. From unauthorized access, to wrongful parameters etc. All of those should be liste d here. It might seem repetitive, but it helps prevent assumptions from being made where they should be._>
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `No token, authorization denied`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "Unable to find team" }`
+
+- **Notes:**
+
+  This API only returns a users owned teams, this will be updated to return a users owned teams and teams they are a collaborator in.
+
+## **Get Team**
+
+- **URL**
+
+  _/team/:teamId_
+
+- **Method:**
+
+  _`GET`_
+
+- **URL Params**
+
+  **Required:**
+
+  `teamId=[Mongo ID]`
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```json
+    {
+      "_id": "60b95583f03fe3c63239c8bf",
+      "name": "Team Rambo",
+      "owner": "60b95583f03fe3c63239c8bf",
+      "boards": [ ],
+      "collaborators": [ ],
+      . . .
+    }
+    ```
+
+- **Error Response:**
 
   - **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "Log in" }`
+    **Content:** `No token, authorization denied`
 
-  OR
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error: "Please provide a proper ID" }`
 
-  - **Code:** 422 UNPROCESSABLE ENTRY <br />
-    **Content:** `{ error : "Email Invalid" }`
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "Unable to find team" }`
+
+## **Create Team**
+
+- **URL**
+
+  _/team_
+
+- **Method:**
+
+  _`POST`_
+
+- **Data Params**
+
+  - name [String] - **Required**
+
+  Example
+
+  ```json
+  {
+    "name": "Team Rambo"
+  }
+  ```
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```json
+    {
+      "_id": "60b95583f03fe3c63239c8bf",
+      "name": "Team Rambo",
+      "owner": "60b95583f03fe3c63239c8bf",
+      "boards": [ ],
+      "collaborators": [ ],
+      . . .
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `No token, authorization denied`=
+
+## **Update Team**
+
+- **URL**
+
+  _/team/:teamId_
+
+- **Method:**
+
+  _`PATCH`_
+
+- **URL Params**
+
+  **Required:**
+
+  `teamId=[Mongo Id]`
+
+- **Data Params**
+
+  - name [String] - **Required**
+
+  _**Note:** Currently teams may only update their name. Collaborators, invites, and boards will have their own methods for working with the Team resource._
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```json
+    {
+      "boards": [],
+      "collaborators": ["60bc09df97ef41e316a8fc21"],
+      "_id": "60bc099297ef41e316a8fc20",
+      "name": "Team Rambo 2.0",
+      "owner": "60b95583f03fe3c63239c8bf",
+      "createdAt": "2021-06-05T23:32:34.164Z",
+      "updatedAt": "2021-06-05T23:54:21.976Z"
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `No token, authorization denied`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "Unable to find team" }`
+
+<br />
+
+# Invite API
+
+## **Get Active Invites**
+
+- **URL**
+
+  _/team/:teamId/invites_
+
+- **Method:**
+
+  _`GET`_
+
+- **URL Params**
+
+  **Required:**
+
+  `teamId=[Mongo Id]`
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```json
+    [
+      {
+        "_id": "60bc0acc08d918e3daeefeef",
+        "team": "60bc099297ef41e316a8fc20",
+        "recipient": "60bc09df97ef41e316a8fc21",
+        "sender": "60b95583f03fe3c63239c8bf",
+        . . .
+      }
+      . . .
+    ]
+    ```
+
+- **Error Response:**
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `No token, authorization denied`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error: "Unable to find team" }`
+
+## **Create Invite**
+
+- **URL**
+
+  _/team/:teamId/invite_
+
+- **Method:**
+
+  `POST`
+
+- **URL Params**
+
+  **Required:**
+
+  `teamId=[Mongo Id]`
+
+- **Data Params**
+
+  - recipient [Mongo Id] - **Required**
+
+  _**Note:** Recipient cannot be equal to authenticated user's id_
+
+  Example
+
+  ```json
+  {
+    "recipient": "60bc09df97ef41e316a8fc21"
+  }
+  ```
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```json
+    {
+      "message": "Invite sent",
+      "payload": {
+        "_id": "60bc0acc08d918e3daeefeef",
+        "team": "60bc099297ef41e316a8fc20",
+        "recipient": "60bc09df97ef41e316a8fc21",
+        "sender": "60b95583f03fe3c63239c8bf",
+        . . .
+      }
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `No token, authorization denied`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "Unable to find team" }`
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : "Please provide a proper ID" }`
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : "Recipient already has been invited" }`
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : "You cannot send an invite to yourself" }`
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : "That person is already in your team" }`
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : "Recipient does not exist" }`
 
 - **Sample Call:**
 
@@ -54,3 +277,164 @@
 - **Notes:**
 
   <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._>
+
+## **Accept Invite**
+
+- **URL**
+
+  _/team/:teamId/:inviteId/accept_
+
+- **Method:**
+
+  _`GET`_
+
+  **Note:** This method is a `GET` because emails are sent to recipient to click and join.
+
+- **URL Params**
+
+  **Required:**
+
+  `teamId=[Mongo Id]`
+
+  `inviteId=[Mongo Id]`
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```json
+    {
+      "message": "Added you to Team Rambo"
+    }
+    ```
+
+- **Error Response:**
+
+  _The authenticated user's id must match the recipient id on the invite resource_
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `No token, authorization denied`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "Unable to find team" }`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "That invite does not exist" }`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "That user no longer exists" }`
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : "This invite is not for you" }`
+
+## **Revoke Invite**
+
+_**Note:** Team owner's id must match the authenticated user's id._
+
+- **URL**
+
+  _/team/:teamId/:inviteId/revoke_
+
+- **Method:**
+
+  `DELETE`
+
+- **URL Params**
+
+  **Required:**
+
+  `teamId=[Mongo Id]`
+
+  `inviteId=[Mongo Id]`
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:** `{ message : "Invite deleted" }`
+
+- **Error Response:**
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `No token, authorization denied`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "That invite does not exist" }`
+
+# Collaborator API
+
+## **Get Team Collaborators**
+
+- **URL**
+
+  _/team/:teamId/collaborators_
+
+- **Method:**
+
+  _`GET`_
+
+- **URL Params**
+
+  **Required:**
+
+  `teamId=[Mongo Id]`
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```json
+    [
+      {
+        "_id": "60bc09df97ef41e316a8fc21",
+        "email": "user@email.com",
+        "createdAt": "2021-06-05T23:33:51.049Z",
+        "updatedAt": "2021-06-05T23:33:51.049Z"
+      }
+      . . .
+    ]
+    ```
+
+- **Error Response:**
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `No token, authorization denied`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error: "Unable to find team" }`
+
+## **Remove a Collaborator**
+
+- **URL**
+
+  _/team/:teamId/collaborators/:userId_
+
+- **Method:**
+
+  _`DELETE`_
+
+- **URL Params**
+
+  **Required:**
+
+  `teamId=[Mongo Id]`
+
+  `userId=[Mongo Id]`
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:** `{ message: "Collaborator removed" }`
+
+- **Error Response:**
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `No token, authorization denied`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error: "Unable to find team" }`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error: "Collaborator not in team" }`
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error: "You cannot perform this task" }`

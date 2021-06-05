@@ -33,9 +33,9 @@ const teamSchema = new mongoose.Schema(
 /**
  * When an invite is accepted this will add the collaborator to the team and
  *
- * @param   {[type]}  userId  [userId description]
+ * @param   {ObjectId}  userId
  *
- * @return  {[type]}          [return description]
+ * @return  {Boolean}   True if successful, false if not.       
  */
 teamSchema.methods.addCollaborator = async function (userId) {
   if (this.collaborators.includes(userId)) return;

@@ -13,7 +13,6 @@ router.post(
   body("recipient")
     .isMongoId()
     .withMessage("Please provide a proper ID for recipient"),
-  body("sender").isMongoId().withMessage("Please provide a proper sender id"),
   inviteController.createInvite
 );
 
