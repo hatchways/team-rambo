@@ -41,8 +41,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const sendToFirstBoard = useCallback(async () => {
     const { boards } = await getUserBoards();
-
-    if (boards) {
+    if (boards && boards.length > 0) {
       history.push(`/dashboard/board/${boards[0]._id}`);
       return;
     }

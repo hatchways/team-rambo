@@ -27,7 +27,7 @@ const App = (): JSX.Element => (
                   <Switch>
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/signup" component={Signup} />
-                    <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+                    <ProtectedRoute exact path="/dashboard/board/:id" component={Dashboard} />
                     <ProtectedRoute exact path="/newboard" component={SplashScreen} />
                     <Route path="*">
                       <Redirect to="/login" />

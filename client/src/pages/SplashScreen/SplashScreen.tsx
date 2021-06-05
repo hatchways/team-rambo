@@ -38,7 +38,7 @@ const SplashScreen = (): JSX.Element => {
     onSubmit: (values: Values) => handleSubmit(values),
   });
   return (
-    <Grid xs={12} container direction="column" justify="center" spacing={3} className={classes.root}>
+    <Grid container direction="column" justify="center" spacing={3} className={classes.root}>
       <Grid item>
         <Typography variant="h4">{`It seems that you don't have any boards!`}</Typography>
       </Grid>
