@@ -8,7 +8,7 @@ exports.getColumns = asyncHandler(async (req, res) => {
 });
 
 exports.getColumn = asyncHandler(async (req, res) => {
-  const column = await Column.findById(req.params.id);
+  const column = await Column.findOne({ _id: req.params.id }).populate("cards");
 
   if (!column) res.status(404).json({ error: "Column not found" });
 
@@ -16,31 +16,29 @@ exports.getColumn = asyncHandler(async (req, res) => {
 });
 
 exports.createColumn = asyncHandler(async (req, res) => {
-  const { name } = req.body;
+  const { name, boardId } = req.body;
+
   const newColumn = await Column.create({
-    name: name,
+    name,
+    boardId,
   });
 
-  return res.status(200).json({ Column: newColumn });
+  return res.status(200).json(newColumn);
 });
 
 exports.updateColumn = asyncHandler(async (req, res, next) => {
-  const { _id, name, cards, index } = req.body;
+  const { _id, name, cards } = req.body;
 
-  const filter = { _id };
   const update = {
     name,
     cards,
-    index,
   };
 
-  const column = await Column.findOneAndUpdate(filter, update, {
+  const column = await Column.findOneAndUpdate(_id, update, {
     new: true,
   });
 
-  const newColumn = column.removePassword();
-
-  return res.status(200).json(newColumn);
+  return res.status(200).json(column);
 });
 
 exports.reorderColumn = asyncHandler(async (req, res) => {

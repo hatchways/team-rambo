@@ -3,7 +3,7 @@ import { IFetchOptions, NewCardApiData } from '../../interface';
 const createCard = async (name: string, tag: string, columnId: string): Promise<NewCardApiData> => {
   const fetchOptions: IFetchOptions = {
     method: 'POST',
-    body: JSON.stringify({ name, tag, columnId }),
+    body: JSON.stringify({ data: { name, tag, columnId } }),
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   };

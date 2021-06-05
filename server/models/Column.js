@@ -3,22 +3,20 @@ const mongoose = require("mongoose");
 const columnSchema = new mongoose.Schema(
   {
     name: {
-      type: Array,
-      required: false,
+      type: String,
+      required: true,
     },
-    cards: {
-      type: Array,
+    cards: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "card", required: false },
+    ],
+    boardId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "board",
       required: true,
     },
   },
   { timestamps: true }
 );
-
-columnSchema.methods.removePassword = function () {
-  const object = this.toObject();
-  delete object.user.password;
-  return object;
-};
 
 const Column = mongoose.model("column", columnSchema);
 module.exports = Column;

@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const cardSchema = new mongoose.Schema(
   {
-    name: {
-      type: Array,
-      required: false,
+    title: {
+      type: String,
+      required: true,
     },
     tag: {
       type: String,
@@ -31,18 +31,13 @@ const cardSchema = new mongoose.Schema(
       required: false,
     },
     columnId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "column",
       required: true,
     },
   },
   { timestamps: true }
 );
-
-cardSchema.methods.removePassword = function () {
-  const object = this.toObject();
-  delete object.user.password;
-  return object;
-};
 
 const Card = mongoose.model("card", cardSchema);
 module.exports = Card;

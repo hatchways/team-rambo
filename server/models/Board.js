@@ -1,29 +1,28 @@
 const mongoose = require("mongoose");
+const Column = require("../models/Column");
 
-const boardSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const boardSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    columns: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "column", required: false },
+    ],
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
-  columns: {
-    type: Array,
-    required: false,
-  },
-  user: {
-    type: mongoose.Types.ObjectId,
-    ref: "user",
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true }
+);
 
 boardSchema.methods.removePassword = function () {
-  const object = this.toObject();
-  delete object.user.password;
-  return object;
+  const board = this.toObject();
+  delete board.user.password;
+  return board;
 };
 
 const Board = mongoose.model("board", boardSchema);
