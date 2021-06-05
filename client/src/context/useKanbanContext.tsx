@@ -44,10 +44,9 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
     if (boards) {
       history.push(`/dashboard/board/${boards[0]._id}`);
-      debugger;
       return;
     }
-    history.push(`/dashboard/board/`);
+    history.push(`/newboard`);
   }, []);
 
   const getAllBoards = async (): Promise<void> => {
@@ -57,8 +56,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const fetchBoard = async (id: string): Promise<void> => {
     const { board } = await getBoard(id);
-    console.log(board);
-    debugger;
     if (!board) {
       sendToFirstBoard();
       return;

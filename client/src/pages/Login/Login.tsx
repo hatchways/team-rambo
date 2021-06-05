@@ -4,12 +4,17 @@ import useStyles from './loginStyles';
 import { login } from '../../helpers/';
 import LoginForm from './LoginForm/LoginForm';
 import { useAuth, useSnackBar, useKanban } from '../../context/';
+import { useEffect } from 'react';
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
-  const { updateLoginContext } = useAuth();
+  const { updateLoginContext, loggedInUser } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
   const { sendToFirstBoard } = useKanban();
+
+  useEffect(() => {
+    if (loggedInUser) sendToFirstBoard();
+  }, [loggedInUser]);
 
   const handleSubmit = (
     { email, password }: { email: string; password: string },
