@@ -4,12 +4,15 @@ const Column = require("../models/Column");
 const Card = require("../models/Card");
 
 exports.getBoard = asyncHandler(async (req, res) => {
-  const board = await Board.findOne({ _id: req.params.id }).populate({
-    path: "columns",
-    populate: {
-      path: "cards",
-    },
-  });
+  const board = await Board.findOne({ _id: req.params.id })
+    .populate({
+      path: "columns",
+      populate: {
+        path: "cards",
+        model: "card",
+      },
+    })
+    .exec();
 
   if (!board) {
     res.status(404);
@@ -36,8 +39,6 @@ exports.createBoard = asyncHandler(async (req, res) => {
   if (!newBoard) {
     res.status(400);
     throw new Error("Board could not be created.");
-
-    return;
   }
 
   const notStarted = await Column.create({
@@ -108,12 +109,7 @@ exports.updateBoard = asyncHandler(async (req, res, next) => {
 
   const board = await Board.findOneAndUpdate(id, update, {
     new: true,
-  }).populate({
-    path: "columns",
-    // populate: {
-    //   path: "cards",
-    // },
-  });
+  }).populate({ path: "columns" });
 
   if (!board) {
     res.status(404);

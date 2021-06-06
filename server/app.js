@@ -14,8 +14,8 @@ const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const fileRouter = require("./routes/file");
 const boardsRouter = require("./routes/board");
-const cardsRouter = require("./routes/card");
 const columnsRouter = require("./routes/column");
+const cardsRouter = require("./routes/card");
 
 const { json, urlencoded } = express;
 
