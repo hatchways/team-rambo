@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useTheme, Box, InputBase, Divider, Grid, Typography, Button } from '@material-ui/core';
+import { v4 as uuidv4 } from 'uuid';
 import { Color } from '../Color/Color';
 import { useKanban } from '../../../../context/useKanbanContext';
 import useStyles from './useStyles';
@@ -58,7 +59,7 @@ export const InnerForm = ({ columnId, formAction }: InnerFormProps): JSX.Element
           const isSuccess = addCard({
             name,
             columnId: columnId,
-            _id: `card-${Math.floor(Math.random() * 999999)}`,
+            _id: uuidv4(),
             tag: selectedTagColor,
           });
           if (isSuccess) formAction(false);

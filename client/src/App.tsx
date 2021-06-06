@@ -13,6 +13,7 @@ import {
   KanbanProvider,
   DialogProvider,
   TourProvider,
+  UserProvider,
 } from './context/';
 
 const App = (): JSX.Element => (
@@ -21,20 +22,22 @@ const App = (): JSX.Element => (
       <SnackBarProvider>
         <AuthProvider>
           <SocketProvider>
-            <TourProvider steps={steps}>
-              <KanbanProvider>
-                <DialogProvider>
-                  <Switch>
-                    <Route exact path="/login" component={Login} />
-                    <Route exact path="/signup" component={Signup} />
-                    <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                    <Route path="*">
-                      <Redirect to="/login" />
-                    </Route>
-                  </Switch>
-                </DialogProvider>
-              </KanbanProvider>
-            </TourProvider>
+            <UserProvider>
+              <TourProvider steps={steps}>
+                <KanbanProvider>
+                  <DialogProvider>
+                    <Switch>
+                      <Route exact path="/login" component={Login} />
+                      <Route exact path="/signup" component={Signup} />
+                      <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+                      <Route path="*">
+                        <Redirect to="/login" />
+                      </Route>
+                    </Switch>
+                  </DialogProvider>
+                </KanbanProvider>
+              </TourProvider>
+            </UserProvider>
           </SocketProvider>
         </AuthProvider>
       </SnackBarProvider>

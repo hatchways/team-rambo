@@ -7,13 +7,13 @@ import { useKanban, useTour } from '../../context/';
 import { TourGuide } from '../TourGuide/TourGuide';
 
 const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element => {
-  const { handleDragEnd } = useKanban();
+  const { focusedCard, handleDragEnd } = useKanban();
   const { isTourMode } = useTour();
 
   return (
     <>
+      {focusedCard && <FocusCard />}
       <DragDropContext onDragEnd={handleDragEnd}>
-        <FocusCard />
         <Droppable droppableId="board" type="column" direction="horizontal">
           {(provided: DroppableProvided) => (
             <Grid ref={provided.innerRef} container spacing={2} {...provided.droppableProps}>

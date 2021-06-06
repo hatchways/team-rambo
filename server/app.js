@@ -13,6 +13,7 @@ const cors = require("cors");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const fileRouter = require("./routes/file");
+const notificationRouter = require("./routes/notification");
 const boardsRouter = require("./routes/board");
 
 const { json, urlencoded } = express;
@@ -48,6 +49,7 @@ app.use((req, res, next) => {
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/files", fileRouter);
+app.use("/notifications/", notificationRouter);
 app.use("/boards", boardsRouter);
 
 if (process.env.NODE_ENV === "production") {
