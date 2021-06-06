@@ -1,5 +1,6 @@
 const { User } = require("../models/User");
 const Board = require("../models/Board");
+const { Invite } = require("../models/Invite");
 const asyncHandler = require("express-async-handler");
 
 // @route POST /users
@@ -28,4 +29,20 @@ exports.getUserBoards = asyncHandler(async (req, res, next) => {
   const boards = await Board.find({ user: req.user.id });
 
   return res.status(200).send({ boards: boards });
+});
+
+/**
+ * Get the authenticated user's outstanding invites.
+ *
+ * Note: we only return the name because the user is not a part of the team and shouldn't be able to see the full team object in the network response.
+ * @route GET /users/invites
+ * @returns {Array} List of invite resources
+ */
+exports.getUsersInvites = asyncHandler(async (req, res, next) => {
+  const invites = await Invite.find({ recipient: req.user.id }).populate(
+    "team",
+    "name"
+  );
+
+  return res.status(200).json(invites);
 });

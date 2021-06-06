@@ -9,6 +9,13 @@ exports.hasAccessToTeam = asyncHandler(async (req, res, next) => {
   const { teamId } = req.params;
   const team = await Team.findOne({ _id: teamId })
     .populate("collaborators")
+    .populate({
+      path: "invites",
+      populate: {
+        path: "recipient",
+        select: "-password",
+      },
+    })
     .select("-password");
 
   if (!team) {

@@ -29,7 +29,13 @@ exports.createInvite = asyncHandler(async (req, res, next) => {
   const { team } = req;
   const { recipient } = req.body;
 
-  const invite = await Invite.findOne({ recipient, team: team.id });
+  const recipientEmail = await User.getEmail(recipient);
+  if (!recipientEmail) {
+    res.status(400);
+    throw new Error("Recipient does not exist");
+  }
+
+  const invite = await Invite.findOne({ recipient });
 
   if (invite) {
     res.status(400);
@@ -55,17 +61,14 @@ exports.createInvite = asyncHandler(async (req, res, next) => {
       sender: req.user.id,
     });
 
-    const recipientEmail = await User.getEmail(recipient);
-    if (!recipientEmail) {
-      res.status(400);
-      throw new Error("Recipient does not exist");
-    }
-
     const emailOptions = {
       subject: "Your invited to join a team",
       html: invitationTemplate(req.team, invite._id),
     };
     sendEmail(recipientEmail, emailOptions);
+
+    team.invites.push(invite.id);
+    await team.save();
 
     return res.status(200).json({
       message: "Invite sent",
@@ -103,7 +106,9 @@ exports.acceptInvite = asyncHandler(async (req, res, next) => {
     throw new Error("That user no longer exists");
   }
 
-  team.addCollaborator(invite.recipient);
+  team
+    .addCollaborator(invite.recipient)
+    .then(() => team.removeInvite(invite.id));
 
   await invite.remove();
 

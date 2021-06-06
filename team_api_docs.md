@@ -77,6 +77,7 @@ Internal documentation for working with the teams feature. To get started take a
       "owner": "60b95583f03fe3c63239c8bf",
       "boards": [ ],
       "collaborators": [ ],
+      "invites": [ ],
       . . .
     }
     ```
@@ -125,6 +126,7 @@ Internal documentation for working with the teams feature. To get started take a
       "owner": "60b95583f03fe3c63239c8bf",
       "boards": [ ],
       "collaborators": [ ],
+      "invites": [ ],
       . . .
     }
     ```

@@ -31,6 +31,7 @@ exports.createTeam = asyncHandler(async (req, res, next) => {
 exports.getUsersTeams = asyncHandler(async (req, res, next) => {
   const teams = await Team.find({ owner: req.user.id })
     .populate("collaborator")
+    .populate("invites")
     .select("-password");
 
   return res.status(200).json(teams);
