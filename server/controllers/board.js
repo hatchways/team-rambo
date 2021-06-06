@@ -25,6 +25,11 @@ exports.createBoard = asyncHandler(async (req, res) => {
     name,
     user: req.user.id,
   });
+  // For testing with postman
+  // const newBoard = await Board.create({
+  //   name,
+  //   user: "60b91df75edef24420936968",
+  // });
 
   if (!newBoard) {
     res.status(400);
@@ -44,19 +49,29 @@ exports.createBoard = asyncHandler(async (req, res) => {
   );
 });
 
-exports.updateBoard = asyncHandler(async (req, res) => {
-  /* Leaving this open to whatever udpates we want in the request body, but maybe it just needs to be name? */
-  const update = req.body;
+exports.updateBoardName = asyncHandler(async (req, res) => {
+  const { name } = req.body;
   const { id } = req.params;
 
-  const board = await Board.findOneAndUpdate(id, update, {
-    new: true,
-  }).populate({ path: "columns" });
+  const board = await Board.findOneAndUpdate(
+    { _id: id },
+    { name },
+    {
+      new: true,
+    }
+  ).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+      model: "card",
+    },
+  });
 
   if (!board) {
     res.status(404);
     throw new Error("Board not found");
   }
+
   await board.save();
   return res.status(200).json(board);
 });
