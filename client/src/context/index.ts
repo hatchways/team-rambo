@@ -3,4 +3,5 @@ export { useKanban, KanbanContext, KanbanProvider } from './useKanbanContext';
 export { useSocket, SocketContext, SocketProvider } from './useSocketContext';
 export { useSnackBar, SnackBarContext, SnackBarProvider } from './useSnackbarContext';
 export { useDialog, DialogContext, DialogProvider } from './useDialogContext';
+export { useTour, TourContext, TourProvider } from './useTour';
 export { useUser, UserContext, UserProvider } from './useUserContext';

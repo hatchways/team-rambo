@@ -8,7 +8,7 @@ import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
 import NotificationCenter from './Notifications/NotificationCenter/NotificationCenter';
 import { testNotifications } from './Notifications/sampleNotificationData';
 import logo from '../../Images/logo.png';
-import { IUser, IBoard } from '../../interface/';
+import { IUser } from '../../interface/';
 import { useKanban } from '../../context';
 
 interface Props {
@@ -68,7 +68,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
             color="inherit"
             aria-label="menu"
           >
-            <MenuIcon />
+            <MenuIcon data-tour="show-boards-step" />
           </IconButton>
         </Toolbar>
       </AppBar>

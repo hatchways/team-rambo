@@ -187,7 +187,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const addCard = (card: ICard): boolean => {
     if (card.name === '') {
-      updateSnackBarMessage('Please enter a card name');
+      updateSnackBarMessage('Please enter a card name', 'error');
 
       return false;
     }

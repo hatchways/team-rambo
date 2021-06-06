@@ -3,10 +3,12 @@ import { DragDropContext, Droppable, DroppableProvided } from 'react-beautiful-d
 import { FocusCard } from './FocusCard/FocusCard';
 import Column from './Column/Column';
 import { IBoard } from '../../interface/';
-import { useKanban } from '../../context/';
+import { useKanban, useTour } from '../../context/';
+import { TourGuide } from '../TourGuide/TourGuide';
 
 const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element => {
   const { focusedCard, handleDragEnd } = useKanban();
+  const { isTourMode } = useTour();
 
   return (
     <>
@@ -16,22 +18,21 @@ const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element => {
           {(provided: DroppableProvided) => (
             <Grid ref={provided.innerRef} container spacing={2} {...provided.droppableProps}>
               {activeBoard.columns.map((column, index) => (
-                <>
-                  <Column
-                    key={column._id}
-                    index={index}
-                    _id={column._id}
-                    name={column.name}
-                    cards={column.cards}
-                    createdAt={column.createdAt}
-                  />
-                </>
+                <Column
+                  key={column._id}
+                  index={index}
+                  _id={column._id}
+                  name={column.name}
+                  cards={column.cards}
+                  createdAt={column.createdAt}
+                />
               ))}
               {provided.placeholder}
             </Grid>
           )}
         </Droppable>
       </DragDropContext>
+      {isTourMode && <TourGuide />}
     </>
   );
 };

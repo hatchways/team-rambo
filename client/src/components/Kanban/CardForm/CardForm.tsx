@@ -38,6 +38,7 @@ const CardForm = ({ columnId }: CardFormProps): JSX.Element => {
           color="secondary"
           disableElevation
           className={`${!formIsOpen ? classes.button : ''}`}
+          data-tour="card-form-step"
         >
           Add a card...
         </Button>
