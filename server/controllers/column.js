@@ -4,7 +4,7 @@ const Column = require("../models/Column");
 exports.getColumns = asyncHandler(async (req, res) => {
   const columns = await Column.find();
 
-  return res.json(Columns);
+  return res.json(columns);
 });
 
 exports.getColumn = asyncHandler(async (req, res) => {
@@ -22,7 +22,7 @@ exports.createColumn = asyncHandler(async (req, res) => {
     name,
     boardId,
   });
-
+  await newColumn.save();
   return res.status(200).json(newColumn);
 });
 
@@ -38,14 +38,27 @@ exports.updateColumn = asyncHandler(async (req, res, next) => {
     new: true,
   });
 
+  await column.save();
   return res.status(200).json(column);
 });
 
 exports.reorderColumn = asyncHandler(async (req, res) => {
   //to be completed
-  const column = await Column.findById(req.params.id);
+  return;
+});
 
-  if (!column) res.status(404).json({ error: "Column not found" });
+exports.deleteColumn = asyncHandler(async (req, res) => {
+  const { id } = req.params;
 
-  return res.status(200).json(column);
+  const deletedColumn = await Column.findOneAndDelete(
+    { _id: id },
+    function (err) {
+      if (err) {
+        res.status(404);
+        throw new error("Column not found!");
+      }
+    }
+  );
+
+  return res.status(200).json(deletedColumn);
 });

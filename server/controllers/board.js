@@ -1,18 +1,14 @@
 const asyncHandler = require("express-async-handler");
 const Board = require("../models/Board");
-const Column = require("../models/Column");
-const Card = require("../models/Card");
 
 exports.getBoard = asyncHandler(async (req, res) => {
-  const board = await Board.findOne({ _id: req.params.id })
-    .populate({
-      path: "columns",
-      populate: {
-        path: "cards",
-        model: "card",
-      },
-    })
-    .exec();
+  const board = await Board.findOne({ _id: req.params.id }).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+      model: "card",
+    },
+  });
 
   if (!board) {
     res.status(404);
@@ -25,15 +21,9 @@ exports.getBoard = asyncHandler(async (req, res) => {
 exports.createBoard = asyncHandler(async (req, res) => {
   const { name } = req.body;
 
-  // const newBoard = await Board.create({
-  //   name,
-  //   user: req.user.id,
-  // });
-
-  //Use this for testing in postman
   const newBoard = await Board.create({
     name,
-    user: "60b91df75edef24420936968",
+    user: req.user.id,
   });
 
   if (!newBoard) {
@@ -41,71 +31,23 @@ exports.createBoard = asyncHandler(async (req, res) => {
     throw new Error("Board could not be created.");
   }
 
-  const notStarted = await Column.create({
-    name: "Not Started",
-    boardId: newBoard._id,
-  });
-  const inProgress = await Column.create({
-    name: "In Progress",
-    boardId: newBoard._id,
-  });
-  const completed = await Column.create({
-    name: "Completed",
-    boardId: newBoard._id,
-  });
-
-  newBoard.columns.push(notStarted);
-  newBoard.columns.push(inProgress);
-  newBoard.columns.push(completed);
+  await newBoard.createTemplateBoard();
   await newBoard.save();
 
-  const card1 = await Card.create({
-    title: "Not Started Card 1",
-    tag: "purple",
-    columnId: notStarted._id,
-  });
-  const card2 = await Card.create({
-    title: "Not Started Card 2",
-    tag: "red",
-    columnId: notStarted._id,
-  });
-  const card3 = await Card.create({
-    title: "In Progress Card 1",
-    tag: "blue",
-    columnId: inProgress._id,
-  });
-  const card4 = await Card.create({
-    title: "Completed Card 1",
-    tag: "green",
-    columnId: completed._id,
-  });
-
-  const CARDS = [card1, card2, card3, card4];
-  const COLUMNS = [notStarted, inProgress, completed];
-
-  COLUMNS.map((column) => {
-    const index = newBoard.columns.findIndex(
-      (boardColumn) => boardColumn._id === column._id
-    );
-    CARDS.map((card) => {
-      if (card.columnId === column._id)
-        newBoard.columns[index].cards.push(card);
-    });
-  });
-
-  await newBoard.save();
-
-  return res.status(200).json(newBoard);
+  return res.status(200).json(
+    await Board.populate(newBoard, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
 });
 
-// Needs major refactoring; won't need to update everything (columns) in updateBoard
-exports.updateBoard = asyncHandler(async (req, res, next) => {
-  const { name } = req.body;
+exports.updateBoard = asyncHandler(async (req, res) => {
+  /* Leaving this open to whatever udpates we want in the request body, but maybe it just needs to be name? */
+  const update = req.body;
   const { id } = req.params;
-
-  const update = {
-    name,
-  };
 
   const board = await Board.findOneAndUpdate(id, update, {
     new: true,
@@ -115,19 +57,27 @@ exports.updateBoard = asyncHandler(async (req, res, next) => {
     res.status(404);
     throw new Error("Board not found");
   }
-
+  await board.save();
   return res.status(200).json(board);
 });
 
 exports.reorderBoard = asyncHandler(async (req, res) => {
   //to be completed
+  return;
+});
 
-  const board = await Board.findById(req.params.id).populate("columns");
+exports.deleteBoard = asyncHandler(async (req, res) => {
+  const { id } = req.params;
 
-  if (!board) {
-    res.status(404);
-    throw new Error("Board not found");
-  }
+  const deletedBoard = await Board.findOneAndDelete(
+    { _id: id },
+    function (err) {
+      if (err) {
+        res.status(404);
+        throw new error("Board not found!");
+      }
+    }
+  );
 
-  return res.status(200).json(board);
+  return res.status(200).json(deletedBoard);
 });
