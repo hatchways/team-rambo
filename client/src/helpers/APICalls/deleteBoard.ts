@@ -1,16 +1,17 @@
-import { IFetchOptions, ICard } from '../../interface';
+import { IFetchOptions, IBoard } from '../../interface';
 
-const getCard = async (id: string): Promise<ICard> => {
+const deleteBoard = async (board: IBoard): Promise<IBoard> => {
   const fetchOptions: IFetchOptions = {
-    method: 'GET',
+    method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
+    body: JSON.stringify(board),
   };
-  return await fetch(`cards/${id}`, fetchOptions)
+  return await fetch(`boards/${board._id}`, fetchOptions)
     .then((res) => res.json())
     .catch((err) => ({
       error: { error: err, message: 'Unable to connect to server. Please try again' },
     }));
 };
 
-export default getCard;
+export default deleteBoard;

@@ -1,16 +1,17 @@
-import { IFetchOptions, IColumn } from '../../interface';
+import { IFetchOptions, ICard } from '../../interface';
 
-const getColumn = async (id: string): Promise<IColumn> => {
+const deleteCard = async (card: ICard): Promise<ICard> => {
   const fetchOptions: IFetchOptions = {
-    method: 'GET',
+    method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
+    body: JSON.stringify(card),
   };
-  return await fetch(`columns/${id}`, fetchOptions)
+  return await fetch(`cards/${card._id}`, fetchOptions)
     .then((res) => res.json())
     .catch((err) => ({
       error: { error: err, message: 'Unable to connect to server. Please try again' },
     }));
 };
 
-export default getColumn;
+export default deleteCard;

@@ -2,17 +2,9 @@ import { useState, useContext, createContext, FunctionComponent, useEffect, Disp
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
 import { v4 as uuidv4 } from 'uuid';
-import { getBoard, getUserBoards, updateBoard, createBoard, createCard, createColumn } from '../helpers/';
+import { getBoard, getUserBoards, updateBoard, createBoard } from '../helpers/';
 import { useSnackBar, useAuth } from './';
-import {
-  IKanbanContext,
-  IColumn,
-  ICard,
-  IBoard,
-  NewBoardApiData,
-  NewCardApiData,
-  NewColumnApiData,
-} from '../interface/';
+import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
@@ -25,6 +17,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     user: 'Initial',
     createdAt: 'Initial',
   });
+
   const [userBoards, setUserBoards] = useState<IBoard[]>([]);
   const [columns, setColumns] = useState<IColumn[]>(activeBoard.columns);
   const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
@@ -36,23 +29,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
     return;
   }, [loggedInUser]);
-
-  const createNewCard = async (name: string, tag: string, columnId: string): Promise<NewCardApiData> => {
-    const request = await createCard(name, tag, columnId);
-    const card = request.card;
-    if (card) addCard(card);
-
-    return request;
-  };
-
-  const createNewColumn = async (name: string): Promise<NewColumnApiData> => {
-    const request = await createColumn(name);
-    if (request.column) {
-      console.log('got column!');
-      addColumn(request.column.name, 'left');
-    }
-    return request;
-  };
 
   const getFirstBoard = async (): Promise<IBoard> => {
     const request = await getUserBoards();
@@ -351,8 +327,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         copyCard,
         removeActiveCard,
         addColumn,
-        createNewCard,
-        createNewColumn,
       }}
     >
       {children}

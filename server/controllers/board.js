@@ -61,11 +61,6 @@ exports.updateBoard = asyncHandler(async (req, res) => {
   return res.status(200).json(board);
 });
 
-exports.reorderBoard = asyncHandler(async (req, res) => {
-  //to be completed
-  return;
-});
-
 exports.deleteBoard = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -80,4 +75,9 @@ exports.deleteBoard = asyncHandler(async (req, res) => {
   );
 
   return res.status(200).json(deletedBoard);
+});
+
+exports.reorderBoard = asyncHandler(async (req, res) => {
+  //to be completed
+  return;
 });
