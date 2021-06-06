@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const { validationResult } = require("express-validator");
-const { Team } = require("../models/Team");
+const { Team } = require("../models");
 
 exports.hasAccessToTeam = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);

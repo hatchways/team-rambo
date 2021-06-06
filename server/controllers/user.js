@@ -1,6 +1,6 @@
 const { User } = require("../models/User");
 const Board = require("../models/Board");
-const { Invite } = require("../models/Invite");
+const { Invite } = require("../models");
 const asyncHandler = require("express-async-handler");
 
 // @route POST /users

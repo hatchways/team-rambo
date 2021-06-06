@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const { validationResult } = require("express-validator");
-const { Team } = require("../../../models/Team");
+const { Team } = require("../../../models");
 
 /**
  * Get all collaborators for the team.

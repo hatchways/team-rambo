@@ -83,4 +83,4 @@ teamSchema.methods.collaboratorIndexPosition = function (userId) {
   );
 };
 
-module.exports = { Team: mongoose.model("team", teamSchema), teamSchema };
+module.exports = mongoose.model("team", teamSchema);

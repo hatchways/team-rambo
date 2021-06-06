@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const { validationResult } = require("express-validator");
-const { Invite } = require("../../../models/Invite");
-const { User } = require("../../../models/User");
+const { Invite, User } = require("../../../models");
 const sendEmail = require("../../../utils/sendEmail");
 
 const invitationTemplate = (team, inviteId) => `
