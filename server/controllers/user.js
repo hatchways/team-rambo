@@ -25,7 +25,13 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
 
 exports.getUserBoards = asyncHandler(async (req, res, next) => {
   //@ts-ignore
-  const boards = await Board.find({ user: req.user.id });
+  const boards = await Board.find({ user: req.user.id }).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+      model: "card",
+    },
+  });
 
   return res.status(200).send({ boards: boards });
 });
