@@ -70,5 +70,33 @@ exports.updateTeam = asyncHandler(async (req, res, next) => {
     { name }
   );
 
+  // middleware handles if a team doesn't exist, so if team is null then user is not the owner.
+  if (!team) {
+    res.status(400);
+    throw new Error("You cannot perform this task");
+  }
+
   return res.status(200).json(team);
+});
+
+/**
+ * Deletes a team from the database.
+ *
+ * @route DELETE /team/:teamId
+ * @returns {Object} The updated team
+ */
+exports.deleteTeam = asyncHandler(async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return next(errors);
+  const { team } = req;
+
+  const isOwner = team.owner.toString() === req.user.id;
+
+  if (isOwner) {
+    await team.remove();
+    return res.status(200).json({ message: "Team deleted" });
+  }
+
+  res.status(400);
+  throw new Error("You cannot perform this task");
 });

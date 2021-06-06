@@ -1,3 +1,28 @@
+# **Team Rambo:** Teams API Documentation
+
+Internal documentation for working with the teams feature. To get started take a look at **Quick View**.
+
+## Quick View
+
+- [Team API](#team-api)
+  - [Get Users Teams](#get-users-teams)
+  - [Get Team](#get-team)
+  - [Create Team](#create-team)
+  - [Update Team](#update-team)
+  - [Delete Team](#delete-team)
+- [Invite API](#invite-api)
+  - [Get Active Invites](#get-active-invites)
+  - [Create Invite](#create-invite)
+  - [Accept Invite](#accept-invite)
+  - [Revoke Invite](#revoke-invite)
+- [Collaborator API](#collaborator-api)
+  - [Get Team Collaborators](#get-team-collaborators)
+  - [Remove a Collaborator](#remove-a-collaborator)
+
+<br />
+
+# Team API
+
 ## **Get Users Teams**
 
 - **URL**
@@ -108,6 +133,38 @@
 
   - **Code:** 401 UNAUTHORIZED <br />
     **Content:** `No token, authorization denied`=
+
+## **Delete Team**
+
+- **URL**
+
+  \_/team/:teamId
+
+- **Method:**
+
+  `DELETE`
+
+- **URL Params**
+
+  **Required:**
+
+  `teamId=[Mongo Id]`
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:** `{ message : "Team deleted" }`
+
+- **Error Response:**
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `No token, authorization denied`
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error: "You cannot perform this task" }`
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "Unable to find team" }`
 
 ## **Update Team**
 

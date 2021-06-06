@@ -48,6 +48,13 @@ router.patch(
   teamController.updateTeam
 );
 
+router.delete(
+  "/:teamId",
+  hasAccessToTeam,
+  param("teamId").isMongoId().withMessage("Please provide a valid ID"),
+  teamController.deleteTeam
+);
+
 // catch express-validation errors;
 router.use((error, req, res, next) => {
   const { errors } = error;
