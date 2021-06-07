@@ -16,7 +16,7 @@ const boardSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, discriminatorKey: "__type" }
 );
 
 boardSchema.methods.removePassword = function () {
@@ -25,4 +25,4 @@ boardSchema.methods.removePassword = function () {
   return object;
 };
 
-module.exports = mongoose.model("board", boardSchema);
+module.exports = { Board: mongoose.model("board", boardSchema), boardSchema };

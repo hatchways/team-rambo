@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const { validationResult } = require("express-validator");
-const { Team } = require("../../../models");
+const { Team } = require("../../../models/Team");
 
 /**
  * Get all collaborators for the team.
@@ -8,9 +7,6 @@ const { Team } = require("../../../models");
  * @returns {Object} A message and payload
  */
 exports.getCollaborators = asyncHandler(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return next(errors);
-
   const { collaborators } = await Team.findOne({ _id: req.team._id })
     .populate("collaborators")
     .select("-password");
@@ -24,8 +20,6 @@ exports.getCollaborators = asyncHandler(async (req, res, next) => {
  * @returns {Object} A message and payload
  */
 exports.removeCollaborator = asyncHandler(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return next(errors);
   const { collaboratorId } = req.params;
   const { team } = req;
 

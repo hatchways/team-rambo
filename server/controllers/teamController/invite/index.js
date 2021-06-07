@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
-const { validationResult } = require("express-validator");
-const { Invite, User } = require("../../../models");
+const { Invite } = require("../../../models/Invite");
+const { User } = require("../../../models/User");
 const sendEmail = require("../../../utils/sendEmail");
 
 const invitationTemplate = (team, inviteId) => `
@@ -23,8 +23,6 @@ const invitationTemplate = (team, inviteId) => `
  * @returns {Object} A message and payload
  */
 exports.createInvite = asyncHandler(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return next(errors);
   const { team } = req;
   const { recipient } = req.body;
 
@@ -139,8 +137,6 @@ exports.getActiveInvites = asyncHandler(async (req, res, next) => {
  * @returns {Object} An invite resource
  */
 exports.getInvite = asyncHandler(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return next(errors);
   const { inviteId } = req.params;
   const invite = await Invite.findOne({ _id: inviteId });
 
@@ -159,8 +155,6 @@ exports.getInvite = asyncHandler(async (req, res, next) => {
  * @returns {Object} A message
  */
 exports.revokeInvite = asyncHandler(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return next(errors);
   const { inviteId } = req.params;
   const invite = await Invite.findOne({ _id: inviteId });
 

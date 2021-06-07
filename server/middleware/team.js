@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const { validationResult } = require("express-validator");
-const { Team } = require("../models");
+const { Team } = require("../models/Team");
 
 exports.hasAccessToTeam = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);
@@ -19,14 +19,12 @@ exports.hasAccessToTeam = asyncHandler(async (req, res, next) => {
     .select("-password");
 
   if (!team) {
-    res.status(400);
+    res.status(404);
     throw new Error("Unable to find team");
   }
   if (
     team.owner == req.user.id ||
-    team.collaborators.findIndex(
-      (collaborator) => collaborator.id.toString() === req.user.id
-    ) > -1
+    team.collaboratorIndexPosition(req.user.id) > -1
   ) {
     req.team = team;
     return next();
