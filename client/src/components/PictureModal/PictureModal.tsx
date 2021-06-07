@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   Box,
@@ -7,44 +7,37 @@ import {
   Paper,
   Avatar,
   Divider,
-  Snackbar,
-  SnackbarCloseReason,
   DialogTitle,
   DialogContent,
   Typography,
 } from '@material-ui/core';
-import MuiAlert, { AlertProps, Color } from '@material-ui/lab/Alert';
-import SaveIcon from '@material-ui/icons/Save';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { Save, CloudUpload } from '@material-ui/icons';
 import Dropzone, { DropzoneState } from 'react-dropzone';
+import { useUser, useSnackBar } from '../../context';
+import uploadImage from '../../helpers/APICalls/uploadImage';
 import useStyles from './PictureModalStyles';
-import { uploadImage } from '../../helpers/';
 
 interface Props {
   open: boolean;
   setOpen: () => void;
 }
 
-interface IAlert {
-  open: boolean;
-  severity?: Color;
-  message?: string;
-}
-
 const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
   const classes = useStyles();
   const maxFileSize = 5e8;
   const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
-  const [alert, setOpenAlert] = useState<IAlert>({ open: false });
   const [preview, setPreview] = useState<string>('');
   const [image, setImage] = useState<Blob>(new Blob());
+  const [canUpload, setCanUpload] = useState<boolean>(false);
+  const { updatePicture } = useUser();
+  const { updateSnackBarMessage } = useSnackBar();
 
   const handleFile = (files: File[]) => {
     const reader = new FileReader();
     const currentFile = [...files].shift();
 
     if (!currentFile) {
-      setOpenAlert({ open: true, message: 'Insert a valid image file!', severity: 'error' });
+      updateSnackBarMessage('Insert a valid image file!', 'error');
       return;
     }
 
@@ -56,38 +49,36 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
       }
     };
     reader.readAsDataURL(currentFile);
+    setCanUpload(true);
   };
 
   const handleUpload = async (file: Blob) => {
     const form = new FormData();
     form.append('image', file);
 
-    const { error } = await uploadImage(form);
+    const { error, picture } = await uploadImage(form);
     if (error) {
-      setOpenAlert({ open: true, message: 'Insert a valid image file!', severity: 'error' });
+      updateSnackBarMessage('Insert a valid image file!', 'error');
       return;
     }
-    setOpenAlert({ open: true, message: 'Image saved!', severity: 'success' });
+    updatePicture(picture);
+    updateSnackBarMessage('Image saved!');
+    handleClose();
+  };
+
+  const handleClose = () => {
     setOpen();
   };
 
-  const handleAlertClose = (
-    event: React.SyntheticEvent<Event> | React.SyntheticEvent<Element, Event>,
-    reason?: SnackbarCloseReason,
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenAlert({ open: false });
-  };
-
-  const Alert = (props: AlertProps) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  const resetDialog = () => {
+    setCanUpload(false);
+    setImage(new Blob());
+    setPreview('');
   };
 
   return (
     <>
-      <Dialog open={open} onClose={setOpen}>
+      <Dialog open={open} onClose={handleClose} onExited={resetDialog}>
         <DialogTitle disableTypography className={classes.root}>
           <Typography variant="h6" className={classes.title}>
             Upload profile picture
@@ -112,7 +103,7 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
                 {({ getRootProps, getInputProps }: DropzoneState) => (
                   <Paper {...getRootProps()} className={classes.dropZonePaper}>
                     <Box>
-                      <CloudUploadIcon className={classes.uploadIcon} />
+                      <CloudUpload className={classes.uploadIcon} />
                       <input type="file" {...getInputProps()} />
                     </Box>
                     <Typography variant="subtitle2" className={classes.text}>
@@ -128,7 +119,8 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
                 variant="contained"
                 color="primary"
                 size="large"
-                startIcon={<SaveIcon />}
+                startIcon={<Save />}
+                disabled={!canUpload}
               >
                 Save
               </Button>
@@ -136,11 +128,6 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
           </Grid>
         </DialogContent>
       </Dialog>
-      <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleAlertClose}>
-        <Alert onClose={handleAlertClose} elevation={7} severity={alert.severity}>
-          {alert.message}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

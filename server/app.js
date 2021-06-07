@@ -15,6 +15,7 @@ const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const fileRouter = require("./routes/file");
 const teamRouter = require("./routes/team/");
+const notificationRouter = require("./routes/notification");
 const boardsRouter = require("./routes/board");
 
 const { json, urlencoded } = express;
@@ -61,6 +62,7 @@ app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/files", fileRouter);
 app.use("/team", teamRouter);
+app.use("/notifications/", notificationRouter);
 app.use("/boards", boardsRouter);
 
 if (process.env.NODE_ENV === "production") {

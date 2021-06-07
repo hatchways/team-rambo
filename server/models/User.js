@@ -13,6 +13,15 @@ const userSchema = new mongoose.Schema(
       required: true,
       select: false,
     },
+    picture: {
+      type: new mongoose.Schema({
+        url: { type: String, required: false },
+      }),
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
