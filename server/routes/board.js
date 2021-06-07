@@ -6,14 +6,16 @@ const {
   updateBoardName,
   reorderBoard,
   deleteBoard,
+  createBoardColumn,
 } = require("../controllers/board");
 
-router.use(protect);
+// router.use(protect);
 
 router.route("/").post(createBoard);
 router.route("/:id").get(getBoard);
 router.route("/:id").patch(updateBoardName);
 router.route("/:id/reorder").patch(reorderBoard);
-router.route(":id").delete(deleteBoard);
+router.route("/:id/addColumn").patch(createBoardColumn);
+router.route("/:id").delete(deleteBoard);
 
 module.exports = router;
