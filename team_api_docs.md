@@ -43,7 +43,15 @@ Internal documentation for working with the teams feature. To get started take a
 - **Success Response:**
 
   - **Code:** 200 <br />
-    **Content:** `[ { _id: 'xyz', name: 'Team Name', collaborators: [ ], boards: [ ] }, . . . ]`
+    **Content:**
+    ```json
+    [
+      {
+        "_id": "60bc6b26cc152a05d91f11ba",
+        "name": "Team Rambo"
+      }
+    ]
+    ```
 
 - **Error Response:**
 
@@ -52,10 +60,6 @@ Internal documentation for working with the teams feature. To get started take a
 
   - **Code:** 404 NOT FOUND <br />
     **Content:** `{ error : "Unable to find team" }`
-
-- **Notes:**
-
-  This API only returns a users owned teams, this will be updated to return a users owned teams and teams they are a collaborator in.
 
 ## **Get Team**
 
