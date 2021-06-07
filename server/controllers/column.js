@@ -72,9 +72,21 @@ exports.createColumnCard = asyncHandler(async (req, res) => {
 
   await column.addCard(title, tag);
 
+  const board = await Board.findById(column.boardId);
+
+  if (!board) {
+    res.status(404);
+    throw new Error("Board not found");
+  }
+
   return res.status(200).json(
-    await Column.populate(column, {
-      path: "cards",
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
     })
   );
 });
+
+exports.deleteColumnCard = asyncHandler(async (req, res) => {});

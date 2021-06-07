@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Card = require("../models/Card");
+const Board = require("../models/Board");
+const Column = require("../models/Column");
 
 // exports.createCard = asyncHandler(async (req, res) => {
 //   const { title, tag, columnId } = req.body;
@@ -14,6 +16,19 @@ const Card = require("../models/Card");
 //   await newCard.save();
 //   return res.status(200).json(newCard);
 // });
+
+exports.getCard = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const card = await Card.findById(id);
+
+  if (!card) {
+    res.status(404);
+    throw new Error("Card not found");
+  }
+
+  return res.status(200).json(card);
+});
 
 exports.updateCard = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -34,12 +49,21 @@ exports.updateCard = asyncHandler(async (req, res) => {
 exports.deleteCard = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const deletedCard = await Card.findOneAndDelete({ _id: id }, function (err) {
-    if (err) {
-      res.status(404);
-      throw new error("Card not found!");
-    }
-  });
+  const card = await Card.findById(id);
 
-  return res.status(200).json(deletedCard);
+  const { columnId } = card;
+
+  await card.deleteSelf(id);
+
+  const column = await Column.findById(columnId);
+  const board = await Board.findById(column.boardId);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
 });

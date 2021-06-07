@@ -39,5 +39,14 @@ const cardSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+cardSchema.methods.deleteSelf = async function () {
+  await Card.findOneAndDelete({ _id: this._id }, function (err) {
+    if (err) {
+      res.status(404);
+      throw new error("Card not found!");
+    }
+  });
+};
+
 const Card = mongoose.model("card", cardSchema);
 module.exports = Card;

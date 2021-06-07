@@ -12,9 +12,10 @@ import {
   deleteColumn,
   updateColumnName,
   createCard,
+  deleteCard,
 } from '../helpers/';
 import { useSnackBar, useAuth } from './';
-import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
+import { IKanbanContext, IColumn, ICard, IBoard } from '../interface/';
 import deleteBoard from '../helpers/APICalls/deleteBoard';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
@@ -58,9 +59,9 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return board;
   };
 
-  const createNewBoard = async (name: string): Promise<NewBoardApiData> => {
+  const createNewBoard = async (name: string): Promise<IBoard> => {
     const request = await createBoard(name);
-    if (request.board) setUserBoards((boards) => [...boards, request.board]);
+    if (request) setUserBoards((boards) => [...boards, request]);
     return request;
   };
 
@@ -219,6 +220,14 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     }
   };
 
+  const removeCard = async (cardId: string) => {
+    const request = await deleteCard(cardId);
+
+    setActiveBoard(request);
+
+    return;
+  };
+
   const swapColumns = (columns: IColumn[], source: DraggableLocation, destination: DraggableLocation): IColumn[] => {
     const [sourceCol] = columns.splice(source.index, 1);
     columns.splice(destination.index, 0, sourceCol);
@@ -241,23 +250,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return request;
   };
 
-  // const removeColumn = (columnId: string): undefined => {
-  //   const colId = columns.findIndex((col) => col._id === columnId);
-
-  //   if (colId < 0) return undefined;
-
-  //   const dupBoard = Object.assign({}, activeBoard);
-  //   const dupColumnsArray = dupBoard.columns.slice();
-  //   const newColumns = dupColumnsArray.slice(0, colId).concat(dupColumnsArray.slice(colId + 1));
-  //   dupBoard.columns = newColumns;
-
-  //   updateBoard(dupBoard);
-  //   setActiveBoard(dupBoard);
-  //   setColumns(newColumns);
-
-  //   return undefined;
-  // };
-
   const updateBoardsName = async (id: string, name: string, setSubmitting: (isSubmitting: boolean) => void) => {
     const request = await updateBoardName(id, name);
 
@@ -277,6 +269,13 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const removeBoard = async (id: string): Promise<IBoard> => {
     const request = await deleteBoard(id);
     setUserBoards((boards) => boards.filter((board) => board._id !== id));
+    // 1) setActiveBoard(userBoards[0])
+
+    // 2)
+    // setUserBoards(request) => returning all of the user's boards;
+    // settActiveBoard(request.boards[0])
+
+    // setActiveBoard(...)
     return request;
   };
 
@@ -328,6 +327,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         addColumn,
         updateBoardsName,
         removeBoard,
+        removeCard,
       }}
     >
       {children}

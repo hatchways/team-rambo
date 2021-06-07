@@ -26,11 +26,11 @@ columnSchema.methods.updateName = async function (columnName) {
   await this.save();
 };
 
-columnSchema.methods.deleteColumn = async function (
-  /** @type {string} */ columnId
+columnSchema.methods.deleteCard = async function (
+  /** @type {string} */ cardId
 ) {
-  const colIndex = this.columns.findIndex((column) => column._id === columnId);
-  this.columns.splice(colIndex, 1);
+  await Card.deleteOne({ _id: cardId });
+
   await this.populate();
   await this.save();
 };

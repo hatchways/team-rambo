@@ -11,7 +11,7 @@ const DialogMenuButton = ({ name }: Props): JSX.Element => {
   const classes = dialogActionButtonStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { updateSnackBarMessage } = useSnackBar();
-  const { activeBoard, moveCard, copyCard, removeActiveCard, getColumnById, focusedCard } = useKanban();
+  const { activeBoard, moveCard, copyCard, removeCard, getColumnById, focusedCard } = useKanban();
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -43,7 +43,10 @@ const DialogMenuButton = ({ name }: Props): JSX.Element => {
         break;
       case 'Delete':
         updateSnackBarMessage(`Deleting card: "${focusedCard?.title}"`);
-        removeActiveCard();
+        if (focusedCard) {
+          console.log(`focusedCard title: ${focusedCard.title} target: ${target} focusedCard Id: ${focusedCard._id}`);
+          removeCard(focusedCard?._id);
+        }
         break;
       default:
         return;

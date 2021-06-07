@@ -1,6 +1,6 @@
-import { IFetchOptions, NewBoardApiData } from '../../interface/';
+import { IFetchOptions, IBoard } from '../../interface/';
 
-const createBoard = async (name: string): Promise<NewBoardApiData> => {
+const createBoard = async (name: string): Promise<IBoard> => {
   const fetchOptions: IFetchOptions = {
     method: 'POST',
     body: JSON.stringify({ name }),
