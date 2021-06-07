@@ -20,15 +20,17 @@ exports.createTeam = asyncHandler(async (req, res, next) => {
 });
 
 /**
- * Gets the Team by ID, otherwise returns null.
+ * Gets a list of users available teams
  * @route GET /team
  * @returns {Array} A list of users team resources
  */
 exports.getUsersTeams = asyncHandler(async (req, res, next) => {
-  const teams = await Team.find({ owner: req.user.id })
-    .populate("collaborator")
-    .populate("invites")
-    .select("-password");
+  const teams = await Team.find(
+    {
+      $or: [{ owner: req.user.id }, { collaborators: req.user.id }],
+    },
+    "name" // only interested in the name as this route will be used for showing the users teams by name.
+  );
 
   return res.status(200).json(teams);
 });
