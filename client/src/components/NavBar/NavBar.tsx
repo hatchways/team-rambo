@@ -18,7 +18,7 @@ interface Props {
 
 const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
   const classes = useStyles();
-  const { activeBoard, createNewColumn } = useKanban();
+  const { activeBoard } = useKanban();
 
   return (
     <Container className={classes.root}>
@@ -36,12 +36,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
               </Button>
             </Grid>
             <Grid item>
-              <Button
-                size="large"
-                color="secondary"
-                onClick={() => createNewColumn('test column', 'left')}
-                startIcon={<CalendarTodayOutlinedIcon />}
-              >
+              <Button size="large" color="secondary" startIcon={<CalendarTodayOutlinedIcon />}>
                 test card
               </Button>
             </Grid>
