@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { columnSchema } = require("./Column");
 
 const boardSchema = new mongoose.Schema(
   {
@@ -17,7 +16,7 @@ const boardSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, discriminatorKey: "__type" }
 );
 
 boardSchema.methods.removePassword = function () {

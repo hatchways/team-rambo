@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const { validationResult } = require("express-validator");
 const { Team } = require("../../../models/Team");
 
 /**
@@ -8,9 +7,6 @@ const { Team } = require("../../../models/Team");
  * @returns {Object} A message and payload
  */
 exports.createTeam = asyncHandler(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return next(errors);
-
   const { name } = req.body;
   const team = await Team.create({
     name,
@@ -24,15 +20,17 @@ exports.createTeam = asyncHandler(async (req, res, next) => {
 });
 
 /**
- * Gets the Team by ID, otherwise returns null.
+ * Gets a list of users available teams
  * @route GET /team
  * @returns {Array} A list of users team resources
  */
 exports.getUsersTeams = asyncHandler(async (req, res, next) => {
-  const teams = await Team.find({ owner: req.user.id })
-    .populate("collaborator")
-    .populate("invites")
-    .select("-password");
+  const teams = await Team.find(
+    {
+      $or: [{ owner: req.user.id }, { collaborators: req.user.id }],
+    },
+    "name" // only interested in the name as this route will be used for showing the users teams by name.
+  );
 
   return res.status(200).json(teams);
 });
@@ -43,9 +41,6 @@ exports.getUsersTeams = asyncHandler(async (req, res, next) => {
  * @returns {Object} The team
  */
 exports.getTeam = asyncHandler(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return next(errors);
-
   return res.status(200).json(req.team);
 });
 
@@ -57,14 +52,7 @@ exports.getTeam = asyncHandler(async (req, res, next) => {
  * @returns {Object} The updated team
  */
 exports.updateTeam = asyncHandler(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return next(errors);
-
   const { name } = req.body;
-  if (!name) {
-    res.status(400);
-    throw new Error("Name is required");
-  }
 
   const team = await Team.findOneAndUpdate(
     { _id: req.params.teamId, owner: req.user.id },
@@ -87,8 +75,6 @@ exports.updateTeam = asyncHandler(async (req, res, next) => {
  * @returns {Object} The updated team
  */
 exports.deleteTeam = asyncHandler(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return next(errors);
   const { team } = req;
 
   const isOwner = team.owner.toString() === req.user.id;

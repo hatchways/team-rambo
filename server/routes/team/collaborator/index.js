@@ -2,6 +2,9 @@ const express = require("express");
 const { body, param, oneOf } = require("express-validator");
 const protect = require("../../../middleware/auth");
 const {
+  checkForValidationErrors,
+} = require("../../../middleware/validationCheck");
+const {
   collaboratorController,
 } = require("../../../controllers/teamController");
 
@@ -16,6 +19,7 @@ router.delete(
   param("collaboratorId")
     .isMongoId()
     .withMessage("Please provide a proper collaborator ID"),
+  checkForValidationErrors,
   collaboratorController.removeCollaborator
 );
 

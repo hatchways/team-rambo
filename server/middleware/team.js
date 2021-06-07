@@ -7,8 +7,9 @@ exports.hasAccessToTeam = asyncHandler(async (req, res, next) => {
   if (!errors.isEmpty()) return next(errors);
 
   const { teamId } = req.params;
-  const team = await Team.findOne({ _id: teamId })
+  const team = await Team.findById(teamId)
     .populate("collaborators")
+    .populate("boards")
     .populate({
       path: "invites",
       populate: {
@@ -19,14 +20,12 @@ exports.hasAccessToTeam = asyncHandler(async (req, res, next) => {
     .select("-password");
 
   if (!team) {
-    res.status(400);
+    res.status(404);
     throw new Error("Unable to find team");
   }
   if (
     team.owner == req.user.id ||
-    team.collaborators.findIndex(
-      (collaborator) => collaborator.id.toString() === req.user.id
-    ) > -1
+    team.collaboratorIndexPosition(req.user.id) > -1
   ) {
     req.team = team;
     return next();

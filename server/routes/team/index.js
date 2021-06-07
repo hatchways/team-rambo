@@ -2,27 +2,41 @@ const express = require("express");
 const { body, param } = require("express-validator");
 const protect = require("../../middleware/auth");
 const { hasAccessToTeam } = require("../../middleware/team");
+const {
+  checkForValidationErrors,
+} = require("../../middleware/validationCheck");
 const { teamController } = require("../../controllers/teamController");
 
 const router = express.Router();
 
 const inviteRoute = require("./invite");
 const collaboratorRoute = require("./collaborator");
+const teamBoardRoute = require("./board");
 
 router.use(protect);
 
 router.use(
   "/:teamId",
-  param("teamId").isMongoId().withMessage("Please provide a proper team id"),
   hasAccessToTeam,
+  param("teamId").isMongoId().withMessage("Please provide a proper team id"),
+  checkForValidationErrors,
   inviteRoute
 );
 
 router.use(
   "/:teamId/collaborators",
-  param("teamId").isMongoId().withMessage("Please provide a proper team id"),
   hasAccessToTeam,
+  param("teamId").isMongoId().withMessage("Please provide a proper team id"),
+  checkForValidationErrors,
   collaboratorRoute
+);
+
+router.use(
+  "/:teamId/boards",
+  hasAccessToTeam,
+  param("teamId").isMongoId().withMessage("Please provide a proper team id"),
+  checkForValidationErrors,
+  teamBoardRoute
 );
 
 router.get("/", teamController.getUsersTeams);
@@ -30,6 +44,7 @@ router.get("/", teamController.getUsersTeams);
 router.post(
   "/",
   body("name").not().isEmpty().withMessage("Name must not be empty"),
+  checkForValidationErrors,
   teamController.createTeam
 );
 
@@ -37,6 +52,7 @@ router.get(
   "/:teamId",
   hasAccessToTeam,
   param("teamId").isMongoId().withMessage("Please provide a valid ID"),
+  checkForValidationErrors,
   teamController.getTeam
 );
 
@@ -45,6 +61,7 @@ router.patch(
   hasAccessToTeam,
   param("teamId").isMongoId().withMessage("Please provide a valid ID"),
   body("name").not().isEmpty().withMessage("Name must noy be empty"),
+  checkForValidationErrors,
   teamController.updateTeam
 );
 
@@ -52,6 +69,7 @@ router.delete(
   "/:teamId",
   hasAccessToTeam,
   param("teamId").isMongoId().withMessage("Please provide a valid ID"),
+  checkForValidationErrors,
   teamController.deleteTeam
 );
 
