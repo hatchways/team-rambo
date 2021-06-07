@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const TeamBoard = require("./TeamBoard");
 
 const teamSchema = new mongoose.Schema(
   {
@@ -68,6 +69,44 @@ teamSchema.methods.removeInvite = async function (inviteId) {
 
   await this.save();
   return true;
+};
+
+/**
+ * Removes a board from the Teams resource.
+ *
+ * @param   {ObjectId}  boardId
+ *
+ * @return  {Boolean}   True if successful, false if not.
+ */
+teamSchema.methods.removeBoard = async function (boardId) {
+  const board = this.boards.findIndex((board) => board.id === boardId);
+  if (board < 0) return false;
+
+  this.boards.splice(board, 1);
+
+  await this.save();
+  return true;
+};
+
+/**
+ * Transfers ownership of team boards. Used for when a collaborator leaves or is removed from the team.
+ * The ownership is automatically given to the team owner.
+ *
+ * @param   {ObjectId}  userId The resource owner.
+ *
+ * @param   {ObjectId}  targetUserId The new owners id
+ *
+ * @return
+ */
+teamSchema.methods.transferBoardsOwnership = async function (
+  userId,
+  targetUserId
+) {
+  const update = await TeamBoard.updateMany(
+    { user: userId },
+    { user: targetUserId }
+  );
+  return update;
 };
 
 /**

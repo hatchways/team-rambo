@@ -26,6 +26,14 @@ router.get(
   teamBoardController.getTeamBoard
 );
 
+router.delete(
+  "/:boardId",
+  param("boardId").isMongoId().withMessage("Please provide a proper board id"),
+  hasAccessToBoard,
+  checkForValidationErrors,
+  teamBoardController.removeBoard
+);
+
 router.post(
   "/:boardId/collaborators",
   param("boardId").isMongoId().withMessage("Please provide a proper board id"),

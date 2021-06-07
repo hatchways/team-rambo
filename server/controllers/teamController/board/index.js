@@ -33,6 +33,26 @@ exports.getTeamBoard = asyncHandler(async (req, res, next) => {
 });
 
 /**
+ * Remove a board by it's id
+ * @route DELETE /team/:teamId/boards/:boardId
+ * @returns {Object} A success message or error
+ */
+exports.removeBoard = asyncHandler(async (req, res, next) => {
+  const { team, teamBoard } = req;
+
+  if (
+    team.owner.toString() === req.user.id ||
+    teamBoard.user.toString() === req.user.id
+  ) {
+    team.removeBoard(teamBoard.id).then(() => teamBoard.remove());
+    return res.status(200).json({ message: `Deleted ${teamBoard.name}` });
+  }
+
+  res.status(401);
+  throw new Error("You cannot perform this task");
+});
+
+/**
  * Add a collaborator or administrator to the team board.
  * @route POST /team/:teamId/boards/:boardId/collaborators
  * @returns {Object} A success message or error

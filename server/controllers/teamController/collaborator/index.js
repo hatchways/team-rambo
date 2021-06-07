@@ -28,6 +28,8 @@ exports.removeCollaborator = asyncHandler(async (req, res, next) => {
   if (isOwner || collaboratorId === req.user.id) {
     const collaboratorIndex = team.collaboratorIndexPosition(collaboratorId);
     if (collaboratorIndex > -1) {
+      await team.transferBoardsOwnership(collaboratorId, team.owner);
+
       team.collaborators.splice(collaboratorIndex, 1);
       await team.save();
 
