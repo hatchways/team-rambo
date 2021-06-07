@@ -18,22 +18,31 @@ router.post(
   teamBoardController.createTeamBoard
 );
 
-router.use(hasAccessToBoard);
-
 router.get(
   "/:boardId",
   param("boardId").isMongoId().withMessage("Please provide a proper board id"),
+  hasAccessToBoard,
   checkForValidationErrors,
   teamBoardController.getTeamBoard
 );
 
 router.post(
-  "/:boardId/collaborators/add",
+  "/:boardId/collaborators",
   param("boardId").isMongoId().withMessage("Please provide a proper board id"),
   body("isAdmin").isBoolean().withMessage("isAdmin must be a proper boolean"),
-  body("userId").isMongoId().withMessage("Please provide a proper user id"),
+  body("user").isMongoId().withMessage("Please provide a proper user id"),
+  hasAccessToBoard,
   checkForValidationErrors,
   teamBoardController.addUserToBoard
+);
+
+router.delete(
+  "/:boardId/collaborators/:user",
+  param("boardId").isMongoId().withMessage("Please provide a proper board id"),
+  param("user").isMongoId().withMessage("Please provide a proper user id"),
+  hasAccessToBoard,
+  checkForValidationErrors,
+  teamBoardController.removeUserFromBoard
 );
 
 module.exports = router;

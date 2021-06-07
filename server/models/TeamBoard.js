@@ -28,7 +28,7 @@ const teamBoardSchema = new mongoose.Schema({
  * @return  {Boolean}   True if successful, false if not.
  */
 teamBoardSchema.methods.addCollaborator = async function (userId, isAdmin) {
-  if (this.collaborators.includes(userId) || this.admins.includes(userId))
+  if (this._userIsCollaborator(userId) > -1 || this._userIsAdmin(userId) > -1)
     return false;
   // this.user because of inheritance of Board will act as the board owner.
   if (userId === this.user) return false;
@@ -51,9 +51,9 @@ teamBoardSchema.methods.addCollaborator = async function (userId, isAdmin) {
  * @return  {Boolean}   True if successful, false if not.
  */
 teamBoardSchema.methods.removeCollaborator = async function (userId) {
-  const collaboratorIndex = this.collaborators.indexOf(userId);
-  if (collaboratorIndex > -1) {
-    this.collaborators.splice(collaboratorIndex, 1);
+  const collaborator = this._userIsCollaborator(userId);
+  if (collaborator > -1) {
+    this.collaborators.splice(collaborator, 1);
 
     await this.save();
     return true;
@@ -65,14 +65,14 @@ teamBoardSchema.methods.removeCollaborator = async function (userId) {
 /**
  * Removes an admin from the team board.
  *
- * @param   {ObjectId}  userId *
+ * @param   {ObjectId}  userId
  *
  * @return  {Boolean}   True if successful, false if not.
  */
 teamBoardSchema.methods.removeAdmin = async function (userId) {
-  const adminIndex = this.admins.indexOf(userId);
-  if (adminIndex > -1) {
-    this.admins.splice(adminIndex, 1);
+  const userAdmin = this._userIsAdmin(userId);
+  if (userAdmin > -1) {
+    this.admins.splice(userAdmin, 1);
 
     await this.save();
     return true;
@@ -82,25 +82,30 @@ teamBoardSchema.methods.removeAdmin = async function (userId) {
 };
 
 /**
- * Check whether the user is in the admins array on the Team Board resource.
+ * Determine the type of user we are looking for.
  *
  * @param   {ObjectId}  userId  A Mongo ObjectID
  *
- * @return  {Number}          Index of the admin or -1 if not found.
+ * @return  {String}            'collaborator' | 'admin' | null (not in team board)
  */
-teamBoardSchema.methods.userIsAdmin = function (userId) {
-  return this.admins.indexOf(userId) > -1;
+teamBoardSchema.methods.getUserType = function (userId) {
+  if (this._userIsCollaborator(userId) > -1) {
+    return "collaborator";
+  } else if (this._userIsAdmin(userId) > -1) {
+    return "admin";
+  }
+
+  return null;
 };
 
-/**
- * Check whether the user is in the collaborators array on the Team Board resource.
- *
- * @param   {ObjectId}  userId  A Mongo ObjectID
- *
- * @return  {Number}          Index of the admin or -1 if not found.
- */
-teamBoardSchema.methods.userIsCollaborator = function (userId) {
-  return this.collaborators.indexOf(userId) > -1;
+// PRIVATE
+
+teamBoardSchema.methods._userIsCollaborator = function (userId) {
+  return this.collaborators.findIndex((c) => c.id === userId);
+};
+
+teamBoardSchema.methods._userIsAdmin = function (userId) {
+  return this.admins.findIndex((a) => a.id === userId);
 };
 
 const TeamBoard = Board.discriminator("TeamBoard", teamBoardSchema);

@@ -7,7 +7,10 @@ exports.hasAccessToBoard = asyncHandler(async (req, res, next) => {
   if (!errors.isEmpty()) return next(errors);
   const { team } = req;
   const { boardId } = req.params;
-  const teamBoard = await TeamBoard.findOne({ id: boardId });
+  const teamBoard = await TeamBoard.findById(boardId)
+    .populate("collaborators")
+    .populate("admins")
+    .select("-password");
 
   if (!teamBoard) {
     res.status(404);
@@ -16,8 +19,9 @@ exports.hasAccessToBoard = asyncHandler(async (req, res, next) => {
 
   if (
     team.owner.toString() === req.user.id ||
-    teamBoard.userIsAdmin(req.user.id) ||
-    teamBoard.userIsCollaborator(req.user.id)
+    teamBoard.user.toString() === req.user.id ||
+    teamBoard.getUserType(req.user.id) === "admin" ||
+    teamBoard.getUserType(req.user.id) === "collaborator"
   ) {
     req.teamBoard = teamBoard;
     return next();
