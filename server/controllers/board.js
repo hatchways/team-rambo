@@ -21,15 +21,16 @@ exports.getBoard = asyncHandler(async (req, res) => {
 exports.createBoard = asyncHandler(async (req, res) => {
   const { name } = req.body;
 
-  const newBoard = await Board.create({
-    name,
-    user: req.user.id,
-  });
-  // For testing with postman
   // const newBoard = await Board.create({
   //   name,
-  //   user: "60b91df75edef24420936968",
+  //   user: req.user.id,
   // });
+
+  // For testing with postman
+  const newBoard = await Board.create({
+    name,
+    user: "60b91df75edef24420936968",
+  });
 
   if (!newBoard) {
     res.status(400);
@@ -37,7 +38,6 @@ exports.createBoard = asyncHandler(async (req, res) => {
   }
 
   await newBoard.createTemplateBoard();
-  await newBoard.save();
 
   return res.status(200).json(
     await Board.populate(newBoard, {
@@ -50,30 +50,26 @@ exports.createBoard = asyncHandler(async (req, res) => {
 });
 
 exports.updateBoardName = asyncHandler(async (req, res) => {
-  const { name } = req.body;
   const { id } = req.params;
+  const { name } = req.body;
 
-  const board = await Board.findOneAndUpdate(
-    { _id: id },
-    { name },
-    {
-      new: true,
-    }
-  ).populate({
-    path: "columns",
-    populate: {
-      path: "cards",
-      model: "card",
-    },
-  });
+  const board = await Board.findById(id);
 
   if (!board) {
     res.status(404);
     throw new Error("Board not found");
   }
 
-  await board.save();
-  return res.status(200).json(board);
+  await board.updateName(name);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
 });
 
 exports.deleteBoard = asyncHandler(async (req, res) => {
@@ -95,4 +91,27 @@ exports.deleteBoard = asyncHandler(async (req, res) => {
 exports.reorderBoard = asyncHandler(async (req, res) => {
   //to be completed
   return;
+});
+
+exports.createBoardColumn = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { side, name } = req.body;
+
+  const board = await Board.findById(id);
+
+  if (!board) {
+    res.status(404);
+    throw new Error("Board not found");
+  }
+
+  await board.addColumn(side, name);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
 });

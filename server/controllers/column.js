@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Column = require("../models/Column");
+const Board = require("../models/Board");
 
 exports.createColumn = asyncHandler(async (req, res) => {
   const { name, boardId } = req.body;
@@ -47,4 +48,29 @@ exports.deleteColumn = asyncHandler(async (req, res) => {
 exports.reorderColumn = asyncHandler(async (req, res) => {
   //to be completed
   return;
+});
+
+exports.renameColumn = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { columnName } = req.body;
+
+  const column = await Column.findById(id).populate("cards");
+
+  if (!column) {
+    res.status(404);
+    throw new Error("Column not found!");
+  }
+
+  await column.updateName(columnName);
+
+  const board = await Board.findById(column.boardId);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
 });
