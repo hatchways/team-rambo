@@ -9,4 +9,6 @@ export { default as getBoard } from './APICalls/getBoard';
 export { default as getUserBoards } from './APICalls/getUserBoards';
 export { default as createBoard } from './APICalls/createBoard';
 export { default as createCard } from './APICalls/createCard';
+export { default as updateBoardName } from './APICalls/updateBoardName';
 export { default as createColumn } from './APICalls/createColumn';
+export { default as updateColumnName } from './APICalls/updateColumnName';

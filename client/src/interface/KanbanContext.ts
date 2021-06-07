@@ -24,5 +24,6 @@ export default interface IKanbanContext {
   moveCard: (destination: IColumn) => void;
   copyCard: (destination: IColumn) => void;
   removeActiveCard: () => void;
-  addColumn: (columnName: string, side: string) => void;
+  addColumn: (side: string, name: string) => void;
+  updateBoardsName: (id: string, name: string, setSubmitting: (isSubmitting: boolean) => void) => void;
 }
