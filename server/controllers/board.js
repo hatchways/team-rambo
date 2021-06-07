@@ -123,3 +123,26 @@ exports.createBoardColumn = asyncHandler(async (req, res) => {
     })
   );
 });
+
+exports.deleteBoardColumn = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { columnId } = req.body;
+
+  const board = await Board.findById(id);
+
+  if (!board) {
+    res.status(404);
+    throw new Error("Board not found");
+  }
+
+  await board.deleteColumn(columnId);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
+});

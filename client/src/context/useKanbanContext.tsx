@@ -9,6 +9,7 @@ import {
   createBoard,
   updateBoardName,
   createColumn,
+  deleteColumn,
   updateColumnName,
   createCard,
 } from '../helpers/';
@@ -196,9 +197,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const addCard = async (title: string, tag: string, columnId: string) => {
     const request = await createCard(title, tag, columnId);
-    console.log('made request', request);
     setActiveBoard(request);
-
     return;
   };
 
@@ -242,22 +241,22 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return request;
   };
 
-  const removeColumn = (columnId: string): undefined => {
-    const colId = columns.findIndex((col) => col._id === columnId);
+  // const removeColumn = (columnId: string): undefined => {
+  //   const colId = columns.findIndex((col) => col._id === columnId);
 
-    if (colId < 0) return undefined;
+  //   if (colId < 0) return undefined;
 
-    const dupBoard = Object.assign({}, activeBoard);
-    const dupColumnsArray = dupBoard.columns.slice();
-    const newColumns = dupColumnsArray.slice(0, colId).concat(dupColumnsArray.slice(colId + 1));
-    dupBoard.columns = newColumns;
+  //   const dupBoard = Object.assign({}, activeBoard);
+  //   const dupColumnsArray = dupBoard.columns.slice();
+  //   const newColumns = dupColumnsArray.slice(0, colId).concat(dupColumnsArray.slice(colId + 1));
+  //   dupBoard.columns = newColumns;
 
-    updateBoard(dupBoard);
-    setActiveBoard(dupBoard);
-    setColumns(newColumns);
+  //   updateBoard(dupBoard);
+  //   setActiveBoard(dupBoard);
+  //   setColumns(newColumns);
 
-    return undefined;
-  };
+  //   return undefined;
+  // };
 
   const updateBoardsName = async (id: string, name: string, setSubmitting: (isSubmitting: boolean) => void) => {
     const request = await updateBoardName(id, name);
@@ -283,6 +282,14 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const addColumn = async (side: string, name: string) => {
     const request = await createColumn(activeBoard._id, side, name);
+
+    setActiveBoard(request);
+
+    return;
+  };
+
+  const removeColumn = async (columnId: string) => {
+    const request = await deleteColumn(activeBoard._id, columnId);
 
     setActiveBoard(request);
 

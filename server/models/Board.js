@@ -44,6 +44,15 @@ boardSchema.methods.addColumn = async function (
   await this.save();
 };
 
+boardSchema.methods.deleteColumn = async function (
+  /** @type {string} */ columnId
+) {
+  const colIndex = this.columns.findIndex((column) => column._id === columnId);
+  this.columns.splice(colIndex, 1);
+  await this.populate();
+  await this.save();
+};
+
 boardSchema.methods.updateName = async function (
   /** @type {string} */ newName
 ) {

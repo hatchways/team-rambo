@@ -11,4 +11,5 @@ export { default as createBoard } from './APICalls/createBoard';
 export { default as createCard } from './APICalls/createCard';
 export { default as updateBoardName } from './APICalls/updateBoardName';
 export { default as createColumn } from './APICalls/createColumn';
+export { default as deleteColumn } from './APICalls/deleteColumn';
 export { default as updateColumnName } from './APICalls/updateColumnName';

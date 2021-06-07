@@ -32,6 +32,12 @@ exports.getUserBoards = asyncHandler(async (req, res, next) => {
       model: "card",
     },
   });
+  /* If no no boards, create a single template board */
+  if (!boards) {
+    const newBoard = await Board.create().createTemplateBoard();
+    boards.push(newBoard);
+    await boards.populate();
+  }
 
   return res.status(200).send({ boards: boards });
 });

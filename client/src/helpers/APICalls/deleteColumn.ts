@@ -1,16 +1,16 @@
-import { IFetchOptions, IBoard, IColumn } from '../../interface';
+import { IFetchOptions, IBoard } from '../../interface';
 
-const deleteColumn = async (column: IColumn): Promise<IBoard> => {
+const deleteColumn = async (boardId: string, columnId: string): Promise<IBoard> => {
   const fetchOptions: IFetchOptions = {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    body: JSON.stringify(column),
+    body: JSON.stringify({ columnId }),
   };
-  return await fetch(`columns/${column._id}`, fetchOptions)
+  return await fetch(`/boards/${boardId}/removeColumn`, fetchOptions)
     .then((res) => res.json())
-    .catch((err) => ({
-      error: { error: err, message: 'Unable to connect to server. Please try again' },
+    .catch(() => ({
+      error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
 

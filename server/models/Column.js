@@ -26,6 +26,15 @@ columnSchema.methods.updateName = async function (columnName) {
   await this.save();
 };
 
+columnSchema.methods.deleteColumn = async function (
+  /** @type {string} */ columnId
+) {
+  const colIndex = this.columns.findIndex((column) => column._id === columnId);
+  this.columns.splice(colIndex, 1);
+  await this.populate();
+  await this.save();
+};
+
 columnSchema.methods.addCard = async function (
   /** @type {string} */ title,
   /** @type {string} */ tag
@@ -37,7 +46,6 @@ columnSchema.methods.addCard = async function (
   });
 
   this.cards.push(newCard);
-
   await this.populate();
   await this.save();
 };

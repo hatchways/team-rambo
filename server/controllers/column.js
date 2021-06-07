@@ -29,22 +29,6 @@ exports.updateColumn = asyncHandler(async (req, res, next) => {
   return res.status(200).json(column);
 });
 
-exports.deleteColumn = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  const deletedColumn = await Column.findOneAndDelete(
-    { _id: id },
-    function (err) {
-      if (err) {
-        res.status(404);
-        throw new error("Column not found!");
-      }
-    }
-  );
-
-  return res.status(200).json(deletedColumn);
-});
-
 exports.reorderColumn = asyncHandler(async (req, res) => {
   //to be completed
   return;
