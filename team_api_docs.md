@@ -537,7 +537,7 @@ _**Note:** Team owner's id must match the authenticated user's id._
 
   ```json
   {
-    "name": "Rambo Board"
+    "name": "Rambo"
   }
   ```
 
@@ -548,13 +548,13 @@ _**Note:** Team owner's id must match the authenticated user's id._
 
     ```json
     {
-      "message": "Team board created!",
+      "message": "Created board Rambo",
       "payload": {
         "collaborators": [],
         "admins": [],
         "_id": "60bd962ccd1af045fff63409",
         "columns": [],
-        "name": "Rambo Board",
+        "name": "Rambo",
         "user": "60bc6d708763b106fc4e38aa",
         . . .
       }
@@ -600,7 +600,7 @@ _**Note:** Team owner's id must match the authenticated user's id._
       "admins": [],
       "columns": [],
       "_id": "60bd962ccd1af045fff63409",
-      "name": "Rambo Board",
+      "name": "Rambo",
       "user": "60bc6d708763b106fc4e38aa",
       . . .
     }

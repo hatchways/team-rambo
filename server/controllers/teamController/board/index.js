@@ -18,7 +18,7 @@ exports.createTeamBoard = asyncHandler(async (req, res, next) => {
   await team.save();
 
   return res.status(200).json({
-    message: "Team board created!",
+    message: `Created board ${name}`,
     payload: teamBoard,
   });
 });
