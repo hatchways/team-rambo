@@ -13,13 +13,19 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: 12,
     },
     statusBar: {
-      padding: '2% 2%',
+      padding: '10px 20px 10px 20px',
+      minHeight: 100,
     },
     title: {
       flexGrow: 1,
       fontWeight: 'bold',
       fontSize: 24,
       paddingLeft: 5,
+    },
+    navBarButtons: {
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      },
     },
   }),
 );
