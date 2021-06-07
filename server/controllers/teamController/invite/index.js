@@ -18,7 +18,7 @@ const invitationTemplate = (team, inviteId) => `
 `;
 
 /**
- * Create a new invite and add the task to the queue to process emailing the recipient.
+ * Create a new invite resource and emails the recipient.
  * @route POST /team/:teamId/invite
  * @returns {Object} A message and payload
  */

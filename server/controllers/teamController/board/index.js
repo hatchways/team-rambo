@@ -29,13 +29,12 @@ exports.createTeamBoard = asyncHandler(async (req, res, next) => {
  * @returns {Object} The team board resource
  */
 exports.getTeamBoard = asyncHandler(async (req, res, next) => {
-  console.log(req.teamBoard);
   return res.status(200).json(req.teamBoard);
 });
 
 /**
  * Add a collaborator or administrator to the team board.
- * @route POST /team/:teamId/boards/:boardId/collaborators/
+ * @route POST /team/:teamId/boards/:boardId/collaborators
  * @returns {Object} A success message or error
  */
 exports.addUserToBoard = asyncHandler(async (req, res, next) => {
