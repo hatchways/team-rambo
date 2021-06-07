@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Grid, CssBaseline, CircularProgress } from '@material-ui/core';
+import { Box, Grid, Typography, CssBaseline, CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Board from '../../components/Kanban/Board';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
@@ -20,7 +20,18 @@ const Dashboard = (): JSX.Element => {
   if (!loggedInUser) {
     history.push('/login');
 
-    return <CircularProgress />;
+    return (
+      <Grid spacing={4} container justify="center" className={classes.loadingScreen}>
+        <Grid item>
+          <CircularProgress size={150} />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4" className={classes.loadingScreenText}>
+            Kanban
+          </Typography>
+        </Grid>
+      </Grid>
+    );
   }
 
   return (

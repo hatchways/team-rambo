@@ -4,7 +4,7 @@ import { theme } from './themes/theme';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
-import ProtectedRoute from '../src/components/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { AuthProvider, SocketProvider, SnackBarProvider, KanbanProvider, DialogProvider } from './context/';
 
 const App = (): JSX.Element => (
