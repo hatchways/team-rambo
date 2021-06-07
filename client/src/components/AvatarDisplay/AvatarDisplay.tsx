@@ -2,19 +2,13 @@ import { useState, MouseEvent } from 'react';
 import { Avatar, Menu, MenuItem, CircularProgress } from '@material-ui/core';
 import PictureModal from '../PictureModal/PictureModal';
 import { useAuth, useUser } from '../../context/';
-import { IUser } from '../../interface';
 import useStyles from './useStyles';
 
-interface Props {
-  loggedIn: boolean;
-  user: IUser;
-}
-
-const AvatarDisplay = ({ user }: Props): JSX.Element => {
+const AvatarDisplay = (): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openImageModal, setOpenImageModal] = useState<boolean>(false);
   const open = Boolean(anchorEl);
-  const { logout, loggedInUser } = useAuth();
+  const { logout } = useAuth();
   const { picture } = useUser();
   const classes = useStyles();
 

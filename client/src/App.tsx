@@ -4,6 +4,7 @@ import { theme } from './themes/theme';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
+import TeamsDashboard from './pages/Teams/Teams';
 import ProtectedRoute from '../src/components/ProtectedRoute';
 import {
   AuthProvider,
@@ -27,6 +28,7 @@ const App = (): JSX.Element => (
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/signup" component={Signup} />
                     <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+                    <ProtectedRoute exact path="/teams" component={TeamsDashboard} />
                     <Route path="*">
                       <Redirect to="/login" />
                     </Route>

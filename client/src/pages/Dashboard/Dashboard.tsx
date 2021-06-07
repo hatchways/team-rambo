@@ -7,6 +7,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import { useAuth, useKanban } from '../../context/';
 import useStyles from './dashboardStyles';
+import { BoardAppBar } from '../../components/BoardAppBar/BoardAppBar';
 
 const Dashboard = (): JSX.Element => {
   const classes = useStyles();
@@ -27,7 +28,8 @@ const Dashboard = (): JSX.Element => {
     <Box>
       <CssBaseline />
       <Box>
-        <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
+        <NavBar loggedInUser={loggedInUser} />
+        <BoardAppBar activeBoard={activeBoard} toggleDrawer={toggleDrawer} />
         <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
       </Box>
       <Box className={classes.buttonOverlay}>

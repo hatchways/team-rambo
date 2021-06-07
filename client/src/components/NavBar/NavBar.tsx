@@ -1,6 +1,6 @@
-import { AppBar, Toolbar, Typography, IconButton, Grid, Button, Container } from '@material-ui/core/';
+import { Grid, Button, Container } from '@material-ui/core/';
+import { Link } from 'react-router-dom';
 import useStyles from './navBarStyles';
-import MenuIcon from '@material-ui/icons/Menu';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
@@ -8,17 +8,14 @@ import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
 import NotificationCenter from './Notifications/NotificationCenter/NotificationCenter';
 import { testNotifications } from './Notifications/sampleNotificationData';
 import logo from '../../Images/logo.png';
-import { IUser, IBoard } from '../../interface/';
-import { useKanban } from '../../context';
+import { IUser } from '../../interface/';
 
 interface Props {
   loggedInUser: IUser;
-  handleDrawerToggle: () => void;
 }
 
-const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
+const NavBar = ({ loggedInUser }: Props): JSX.Element => {
   const classes = useStyles();
-  const { activeBoard } = useKanban();
 
   return (
     <Container className={classes.root}>
@@ -40,6 +37,13 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
                 Calendar
               </Button>
             </Grid>
+            <Grid item>
+              <Link to="/teams">
+                <Button size="large" color="secondary" startIcon={<DashboardOutlinedIcon />}>
+                  Teams
+                </Button>
+              </Link>
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={4}>
@@ -51,27 +55,11 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
               <AddBoardDialog />
             </Grid>
             <Grid item>
-              <AvatarDisplay loggedIn user={loggedInUser} />
+              <AvatarDisplay />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            {activeBoard.name}
-          </Typography>
-          <IconButton
-            onClick={handleDrawerToggle}
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
     </Container>
   );
 };

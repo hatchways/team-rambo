@@ -1,18 +1,14 @@
-import { useState } from 'react';
-import { Box, CssBaseline, CircularProgress } from '@material-ui/core';
+import { Box, CssBaseline, CircularProgress, Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
-import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
-import { useAuth, useKanban } from '../../context/';
-import useStyles from '../shared/pageStyles';
+import { BoardViewWrapper } from '../../components/Teams/BoardViewWrapper/BoardViewWrapper';
+import { Sidebar } from '../../components/Teams/Sidebar/Sidebar';
+import { TeamsAppBar } from '../../components/Teams/TeamsAppBar/TeamsAppBar';
+import { useAuth } from '../../context/';
 
 const TeamsDashboard = (): JSX.Element => {
-  const classes = useStyles();
   const history = useHistory();
   const { loggedInUser } = useAuth();
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-
-  const toggleDrawer = (): void => setOpenDrawer((prevOpen) => !prevOpen);
 
   if (!loggedInUser) {
     history.push('/login');
@@ -24,10 +20,15 @@ const TeamsDashboard = (): JSX.Element => {
     <Box>
       <CssBaseline />
       <Box>
-        <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
+        <NavBar loggedInUser={loggedInUser} />
       </Box>
       <Box>
-        <h1>Teams Dashboard</h1>
+        <Grid container>
+          <Sidebar />
+          <BoardViewWrapper>
+            <TeamsAppBar />
+          </BoardViewWrapper>
+        </Grid>
       </Box>
     </Box>
   );
