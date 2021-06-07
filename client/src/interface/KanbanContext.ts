@@ -19,6 +19,7 @@ export default interface IKanbanContext {
     setSubmitting: (isSubmitting: boolean) => void,
   ) => void;
   removeColumn: (columnId: string) => void;
+  removeBoard: (boardId: string) => void;
   fetchBoard: (id: string) => Promise<IBoard>;
   createNewBoard: (name: string) => Promise<NewBoardApiData>;
   moveCard: (destination: IColumn) => void;

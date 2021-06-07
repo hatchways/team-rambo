@@ -85,7 +85,14 @@ exports.deleteBoard = asyncHandler(async (req, res) => {
     }
   );
 
-  return res.status(200).json(deletedBoard);
+  return res.status(200).json(
+    await Board.populate(deletedBoard, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
 });
 
 exports.reorderBoard = asyncHandler(async (req, res) => {

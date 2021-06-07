@@ -1,6 +1,6 @@
-import { IFetchOptions, IColumn } from '../../interface';
+import { IFetchOptions, IBoard, IColumn } from '../../interface';
 
-const deleteColumn = async (column: IColumn): Promise<IColumn> => {
+const deleteColumn = async (column: IColumn): Promise<IBoard> => {
   const fetchOptions: IFetchOptions = {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },

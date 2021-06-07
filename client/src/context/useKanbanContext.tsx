@@ -13,6 +13,7 @@ import {
 } from '../helpers/';
 import { useSnackBar, useAuth } from './';
 import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
+import deleteBoard from '../helpers/APICalls/deleteBoard';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
@@ -291,6 +292,16 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return request;
   };
 
+  const removeBoard = async (id: string) => {
+    const request = await deleteBoard(id);
+
+    const clonedUserBoards = userBoards.slice().filter((board) => board._id !== request._id);
+
+    setUserBoards(clonedUserBoards);
+
+    return request;
+  };
+
   const addColumn = async (side: string, name: string) => {
     const request = await createColumn(activeBoard._id, side, name);
 
@@ -330,6 +341,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         removeActiveCard,
         addColumn,
         updateBoardsName,
+        removeBoard,
       }}
     >
       {children}
