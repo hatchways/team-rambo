@@ -38,7 +38,7 @@ const AddColumnDialog = (): JSX.Element => {
         toggleFunction={() => {
           setOpen(false);
         }}
-        buttonFunction={() => addColumn(columnName, side)}
+        buttonFunction={() => addColumn(side, columnName)}
         component={
           <TextField
             required

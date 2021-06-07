@@ -2,7 +2,15 @@ import { useState, useContext, createContext, FunctionComponent, useEffect, Disp
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
 import { v4 as uuidv4 } from 'uuid';
-import { getBoard, getUserBoards, updateBoard, createBoard } from '../helpers/';
+import {
+  getBoard,
+  getUserBoards,
+  updateBoard,
+  createBoard,
+  updateBoardName,
+  createColumn,
+  updateColumnName,
+} from '../helpers/';
 import { useSnackBar, useAuth } from './';
 import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
 
@@ -17,7 +25,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     user: 'Initial',
     createdAt: 'Initial',
   });
-
   const [userBoards, setUserBoards] = useState<IBoard[]>([]);
   const [columns, setColumns] = useState<IColumn[]>(activeBoard.columns);
   const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
@@ -236,31 +243,19 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return columns;
   };
 
-  const renameColumn = (
+  const renameColumn = async (
     columnId: string,
-    name: string,
+    columnName: string,
     setIsRenaming: Dispatch<SetStateAction<boolean>>,
     setSubmitting: (isSubmitting: boolean) => void,
-  ): undefined => {
-    const colId = columns.findIndex((col) => col._id === columnId);
+  ) => {
+    const request = await updateColumnName(columnId, columnName);
+    setSubmitting(false);
+    setIsRenaming(false);
 
-    if (colId < 0) return undefined;
+    setActiveBoard(request);
 
-    const dupColumns = cloneDeep(columns);
-    const dupBoard = Object.assign({}, activeBoard);
-
-    dupColumns[colId].name = name;
-    dupBoard.columns = dupColumns;
-
-    updateBoard(dupBoard).then(() => {
-      setSubmitting(false);
-      setIsRenaming((prev) => !prev);
-    });
-
-    setActiveBoard(dupBoard);
-    setColumns(dupColumns);
-
-    return undefined;
+    return request;
   };
 
   const removeColumn = (columnId: string): undefined => {
@@ -280,21 +275,28 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return undefined;
   };
 
-  const addColumn = (columnName: string, side: string): void => {
-    const blankColumn: IColumn = {
-      _id: uuidv4(),
-      name: columnName,
-      cards: [],
-      createdAt: new Date(),
-    };
-    const dupBoard = Object.assign({}, activeBoard);
-    const dupColumnsArray = dupBoard.columns.slice();
-    side === 'right' ? dupColumnsArray.push(blankColumn) : dupColumnsArray.unshift(blankColumn);
-    dupBoard.columns = dupColumnsArray;
+  const updateBoardsName = async (id: string, name: string, setSubmitting: (isSubmitting: boolean) => void) => {
+    const request = await updateBoardName(id, name);
 
-    updateBoard(dupBoard);
-    setActiveBoard(dupBoard);
-    setColumns(dupColumnsArray);
+    const clonedUserBoards = userBoards.slice();
+    const updatedBoardIndex = userBoards.findIndex((board) => board._id === activeBoard._id);
+    clonedUserBoards[updatedBoardIndex] = request;
+
+    setSubmitting(false);
+
+    setActiveBoard(request);
+
+    setUserBoards(clonedUserBoards);
+
+    return request;
+  };
+
+  const addColumn = async (side: string, name: string) => {
+    const request = await createColumn(activeBoard._id, side, name);
+
+    setActiveBoard(request);
+
+    return;
   };
 
   const setOpenCard = (card: ICard): void => setFocusedCard(card);
@@ -327,6 +329,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         copyCard,
         removeActiveCard,
         addColumn,
+        updateBoardsName,
       }}
     >
       {children}
