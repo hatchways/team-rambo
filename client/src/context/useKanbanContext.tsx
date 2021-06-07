@@ -10,6 +10,7 @@ import {
   updateBoardName,
   createColumn,
   updateColumnName,
+  createCard,
 } from '../helpers/';
 import { useSnackBar, useAuth } from './';
 import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
@@ -193,30 +194,12 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     setColumns(columnsCopy);
   };
 
-  const addCard = (card: ICard): boolean => {
-    if (card.name === '') {
-      updateSnackBarMessage('Please enter a card name');
+  const addCard = async (title: string, tag: string, columnId: string) => {
+    const request = await createCard(title, tag, columnId);
+    console.log('made request', request);
+    setActiveBoard(request);
 
-      return false;
-    }
-
-    const columnsCopy = cloneDeep(columns);
-    const columnIndex = columnsCopy.findIndex((col) => col._id === card.columnId);
-    if (columnIndex > -1) {
-      const columnCopy = cloneDeep(columns[columnIndex]);
-      columnCopy.cards.push(card);
-      columnsCopy[columnIndex] = columnCopy;
-      const copyBoard = Object.assign({}, activeBoard);
-      copyBoard.columns = columnsCopy;
-
-      updateBoard(copyBoard);
-      setActiveBoard(copyBoard);
-      setColumns(columnsCopy);
-
-      return true;
-    }
-
-    return false;
+    return;
   };
 
   const removeActiveCard = (): void => {
@@ -292,13 +275,9 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return request;
   };
 
-  const removeBoard = async (id: string) => {
+  const removeBoard = async (id: string): Promise<IBoard> => {
     const request = await deleteBoard(id);
-
-    const clonedUserBoards = userBoards.slice().filter((board) => board._id !== request._id);
-
-    setUserBoards(clonedUserBoards);
-
+    setUserBoards((boards) => boards.filter((board) => board._id !== id));
     return request;
   };
 

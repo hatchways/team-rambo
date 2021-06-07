@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Card = require("./Card");
 
 const columnSchema = new mongoose.Schema(
   {
@@ -20,6 +21,22 @@ const columnSchema = new mongoose.Schema(
 
 columnSchema.methods.updateName = async function (columnName) {
   this.name = columnName;
+
+  await this.populate();
+  await this.save();
+};
+
+columnSchema.methods.addCard = async function (
+  /** @type {string} */ title,
+  /** @type {string} */ tag
+) {
+  const newCard = await Card.create({
+    title: title,
+    tag: tag,
+    columnId: this._id,
+  });
+
+  this.cards.push(newCard);
 
   await this.populate();
   await this.save();

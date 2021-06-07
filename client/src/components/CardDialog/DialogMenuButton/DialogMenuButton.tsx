@@ -42,7 +42,7 @@ const DialogMenuButton = ({ name }: Props): JSX.Element => {
         }
         break;
       case 'Delete':
-        updateSnackBarMessage(`Deleting card: "${focusedCard?.name}"`);
+        updateSnackBarMessage(`Deleting card: "${focusedCard?.title}"`);
         removeActiveCard();
         break;
       default:

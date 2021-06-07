@@ -6,7 +6,7 @@ export default interface IKanbanContext {
   activeBoard: IBoard;
   focusedCard: ICard | null;
   userBoards: IBoard[];
-  addCard: (card: ICard) => boolean;
+  addCard: (title: string, tag: string, columnId: string) => void;
   setOpenCard: (card: ICard) => void;
   resetOpenCard: () => void;
   getColumnById: (columnId: string) => IColumn;

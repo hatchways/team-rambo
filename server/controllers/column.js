@@ -74,3 +74,23 @@ exports.renameColumn = asyncHandler(async (req, res) => {
     })
   );
 });
+
+exports.createColumnCard = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { title, tag } = req.body;
+
+  const column = await Column.findById(id);
+
+  if (!column) {
+    res.status(404);
+    throw new Error("Column not found");
+  }
+
+  await column.addCard(title, tag);
+
+  return res.status(200).json(
+    await Column.populate(column, {
+      path: "cards",
+    })
+  );
+});

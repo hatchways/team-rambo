@@ -72,7 +72,7 @@ const Column = ({ _id, name, cards, index }: ColumnProps): JSX.Element => {
                       key={card._id}
                       id={card._id}
                       columnId={card.columnId}
-                      name={card.name}
+                      title={card.title}
                       tag={card.tag || 'white'}
                       index={index}
                     />

@@ -19,13 +19,13 @@ import { cardDialogStyles, DialogItemGroup, DialogActionButton, DialogMenuButton
 import { useDialog, useKanban } from '../../context/';
 
 interface DialogProps {
-  name: string;
+  title: string;
   tag: string;
   columnId: string;
   id: string;
 }
 
-const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
+const CardDialog = ({ title, columnId, tag }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
   const classes = cardDialogStyles();
   const theme = useTheme();
@@ -57,7 +57,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
             <Grid container className={classes.titleContainer}>
               <ImportContactsOutlinedIcon color="primary" className={classes.icons} />
               <Typography variant="h5" className={classes.dialogTitle}>
-                {name}
+                {title}
               </Typography>
               <Box className={`${classes.cardTag}`} style={{ backgroundColor: theme.palette.tags[tagColor] }}></Box>
               <IconButton onClick={handleClick}>

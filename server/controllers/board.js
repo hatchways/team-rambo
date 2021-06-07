@@ -21,16 +21,17 @@ exports.getBoard = asyncHandler(async (req, res) => {
 exports.createBoard = asyncHandler(async (req, res) => {
   const { name } = req.body;
 
-  // const newBoard = await Board.create({
-  //   name,
-  //   user: req.user.id,
-  // });
-
-  // For testing with postman
   const newBoard = await Board.create({
     name,
-    user: "60b91df75edef24420936968",
+    user: req.params.id,
   });
+
+  console.log(newBoard.name);
+  // For testing with postman
+  // const newBoard = await Board.create({
+  //   name,
+  //   user: "60b91df75edef24420936968",
+  // });
 
   if (!newBoard) {
     res.status(400);

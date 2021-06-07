@@ -16,5 +16,5 @@ export interface BoardApiData {
 
 export interface NewBoardApiData {
   board: IBoard;
-  error?: { messge: string };
+  error?: { message: string };
 }

@@ -7,13 +7,13 @@ import useStyles from './useStyles';
 
 type CardProps = {
   id: string;
-  name: string;
+  title: string;
   columnId: string;
   index: number;
   tag: string;
 };
 
-const Card = ({ id, name, tag = 'white', columnId, index }: CardProps): JSX.Element => {
+const Card = ({ id, title, tag = 'white', columnId, index }: CardProps): JSX.Element => {
   const { setOpenCard } = useKanban();
   const classes = useStyles();
   const colorClasses = useColorTagStyles({ tag });
@@ -26,7 +26,7 @@ const Card = ({ id, name, tag = 'white', columnId, index }: CardProps): JSX.Elem
               onClick={() => {
                 setOpenCard({
                   _id: id,
-                  name,
+                  title,
                   tag,
                   columnId,
                 });
@@ -37,7 +37,7 @@ const Card = ({ id, name, tag = 'white', columnId, index }: CardProps): JSX.Elem
             >
               <Box className={`${classes.cardTag} ${colorClasses.cardTagColor}`}></Box>
               <Typography className={classes.typography} variant="h6">
-                {name}
+                {title}
               </Typography>
             </Box>
           </div>

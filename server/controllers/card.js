@@ -1,19 +1,19 @@
 const asyncHandler = require("express-async-handler");
 const Card = require("../models/Card");
 
-exports.createCard = asyncHandler(async (req, res) => {
-  const { title, tag, columnId } = req.body;
+// exports.createCard = asyncHandler(async (req, res) => {
+//   const { title, tag, columnId } = req.body;
 
-  const newCard = await Card.create({
-    title,
-    tag,
-    columnId,
-  });
+//   const newCard = await Card.create({
+//     title,
+//     tag,
+//     columnId,
+//   });
 
-  if (!newCard) throw new Error("Card could not be created.");
-  await newCard.save();
-  return res.status(200).json(newCard);
-});
+//   if (!newCard) throw new Error("Card could not be created.");
+//   await newCard.save();
+//   return res.status(200).json(newCard);
+// });
 
 exports.updateCard = asyncHandler(async (req, res) => {
   const { id } = req.params;
