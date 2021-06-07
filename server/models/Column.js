@@ -18,5 +18,12 @@ const columnSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+columnSchema.methods.updateName = async function (columnName) {
+  this.name = columnName;
+
+  await this.populate();
+  await this.save();
+};
+
 const Column = mongoose.model("column", columnSchema);
 module.exports = Column;

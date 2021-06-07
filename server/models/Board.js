@@ -20,10 +20,37 @@ const boardSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Method that will remove the user's password before returning the board; this can be redone to ensure we don't pop user
 boardSchema.methods.removePassword = function () {
   const board = this.toObject();
   delete board.user.password;
   return board;
+};
+
+boardSchema.methods.addColumn = async function (
+  /** @type {string} */ side,
+  /** @type {string} */ columnName
+) {
+  const newColumn = await Column.create({
+    name: columnName,
+    boardId: this._id,
+  });
+
+  side === "left"
+    ? this.columns.unshift(newColumn)
+    : this.columns.push(newColumn);
+
+  await this.populate();
+  await this.save();
+};
+
+boardSchema.methods.updateName = async function (
+  /** @type {string} */ newName
+) {
+  this.name = newName;
+
+  await this.populate();
+  await this.save();
 };
 
 boardSchema.methods.createTemplateBoard = async function () {
