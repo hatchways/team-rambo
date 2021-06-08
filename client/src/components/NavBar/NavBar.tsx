@@ -42,12 +42,12 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
         <Grid item xs={9} sm={1} md={9} lg={9}>
           <Grid container spacing={2} alignItems="center" justify="flex-end">
             <Grid item className={classes.navBarButtons}>
-              <Button size="large" color="secondary" startIcon={<CalendarTodayOutlinedIcon />}>
+              <Button size="large" color="secondary" startIcon={<DashboardOutlinedIcon />}>
                 Dashboard
               </Button>
             </Grid>
             <Grid item className={classes.navBarButtons}>
-              <Button size="large" color="secondary" startIcon={<DashboardOutlinedIcon />}>
+              <Button size="large" color="secondary" startIcon={<CalendarTodayOutlinedIcon />}>
                 Calendar
               </Button>
             </Grid>
