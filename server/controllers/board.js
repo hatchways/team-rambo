@@ -27,7 +27,6 @@ exports.createBoard = asyncHandler(async (req, res) => {
     user: req.params.id,
   });
 
-  console.log(newBoard.name);
   // For testing with postman
   // const newBoard = await Board.create({
   //   name,
