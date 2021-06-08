@@ -9,7 +9,7 @@ const {
   deleteColumnCard,
 } = require("../controllers/column");
 
-// router.use(protect);
+router.use(protect);
 
 router.route("/").post(createColumn);
 router.route("/:id").patch(updateColumn);
