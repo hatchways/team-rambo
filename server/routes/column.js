@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const protect = require("../middleware/auth");
 const {
-  createColumn,
   updateColumn,
+  swapCardsInColumn,
+  swapCardsOutsideColumn,
   reorderColumn,
   renameColumn,
   createColumnCard,
@@ -11,8 +12,9 @@ const {
 
 // router.use(protect);
 
-router.route("/").post(createColumn);
 router.route("/:id").patch(updateColumn);
+router.route("/:id/swapCardsInColumn").patch(swapCardsInColumn);
+router.route("/:id/swapCardsOutsideColumn").patch(swapCardsOutsideColumn);
 router.route("/:id/reorder").patch(reorderColumn);
 router.route("/:id/rename").patch(renameColumn);
 router.route("/:id/addCard").patch(createColumnCard);

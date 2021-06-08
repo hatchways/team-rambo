@@ -100,9 +100,31 @@ exports.deleteBoard = asyncHandler(async (req, res) => {
   // 2) Return a success/error message based on deleting board;
 });
 
-exports.reorderBoard = asyncHandler(async (req, res) => {
-  //to be completed
-  return;
+exports.swapBoardColumns = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { column1, column2 } = req.body;
+
+  console.log(column1, column2);
+
+  const board = await Board.findById(id);
+
+  await Board.populate(board, {
+    path: "columns",
+    populate: {
+      path: "cards",
+    },
+  });
+
+  await board.swapColumns(column1, column2);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
 });
 
 exports.createBoardColumn = asyncHandler(async (req, res) => {

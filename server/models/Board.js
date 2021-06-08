@@ -105,5 +105,20 @@ boardSchema.methods.createTemplateBoard = async function () {
   await this.save();
 };
 
+boardSchema.methods.swapColumns = async function (
+  /** @type {{index: number; droppableId: string}} */ column1,
+  /** @type {{index: number; droppableId: string}} */ column2
+) {
+  const col1 = this.columns[column1.index];
+  const col2 = this.columns[column2.index];
+
+  this.columns[column2.index] = col1;
+  this.columns[column1.index] = col2;
+
+  this.markModified("columns");
+  await this.populate();
+  await this.save();
+};
+
 const Board = mongoose.model("board", boardSchema);
 module.exports = Board;

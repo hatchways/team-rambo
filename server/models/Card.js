@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Column = require("../models/Column");
 
 const cardSchema = new mongoose.Schema(
   {
@@ -43,9 +44,23 @@ cardSchema.methods.deleteSelf = async function () {
   await Card.findOneAndDelete({ _id: this._id }, function (err) {
     if (err) {
       res.status(404);
-      throw new error("Card not found!");
+      throw new Error("Card not found!");
     }
   });
+};
+
+cardSchema.methods.duplicate = async function (
+  /** @type {string} */ columnId,
+  column
+) {
+  const newCard = await Card.create({
+    title: this.title,
+    tag: this.tag,
+    columnId,
+  });
+
+  column.cards.push(newCard);
+  await column.save();
 };
 
 const Card = mongoose.model("card", cardSchema);

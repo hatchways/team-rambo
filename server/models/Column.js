@@ -50,5 +50,23 @@ columnSchema.methods.addCard = async function (
   await this.save();
 };
 
+columnSchema.methods.swapPosition = async function (
+  /** @type {string} */ cardId,
+  /** @type {{index: number, droppableId: string}} */ source,
+  /** @type {{index: number, droppableId: string}} */ destination
+) {
+  const card = await Card.findById(cardId);
+
+  const clonedCards = this.cards.slice();
+  clonedCards.splice(source.index, 1);
+  clonedCards.splice(destination.index, 0, card);
+
+  this.cards = clonedCards;
+
+  this.markModified("cards");
+  await this.populate();
+  await this.save();
+};
+
 const Column = mongoose.model("column", columnSchema);
 module.exports = Column;
