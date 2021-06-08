@@ -9,10 +9,9 @@ const {
   moveCard,
 } = require("../controllers/card");
 
-// router.use(protect);
+router.use(protect);
 
 router.route("/:id").get(getCard);
-//router.route("/").post(createCard);
 router.route("/:id").patch(updateCard);
 router.route("/:id/copyCard").post(copyCard);
 router.route("/:id/moveCard").patch(moveCard);

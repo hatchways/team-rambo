@@ -1,6 +1,6 @@
 import { IFetchOptions, IBoard } from '../../interface';
 
-const deleteBoard = async (boardId: string): Promise<IBoard> => {
+const deleteBoard = async (boardId: string): Promise<IBoard[]> => {
   const fetchOptions: IFetchOptions = {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },

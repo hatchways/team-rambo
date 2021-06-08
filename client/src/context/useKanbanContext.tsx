@@ -108,17 +108,12 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return request;
   };
 
-  const removeBoard = async (id: string): Promise<IBoard> => {
-    const request = await deleteBoard(id);
-    setUserBoards((boards) => boards.filter((board) => board._id !== id));
-    // 1) setActiveBoard(userBoards[0])
-
-    // 2)
-    // setUserBoards(request) => returning all of the user's boards;
-    // settActiveBoard(request.boards[0])
-
-    // setActiveBoard(...)
-    return request;
+  const removeBoard = async (id: string) => {
+    const remainingBoards = await deleteBoard(id);
+    setUserBoards(remainingBoards);
+    //show first board if we deleted the activeBoard
+    if (activeBoard._id === id) setActiveBoard(remainingBoards[0]);
+    return;
   };
 
   /*    Columns Section   */

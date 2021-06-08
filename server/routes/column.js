@@ -10,7 +10,7 @@ const {
   deleteColumnCard,
 } = require("../controllers/column");
 
-// router.use(protect);
+router.use(protect);
 
 router.route("/:id").patch(updateColumn);
 router.route("/:id/swapCardsInColumn").patch(swapCardsInColumn);

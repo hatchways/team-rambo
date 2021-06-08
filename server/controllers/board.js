@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Board = require("../models/Board");
+const User = require("../models/User");
 
 exports.getBoard = asyncHandler(async (req, res) => {
   const board = await Board.findOne({ _id: req.params.id }).populate({
@@ -21,17 +22,17 @@ exports.getBoard = asyncHandler(async (req, res) => {
 exports.createBoard = asyncHandler(async (req, res) => {
   const { name } = req.body;
 
-  // const newBoard = await Board.create({
-  //   name,
-  //   user: req.params.id,
-  // });
-
-  // console.log(newBoard.name);
-  // For testing with postman
   const newBoard = await Board.create({
     name,
-    user: "60b91df75edef24420936968",
+    user: req.params.id,
   });
+
+  console.log(newBoard.name);
+  // For testing with postman
+  // const newBoard = await Board.create({
+  //   name,
+  //   user: "60b91df75edef24420936968",
+  // });
 
   if (!newBoard) {
     res.status(400);
@@ -77,27 +78,23 @@ exports.updateBoardName = asyncHandler(async (req, res) => {
 exports.deleteBoard = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const deletedBoard = await Board.findOneAndDelete(
-    { _id: id },
-    function (err) {
-      if (err) {
-        res.status(404);
-        throw new error("Board not found!");
-      }
-    }
-  );
+  const deletedBoard = await Board.findOneAndDelete({ _id: id });
+
+  if (!deletedBoard) {
+    res.status(404);
+    throw new Error("Couldn't find a board to delete!");
+  }
+
+  const boards = await Board.find({ user: deletedBoard.user });
 
   return res.status(200).json(
-    await Board.populate(deletedBoard, {
+    await Board.populate(boards, {
       path: "columns",
       populate: {
         path: "cards",
       },
     })
   );
-
-  // 1) After deleting board, get the user's boards again and return the first;
-  // 2) Return a success/error message based on deleting board;
 });
 
 exports.swapBoardColumns = asyncHandler(async (req, res) => {
