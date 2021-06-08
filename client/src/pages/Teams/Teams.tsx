@@ -23,7 +23,7 @@ const TeamsDashboard = (): JSX.Element => {
         <NavBar loggedInUser={loggedInUser} />
       </Box>
       <Box>
-        <Grid container>
+        <Grid container alignItems="stretch">
           <Sidebar />
           <BoardViewWrapper>
             <TeamsAppBar />

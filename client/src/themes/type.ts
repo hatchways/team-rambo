@@ -7,3 +7,9 @@ export interface ICardTagPalette {
   blue?: string;
   purple?: string;
 }
+
+export interface ITeamsColorPalette {
+  secondary?: string;
+  text?: string;
+  subtext?: string;
+}

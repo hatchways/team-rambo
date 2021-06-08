@@ -2,5 +2,7 @@ import { Grid } from '@material-ui/core';
 import { PropsWithChildren } from 'react';
 
 export const BoardViewWrapper = ({ children }: PropsWithChildren<Record<string, unknown>>): JSX.Element => (
-  <Grid container>{children}</Grid>
+  <Grid lg={9} md={8} container>
+    {children}
+  </Grid>
 );

@@ -25,6 +25,11 @@ export const theme = createMuiTheme({
       blue: '#59B0FF',
       purple: '#D460F7',
     },
+    teams: {
+      secondary: '#F1F5F9',
+      text: '#475569',
+      subtext: '#9FA6B2',
+    },
   },
   shape: {
     borderRadius: 5,
