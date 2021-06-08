@@ -4,6 +4,7 @@ import { AccountCircle, PowerSettingsNew } from '@material-ui/icons';
 import { useAuth, useUser } from '../../context/';
 import PictureModal from '../PictureModal/PictureModal';
 import useStyles from './useStyles';
+import profileFallback from '../../Images/profileFallback.png';
 
 const AvatarDisplay = (avatarProps: AvatarProps): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -38,21 +39,16 @@ const AvatarDisplay = (avatarProps: AvatarProps): JSX.Element => {
 
   return (
     <div>
-      {picture ? (
-        <Avatar
-          alt="Profile Image"
-          src={picture.url}
-          aria-label="show auth menu"
-          aria-controls="auth-menu"
-          aria-haspopup="true"
-          className={classes.medium}
-          onClick={handleClick}
-          {...avatarProps}
-        ></Avatar>
-      ) : (
-        <CircularProgress color="primary"></CircularProgress>
-      )}
-
+      <Avatar
+        alt="Profile Image"
+        src={picture?.url || profileFallback}
+        aria-label="show auth menu"
+        aria-controls="auth-menu"
+        aria-haspopup="true"
+        className={classes.medium}
+        onClick={handleClick}
+        {...avatarProps}
+      ></Avatar>
       <Menu
         id="auth-menu"
         anchorEl={anchorEl}

@@ -65,9 +65,13 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
       </Grid>
       <AppBar position="static">
         <Toolbar variant="dense">
-          <Typography variant="h6" className={classes.title}>
-            {activeBoard.name}
-          </Typography>
+          <Grid container>
+            <Grid item>
+              <Typography variant="h6" className={classes.title}>
+                {activeBoard.name}
+              </Typography>
+            </Grid>
+          </Grid>
           <Grid container spacing={2} justify="flex-end" alignItems="center">
             <Grid item>
               <Button onClick={handleDrawerToggle} className={classes.viewBoardsButton} variant="outlined">

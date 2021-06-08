@@ -14,7 +14,7 @@ const MenuDrawer = ({ open, onClose }: Props): JSX.Element => {
   const classes = useStyles();
 
   return (
-    <Drawer anchor={'left'} open={open} onClose={onClose}>
+    <Drawer anchor={'right'} open={open} onClose={onClose}>
       <List className={classes.list}>
         <ListItem className={classes.avatarContainer}>
           <AvatarDisplay className={classes.avatar} />

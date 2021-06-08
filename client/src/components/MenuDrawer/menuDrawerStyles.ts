@@ -30,8 +30,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
   },
   avatar: {
-    height: 100,
-    width: 100,
+    height: 64,
+    width: 64,
+    margin: 10,
   },
 }));
 
