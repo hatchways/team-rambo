@@ -11,6 +11,7 @@ export default interface IKanbanContext {
   setOpenCard: (card: ICard) => void;
   resetOpenCard: () => void;
   getColumnById: (columnId: string) => IColumn;
+  /** Dragging function for columns/cards */
   handleDragEnd: (result: DropResult) => void;
   setActiveBoard: (board: IBoard) => void;
   renameColumn: (
@@ -25,7 +26,6 @@ export default interface IKanbanContext {
   createNewBoard: (name: string) => Promise<IBoard>;
   moveCard: (destination: IColumn) => void;
   copyCard: (destination: IColumn) => void;
-  removeActiveCard: () => void;
   addColumn: (side: string, name: string) => void;
   updateBoardsName: (id: string, name: string, setSubmitting: (isSubmitting: boolean) => void) => void;
   removeCard: (cardId: string) => void;

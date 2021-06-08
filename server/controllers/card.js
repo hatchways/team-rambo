@@ -16,6 +16,56 @@ exports.getCard = asyncHandler(async (req, res) => {
   return res.status(200).json(card);
 });
 
+exports.copyCard = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { columnId } = req.body;
+
+  const card = await Card.findById(id);
+  const column = await Column.findById(columnId).populate("cards");
+
+  await card.duplicate(columnId, column);
+
+  const board = await Board.findById(column.boardId);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
+});
+
+exports.moveCard = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { columnId } = req.body;
+
+  const card = await Card.findById(id);
+  const oldColumn = await Column.findById(card.columnId).populate("cards");
+  const newColumn = await Column.findById(columnId).populate("cards");
+
+  const cardIndex = oldColumn.cards.findIndex(
+    (colCard) => colCard._id === card._id
+  );
+  oldColumn.cards.splice(cardIndex, 1);
+  newColumn.cards.push(card);
+
+  await oldColumn.save();
+  await newColumn.save();
+
+  const board = await Board.findById(oldColumn.boardId);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
+});
+
 exports.updateCard = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const update = req.body;
