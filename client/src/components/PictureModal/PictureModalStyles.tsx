@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme) => ({
   dropZonePaper: {
     height: 'fit-content',
     padding: 10,
+    cursor: 'pointer',
     '&:hover': {
       background: '#CECECE',
-      cursor: 'pointer',
     },
   },
   uploadIcon: {
