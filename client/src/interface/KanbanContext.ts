@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
 import { IBoard, ICard, IColumn } from './';
+import { ICardUpdateData } from './Card';
 
 export default interface IKanbanContext {
   activeBoard: IBoard;
@@ -28,4 +29,5 @@ export default interface IKanbanContext {
   addColumn: (side: string, name: string) => void;
   updateBoardsName: (id: string, name: string, setSubmitting: (isSubmitting: boolean) => void) => void;
   removeCard: (cardId: string) => void;
+  updateActiveCard: (data: ICardUpdateData) => void;
 }

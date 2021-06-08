@@ -44,7 +44,6 @@ const DialogMenuButton = ({ name }: Props): JSX.Element => {
       case 'Delete':
         updateSnackBarMessage(`Deleting card: "${focusedCard?.title}"`);
         if (focusedCard) {
-          console.log(`focusedCard title: ${focusedCard.title} target: ${target} focusedCard Id: ${focusedCard._id}`);
           removeCard(focusedCard?._id);
         }
         break;

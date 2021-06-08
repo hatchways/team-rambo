@@ -1,4 +1,4 @@
-import { cloneElement } from 'react';
+import { cloneElement, useState } from 'react';
 import { Button, IconButton, Grid, Box, TextField, Typography } from '@material-ui/core';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -9,7 +9,7 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import AttachFileOutlinedIcon from '@material-ui/icons/AttachFileOutlined';
 import CheckList from '../CheckList/CheckList';
 import dialogItemStyles from './dialogItemStyles';
-import { useDialog } from '../../../context/';
+import { useDialog, useKanban } from '../../../context/';
 import { IDialogItem } from '../../../interface';
 import { DatePicker } from '..';
 
@@ -18,12 +18,15 @@ const DialogItem = ({
   content = 'description',
   icon = 'clear',
   id = 'testId',
+  activeCard,
 }: IDialogItem): JSX.Element => {
   const classes = dialogItemStyles();
   const { removeItem } = useDialog();
+  const [updateContent, setUpdateContent] = useState('');
+  const { updateActiveCard } = useKanban();
 
   const handleSave = () => {
-    console.log(`Saving DialogItem with id: ${id}`);
+    updateActiveCard(JSON.parse(`{"${content}": "${updateContent}"}`));
   };
 
   const handleClose = () => {
@@ -55,14 +58,18 @@ const DialogItem = ({
     switch (item) {
       case 'description':
         return (
-          <TextField
-            fullWidth
-            multiline
-            rows={4}
-            placeholder="Add description"
-            variant="outlined"
-            className={classes.textField}
-          />
+          <>
+            <div>{activeCard ? activeCard.description : 'placeholder'}</div>
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
+              placeholder={'Description'}
+              variant="outlined"
+              className={classes.textField}
+              onChange={(e) => setUpdateContent(e.target.value)}
+            />
+          </>
         );
       case 'deadline':
         return <DatePicker />;
@@ -75,6 +82,7 @@ const DialogItem = ({
             placeholder="Add description"
             variant="outlined"
             className={classes.textField}
+            onChange={(e) => setUpdateContent(e.target.value)}
           />
         );
       case 'tag':

@@ -13,9 +13,10 @@ import {
   updateColumnName,
   createCard,
   deleteCard,
+  updateCard,
 } from '../helpers/';
 import { useSnackBar, useAuth } from './';
-import { IKanbanContext, IColumn, ICard, IBoard } from '../interface/';
+import { IKanbanContext, IColumn, ICard, IBoard, ICardUpdateData } from '../interface/';
 import deleteBoard from '../helpers/APICalls/deleteBoard';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
@@ -202,6 +203,16 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     return;
   };
 
+  const updateActiveCard = async (data: ICardUpdateData) => {
+    if (focusedCard) {
+      const request = await updateCard(focusedCard._id, data);
+      console.log(request);
+      updateBoard(request);
+      setActiveBoard(request);
+    }
+    return;
+  };
+
   const removeActiveCard = (): void => {
     const columnsCopy = cloneDeep(columns);
     const columnIndex = columnsCopy.findIndex((col) => col._id === focusedCard?.columnId);
@@ -323,6 +334,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         updateBoardsName,
         removeBoard,
         removeCard,
+        updateActiveCard,
       }}
     >
       {children}

@@ -11,6 +11,7 @@ export const FocusCard = (): JSX.Element => {
           title={focusedCard.title}
           columnId={focusedCard.columnId}
           tag={focusedCard?.tag || 'white'}
+          activeCard={focusedCard}
         />
       )}
     </>
