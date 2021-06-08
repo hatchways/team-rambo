@@ -121,14 +121,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     if (focusedCard) {
       const request = await updateCard(focusedCard._id, data);
       console.log(request);
-      updateBoard(request);
       setActiveBoard(request);
     }
     return;
   };
-
-  const removeCard = async (cardId: string) => {
-    const request = await deleteCard(cardId);
 
   /*    Columns Section   */
   const addColumn = async (side: string, name: string): Promise<void> => {
