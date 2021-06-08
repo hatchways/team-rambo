@@ -60,8 +60,8 @@ const NotificationCenter = (): JSX.Element => {
                 type={item.type}
                 title={item.title}
                 description={item.description}
-                read={Boolean(item.read)}
-                link={item.link ? item.link : ''}
+                read={item.read}
+                link={item.link}
                 user={item.user}
               />
             );

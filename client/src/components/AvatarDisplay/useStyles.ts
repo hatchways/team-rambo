@@ -19,9 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
     large: {
       width: theme.spacing(7),
       height: theme.spacing(7),
-      '&:hover': {
-        cursor: 'pointer',
-      },
+      cursor: 'pointer',
     },
     listItemIcon: {
       minWidth: 38,
