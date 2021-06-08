@@ -1,6 +1,5 @@
-import { useState, useEffect, MouseEvent } from 'react';
+import { useState, MouseEvent } from 'react';
 import {
-  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -16,9 +15,8 @@ import {
 import ClearIcon from '@material-ui/icons/Clear';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { cardDialogStyles, DialogItemGroup, DialogActionButton, dialogActionButtonStyles } from '../CardDialog';
-import { useSnackBar, useDialog, useKanban } from '../../context/';
-import { IColumn } from '../../interface/';
+import { cardDialogStyles, DialogItemGroup, DialogActionButton, DialogMenuButton } from '../CardDialog';
+import { useDialog, useKanban } from '../../context/';
 
 interface DialogProps {
   name: string;
@@ -29,11 +27,8 @@ interface DialogProps {
 
 const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
-  const [column, setColumn] = useState<IColumn | null>(null);
   const classes = cardDialogStyles();
-  const buttonClasses = dialogActionButtonStyles(); //to be removed in Dialog Actions PR
   const theme = useTheme();
-  const { updateSnackBarMessage } = useSnackBar();
   const { resetOpenCard, getColumnById } = useKanban();
   const { items, resetItems } = useDialog();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -44,6 +39,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
     setOpen(false);
     resetItems();
   };
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -53,19 +49,8 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
     setTagColor(tag);
   };
 
-  useEffect(() => {
-    const column = getColumnById(columnId);
-    if (!column) {
-      updateSnackBarMessage('Column does not exist');
-      handleClose();
-    }
-    setColumn(column);
-
-    return () => setColumn(null);
-  }, []);
-
   return (
-    <Box>
+    <>
       <Dialog scroll="paper" open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
         <Grid container spacing={3} className={classes.hasMargin}>
           <Grid item xs={12}>
@@ -92,7 +77,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
               </Menu>
             </Grid>
             <Typography variant="body2" className={classes.dialogSubTitle}>
-              {`In list "${column?.name}"`}
+              {`In list "${getColumnById(columnId)?.name}"`}
             </Typography>
           </Grid>
         </Grid>
@@ -121,10 +106,10 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
                     <Typography variant="caption" className={classes.buttonColumnTitle}>
                       ACTIONS:
                     </Typography>
-                    <Button className={buttonClasses.columnButton}>Move</Button>
-                    <Button className={buttonClasses.columnButton}>Copy</Button>
-                    <Button className={buttonClasses.columnButton}>Share</Button>
-                    <Button className={buttonClasses.columnButton}>Delete</Button>
+                    <DialogMenuButton name="Move" />
+                    <DialogMenuButton name="Copy" />
+                    <DialogMenuButton name="Share" />
+                    <DialogMenuButton name="Delete" />
                   </Box>
                 </Grid>
               </Grid>
@@ -137,7 +122,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
           </IconButton>
         </DialogActions>
       </Dialog>
-    </Box>
+    </>
   );
 };
 

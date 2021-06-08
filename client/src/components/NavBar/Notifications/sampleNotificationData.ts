@@ -1,6 +1,6 @@
-import INotificationItem from '../../../interface/Notification';
+import { INotificationItem } from '../../../interface/';
 
-export const testNotifications: INotificationItem[] = [
+export const notifications: INotificationItem[] = [
   {
     type: 'reminder',
     title: 'Go Shopping',

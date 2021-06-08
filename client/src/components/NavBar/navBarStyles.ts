@@ -9,8 +9,9 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: '0',
       backgroundColor: '#FFFFFF',
     },
-    menuButton: {
+    viewBoardsButton: {
       marginRight: 12,
+      color: 'white',
     },
     statusBar: {
       padding: '10px 20px 10px 20px',
@@ -18,13 +19,32 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       flexGrow: 1,
-      fontWeight: 'bold',
-      fontSize: 24,
+      fontWeight: 'normal',
+      fontSize: 20,
       paddingLeft: 5,
     },
     navBarButtons: {
       [theme.breakpoints.down('sm')]: {
         display: 'none',
+      },
+    },
+    menuIcon: {
+      [theme.breakpoints.up('sm')]: {
+        display: 'none',
+      },
+      [theme.breakpoints.down('sm')]: {
+        display: 'block',
+      },
+    },
+    secondNotification: {
+      justify: 'flex-end',
+      alignItems: 'flex-end',
+
+      [theme.breakpoints.up('sm')]: {
+        display: 'none',
+      },
+      [theme.breakpoints.down('sm')]: {
+        display: 'block',
       },
     },
   }),

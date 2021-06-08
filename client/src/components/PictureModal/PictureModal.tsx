@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   Box,
@@ -14,9 +14,9 @@ import {
 } from '@material-ui/core';
 import { Save, Clear, CloudUpload } from '@material-ui/icons';
 import Dropzone, { DropzoneState } from 'react-dropzone';
+import { useUser, useSnackBar } from '../../context';
+import uploadImage from '../../helpers/APICalls/uploadImage';
 import useStyles from './PictureModalStyles';
-import { uploadImage } from '../../helpers/';
-import { useSnackBar } from '../../context';
 
 interface Props {
   open: boolean;
@@ -30,6 +30,8 @@ const PictureModal = ({ open, onClose }: Props): JSX.Element => {
   const { updateSnackBarMessage } = useSnackBar();
   const [preview, setPreview] = useState<string>('');
   const [image, setImage] = useState<Blob>(new Blob());
+  const [canUpload, setCanUpload] = useState<boolean>(false);
+  const { updatePicture } = useUser();
 
   const handleFile = (files: File[]) => {
     const reader = new FileReader();
@@ -48,25 +50,37 @@ const PictureModal = ({ open, onClose }: Props): JSX.Element => {
       }
     };
     reader.readAsDataURL(currentFile);
+    setCanUpload(true);
   };
 
   const handleUpload = async (file: Blob) => {
     const form = new FormData();
     form.append('image', file);
 
-    const { error } = await uploadImage(form);
+    const { error, picture } = await uploadImage(form);
     if (error) {
       updateSnackBarMessage('Insert a valid image file!', 'error');
       return;
     }
-    updateSnackBarMessage('Image saved!', 'success');
+    updatePicture(picture);
+    updateSnackBarMessage('Image saved!');
+    handleClose();
+  };
+
+  const handleClose = () => {
     onClose();
+  };
+
+  const resetDialog = () => {
+    setCanUpload(false);
+    setImage(new Blob());
+    setPreview('');
   };
 
   return (
     <>
-      <Dialog open={open} onClose={onClose} className={classes.root}>
-        <DialogTitle disableTypography>
+      <Dialog open={open} onClose={handleClose} onExited={resetDialog}>
+        <DialogTitle disableTypography className={classes.root}>
           <Typography variant="h6" className={classes.title}>
             Upload profile picture
           </Typography>
@@ -110,6 +124,7 @@ const PictureModal = ({ open, onClose }: Props): JSX.Element => {
                 color="primary"
                 size="large"
                 startIcon={<Save />}
+                disabled={!canUpload}
               >
                 Save
               </Button>

@@ -1,21 +1,16 @@
 import { useState, MouseEvent } from 'react';
-import { Avatar, Menu, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { PowerSettingsNew, AccountCircle } from '@material-ui/icons';
-import { useAuth } from '../../context';
+import { Avatar, Menu, MenuItem, CircularProgress, ListItemText, ListItemIcon, AvatarProps } from '@material-ui/core';
+import { AccountCircle, PowerSettingsNew } from '@material-ui/icons';
+import { useAuth, useUser } from '../../context/';
 import PictureModal from '../PictureModal/PictureModal';
-import { IUser } from '../../interface';
 import useStyles from './useStyles';
 
-interface Props {
-  loggedIn: boolean;
-  user: IUser;
-}
-
-const AvatarDisplay = ({ user }: Props): JSX.Element => {
+const AvatarDisplay = (avatarProps: AvatarProps): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openImageModal, setOpenImageModal] = useState<boolean>(false);
   const open = Boolean(anchorEl);
   const { logout } = useAuth();
+  const { picture } = useUser();
   const classes = useStyles();
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -43,15 +38,21 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
 
   return (
     <div>
-      <Avatar
-        alt="Profile Image"
-        src={`https://robohash.org/${user.email}.png`}
-        aria-label="show auth menu"
-        aria-controls="auth-menu"
-        aria-haspopup="true"
-        className={classes.large}
-        onClick={handleClick}
-      ></Avatar>
+      {picture ? (
+        <Avatar
+          alt="Profile Image"
+          src={picture.url}
+          aria-label="show auth menu"
+          aria-controls="auth-menu"
+          aria-haspopup="true"
+          className={classes.medium}
+          onClick={handleClick}
+          {...avatarProps}
+        ></Avatar>
+      ) : (
+        <CircularProgress color="primary"></CircularProgress>
+      )}
+
       <Menu
         id="auth-menu"
         anchorEl={anchorEl}
