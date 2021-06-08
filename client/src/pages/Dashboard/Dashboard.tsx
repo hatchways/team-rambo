@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Box, Grid, Typography, CssBaseline, CircularProgress } from '@material-ui/core';
+import { Box, Grid, CssBaseline } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Board from '../../components/Kanban/Board';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
+import LoadingBoard from '../../components/LoadingBoard/LoadingBoard';
 import { useAuth, useKanban } from '../../context/';
 import useStyles from './dashboardStyles';
 
@@ -20,18 +21,7 @@ const Dashboard = (): JSX.Element => {
   if (!loggedInUser) {
     history.push('/login');
 
-    return (
-      <Grid spacing={4} container justify="center" className={classes.loadingScreen}>
-        <Grid item>
-          <CircularProgress size={150} />
-        </Grid>
-        <Grid item>
-          <Typography variant="h4" className={classes.loadingScreenText}>
-            Kanban
-          </Typography>
-        </Grid>
-      </Grid>
-    );
+    return <LoadingBoard />;
   }
 
   return (
