@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Typography, ListItem, ListItemText, ListItemIcon, List, Divider, Drawer } from '@material-ui/core';
 import SwapHorizontalCircleOutlinedIcon from '@material-ui/icons/SwapHorizontalCircleOutlined';
+import { useHistory } from 'react-router-dom';
 import useStyles from './optionsDrawerStyles';
 import { useKanban } from '../../context/';
-import { useHistory } from 'react-router-dom';
 
 interface Props {
   open: boolean;

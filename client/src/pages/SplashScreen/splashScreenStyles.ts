@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 'bold',
       opacity: 1,
     },
-    disableUnderline: true,
   },
   submit: {
     margin: theme.spacing(3, 2, 2),

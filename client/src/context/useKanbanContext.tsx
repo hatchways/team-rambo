@@ -11,10 +11,10 @@ import {
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
 import { v4 as uuidv4 } from 'uuid';
+import { useHistory } from 'react-router-dom';
 import { getBoard, getUserBoards, updateBoard, createBoard } from '../helpers/';
 import { useSnackBar, useAuth } from './';
 import { IKanbanContext, IColumn, ICard, IBoard, INewBoardApiData } from '../interface/';
-import { useHistory } from 'react-router-dom';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
