@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
       width: '300px',
     },
   },
+  loading: {
+    textAlign: 'center',
+  },
 }));
 
 export default useStyles;
