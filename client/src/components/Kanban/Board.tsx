@@ -12,19 +12,21 @@ const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element => {
     <>
       {focusedCard && <FocusCard />}
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId={activeBoard._id} type="column" direction="horizontal">
+        <Droppable droppableId={activeBoard && activeBoard._id} type="column" direction="horizontal">
           {(provided: DroppableProvided) => (
             <Grid ref={provided.innerRef} container spacing={2} {...provided.droppableProps}>
-              {activeBoard.columns.map((column, index) => (
-                <Column
-                  key={column._id}
-                  index={index}
-                  _id={column._id}
-                  name={column.name}
-                  cards={column.cards}
-                  createdAt={column.createdAt}
-                />
-              ))}
+              {activeBoard &&
+                activeBoard.columns &&
+                activeBoard.columns.map((column, index) => (
+                  <Column
+                    key={column._id}
+                    index={index}
+                    _id={column._id}
+                    name={column.name}
+                    cards={column.cards}
+                    createdAt={column.createdAt}
+                  />
+                ))}
               {provided.placeholder}
             </Grid>
           )}

@@ -1,10 +1,13 @@
 export interface ICard {
   _id: string;
-  columnId: string;
   title: string;
-  tag?: string;
-  dueDate?: Date;
+  tag: string;
   description?: string;
+  deadline?: Date;
+  comment?: string;
+  attachment?: string;
+  checklist?: Array<string>;
+  columnId: string;
   createdAt?: Date;
 }
 

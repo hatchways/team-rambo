@@ -9,7 +9,7 @@ const {
   moveCard,
 } = require("../controllers/card");
 
-//router.use(protect);
+router.use(protect);
 
 router.route("/:id").get(getCard);
 router.route("/:id").patch(updateCard);

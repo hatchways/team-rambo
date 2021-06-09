@@ -23,15 +23,9 @@ exports.createBoard = asyncHandler(async (req, res) => {
   const { name } = req.body;
 
   const newBoard = await Board.create({
-    name,
-    user: req.params.id,
+    name: name,
+    user: req.user.id,
   });
-
-  // For testing with postman
-  // const newBoard = await Board.create({
-  //   name,
-  //   user: "60b91df75edef24420936968",
-  // });
 
   if (!newBoard) {
     res.status(400);
@@ -40,15 +34,14 @@ exports.createBoard = asyncHandler(async (req, res) => {
 
   await newBoard.createTemplateBoard();
 
-  const board = await Board.populate(newBoard, {
-    path: "columns",
-    populate: {
-      path: "cards",
-    },
-  });
-  return res.status(200).json({ board });
-
-  // { board?: a board, error?: string}
+  return res.status(200).json(
+    await Board.populate(newBoard, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
 });
 
 exports.updateBoardName = asyncHandler(async (req, res) => {

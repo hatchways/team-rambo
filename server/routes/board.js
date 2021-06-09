@@ -10,7 +10,7 @@ const {
   deleteBoardColumn,
 } = require("../controllers/board");
 
-//router.use(protect);
+router.use(protect);
 
 router.route("/").post(createBoard);
 router.route("/:id").get(getBoard);
