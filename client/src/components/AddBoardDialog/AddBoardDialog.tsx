@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import * as Yup from 'yup';
-import { Formik, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import StyledDialog from '../StyledDialog/StyledDialog';
 import addBoardDialogStyles from './AddBoardDialogStyles';
 import { useKanban, useSnackBar } from '../../context/';
@@ -67,34 +67,26 @@ const AddBoardDialog = (): JSX.Element => {
         toggleFunction={setOpen}
         buttonFunction={formik.handleSubmit}
         component={
-          <Formik
-            initialValues={{ name: '' }}
-            onSubmit={(values: Values) => console.log(values.name, 'sinal')}
-            validationSchema={Yup.object().shape({
-              name: Yup.string().required(`Insert the board's name`).min(2).max(50),
-            })}
-          >
-            <form onSubmit={formik.handleSubmit}>
-              <Grid container spacing={2} className={classes.formGrid}>
-                <Grid item>
-                  <TextField
-                    name="name"
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name}
-                    fullWidth
-                    placeholder="Add Title"
-                    variant="outlined"
-                    InputProps={{
-                      classes: { input: classes.inputs },
-                    }}
-                    className={classes.textField}
-                  />
-                </Grid>
+          <form onSubmit={formik.handleSubmit}>
+            <Grid container spacing={2} className={classes.formGrid}>
+              <Grid item>
+                <TextField
+                  name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
+                  fullWidth
+                  placeholder="Add Title"
+                  variant="outlined"
+                  InputProps={{
+                    classes: { input: classes.inputs },
+                  }}
+                  className={classes.textField}
+                />
               </Grid>
-            </form>
-          </Formik>
+            </Grid>
+          </form>
         }
       />
     </>

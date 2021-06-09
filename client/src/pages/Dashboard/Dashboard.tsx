@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Box, Grid, CssBaseline, CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { BoardAppBar } from '../../components/BoardAppBar/BoardAppBar';
 import Board from '../../components/Kanban/Board';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import { useAuth, useKanban } from '../../context/';
 import useStyles from './dashboardStyles';
-import { BoardAppBar } from '../../components/BoardAppBar/BoardAppBar';
 
 const Dashboard = (): JSX.Element => {
   const classes = useStyles();

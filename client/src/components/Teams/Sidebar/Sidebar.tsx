@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, Container, Grid, Typography, Hidden } from '@material-ui/core';
+import { Box, Button, Container, Grid, Typography, Hidden, DialogTitle } from '@material-ui/core';
 import useStyles from './sidebarStyles';
 import useChildStyles from '../shared/childStyles';
 import clsx from 'clsx';
@@ -39,7 +39,8 @@ export const Sidebar = (): JSX.Element => {
             >
               {selectedValue}
             </Button>
-            <DialogWrapper heading="Switch Team" selectedValue={selectedValue} open={open} onClose={handleClose}>
+            <DialogWrapper selectedValue={selectedValue} open={open} onClose={handleClose}>
+              <DialogTitle>Switch Team</DialogTitle>
               <TeamDialogList />
             </DialogWrapper>
           </Box>

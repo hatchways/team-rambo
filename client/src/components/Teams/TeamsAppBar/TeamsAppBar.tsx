@@ -1,8 +1,20 @@
-import { useState } from 'react';
-import { AppBar, Button, Grid, Toolbar, Typography, withStyles, IconButton } from '@material-ui/core';
+import { AppBar, Button, Grid, IconButton, TextField, Toolbar, Typography, withStyles } from '@material-ui/core';
 import { Add, MoreHoriz } from '@material-ui/icons';
+import { Form, Formik } from 'formik';
+import { useState } from 'react';
+import * as yup from 'yup';
 import { DialogWrapper } from '../shared/TeamDialog';
 import useStyles from './teamsAppBarStyles';
+
+interface TeamForm {
+  name: string;
+  description: string;
+}
+
+const teamValidation = yup.object({
+  name: yup.string().required(),
+  description: yup.string(),
+});
 
 const AppBarButton = withStyles(() => ({
   root: {
@@ -24,11 +36,15 @@ const AppBarIconButton = withStyles(() => ({
 export const TeamsAppBar = (): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedValue, setSelectedValue] = useState<string>('');
-  const [action, setAction] = useState<string>('');
+  const [action, setAction] = useState<{ display: string; action: string }>({ display: '', action: '' });
   const classes = useStyles();
+  const initialTeamValues: TeamForm = {
+    name: '',
+    description: '',
+  };
 
-  const handleClickOpen = (action: string) => {
-    setAction(action);
+  const handleClickOpen = (display: string, action: string) => {
+    setAction({ display, action });
     setOpen(true);
   };
 
@@ -48,7 +64,7 @@ export const TeamsAppBar = (): JSX.Element => {
                 size="medium"
                 variant="outlined"
                 startIcon={<Add />}
-                onClick={() => handleClickOpen('Invite collaborator')}
+                onClick={() => handleClickOpen('Invite collaborator', 'team')}
               >
                 Invite Collaborator
               </AppBarButton>
@@ -56,7 +72,7 @@ export const TeamsAppBar = (): JSX.Element => {
                 size="medium"
                 variant="outlined"
                 startIcon={<Add />}
-                onClick={() => handleClickOpen('Create new board')}
+                onClick={() => handleClickOpen('Create new board', 'collaborator')}
               >
                 New Team Board
               </AppBarButton>
@@ -69,7 +85,33 @@ export const TeamsAppBar = (): JSX.Element => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <DialogWrapper heading={action} open={open} selectedValue={selectedValue} onClose={handleClose}></DialogWrapper>
+      <DialogWrapper open={open} selectedValue={selectedValue} onClose={handleClose}>
+        {action.action === 'team' ? (
+          <Formik
+            initialValues={initialTeamValues}
+            onSubmit={(values, actions) => {
+              console.log({ values, actions });
+
+              alert(JSON.stringify(values, null, 2));
+
+              actions.setSubmitting(false);
+            }}
+            validationSchema={teamValidation}
+          >
+            {({ errors }) => {
+              console.log(errors);
+              return (
+                <Form>
+                  <TextField id="name" variant="outlined" placeholder="Enter name" name="name" />
+                  <button type="submit">Create</button>
+                </Form>
+              );
+            }}
+          </Formik>
+        ) : (
+          <h1>Collaborator action</h1>
+        )}
+      </DialogWrapper>
     </Grid>
   );
 };
