@@ -64,7 +64,7 @@ const NavBar = ({ handleDrawerToggle }: Props): JSX.Element => {
           <Grid container>
             <Grid item>
               <Typography variant="h6" className={classes.title}>
-                {activeBoard.name}
+                {activeBoard._id != 'Initial' && activeBoard.name}
               </Typography>
             </Grid>
           </Grid>

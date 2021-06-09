@@ -1,5 +1,5 @@
 import { useState, MouseEvent } from 'react';
-import { Avatar, Menu, MenuItem, CircularProgress, ListItemText, ListItemIcon, AvatarProps } from '@material-ui/core';
+import { Avatar, Menu, MenuItem, ListItemText, ListItemIcon, AvatarProps } from '@material-ui/core';
 import { AccountCircle, PowerSettingsNew } from '@material-ui/icons';
 import { useAuth, useUser } from '../../context/';
 import PictureModal from '../PictureModal/PictureModal';

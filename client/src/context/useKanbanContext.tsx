@@ -1,10 +1,20 @@
-import { useState, useContext, createContext, FunctionComponent, useEffect, Dispatch, SetStateAction } from 'react';
+import {
+  useState,
+  useContext,
+  createContext,
+  FunctionComponent,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+} from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash.clonedeep';
 import { v4 as uuidv4 } from 'uuid';
+import { useHistory } from 'react-router-dom';
 import { getBoard, getUserBoards, updateBoard, createBoard } from '../helpers/';
 import { useSnackBar, useAuth } from './';
-import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
+import { IKanbanContext, IColumn, ICard, IBoard, INewBoardApiData } from '../interface/';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
@@ -22,35 +32,39 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
   const { updateSnackBarMessage } = useSnackBar();
   const { loggedInUser } = useAuth();
+  const history = useHistory();
 
   useEffect(() => {
-    if (loggedInUser) getFirstBoard();
-
+    if (loggedInUser) getAllBoards();
     return;
-  }, [loggedInUser]);
+  }, [history, loggedInUser]);
 
-  const getFirstBoard = async (): Promise<IBoard> => {
-    const request = await getUserBoards();
-    if (request.boards.length > 0) {
-      const board = request.boards[0];
-      setActiveBoard(board);
-      setUserBoards(request.boards);
-      setColumns(board.columns);
-      return board;
-    } else {
-      return { _id: 'Initial', name: 'Initial', columns: [], cards: [], user: 'Initial', createdAt: 'Initial' };
+  const sendToFirstBoard = useCallback(async () => {
+    const { boards } = await getUserBoards();
+    if (boards && boards.length > 0) {
+      history.push(`/dashboard/board/${boards[0]._id}`);
+      return;
     }
+    history.push(`/newboard`);
+  }, []);
+
+  const getAllBoards = async (): Promise<void> => {
+    const { boards } = await getUserBoards();
+    setUserBoards(boards);
   };
 
-  const fetchBoard = async (id: string): Promise<IBoard> => {
-    const board = await getBoard(id);
+  const fetchBoard = async (id: string): Promise<void> => {
+    const { board } = await getBoard(id);
+    if (!board) {
+      sendToFirstBoard();
+      return;
+    }
+
     setActiveBoard(board);
     setColumns(board.columns);
-
-    return board;
   };
 
-  const createNewBoard = async (name: string): Promise<NewBoardApiData> => {
+  const createNewBoard = async (name: string): Promise<INewBoardApiData> => {
     const request = await createBoard(name);
     if (request.board) setUserBoards((boards) => [...boards, request.board]);
 
@@ -330,6 +344,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         copyCard,
         removeActiveCard,
         addColumn,
+        sendToFirstBoard,
       }}
     >
       {children}

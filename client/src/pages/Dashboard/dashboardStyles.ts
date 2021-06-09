@@ -24,14 +24,8 @@ const useStyles = makeStyles((theme) => ({
       width: '300px',
     },
   },
-  loadingScreen: {
-    marginTop: 50,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  loadingScreenText: {
-    fontWeight: 'bolder',
+  loading: {
+    textAlign: 'center',
   },
 }));
 

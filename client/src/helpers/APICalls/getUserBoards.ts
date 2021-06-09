@@ -1,6 +1,6 @@
-import { IFetchOptions, BoardApiData } from '../../interface/';
+import { IFetchOptions, IBoardsApiData } from '../../interface/';
 
-const getUserBoards = async (): Promise<BoardApiData> => {
+const getUserBoards = async (): Promise<IBoardsApiData> => {
   const fetchOptions: IFetchOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },

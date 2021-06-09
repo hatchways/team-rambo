@@ -3,12 +3,18 @@ import { FormikHelpers } from 'formik';
 import useStyles from './loginStyles';
 import { login } from '../../helpers/';
 import LoginForm from './LoginForm/LoginForm';
-import { useAuth, useSnackBar } from '../../context/';
+import { useAuth, useSnackBar, useKanban } from '../../context/';
+import { useEffect } from 'react';
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
-  const { updateLoginContext } = useAuth();
+  const { updateLoginContext, loggedInUser } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
+  const { sendToFirstBoard } = useKanban();
+
+  useEffect(() => {
+    if (loggedInUser) sendToFirstBoard();
+  }, [loggedInUser]);
 
   const handleSubmit = (
     { email, password }: { email: string; password: string },
@@ -17,15 +23,14 @@ export default function Login(): JSX.Element {
     login(email, password).then((data) => {
       if (data.error) {
         setSubmitting(false);
-        updateSnackBarMessage(data.error.message);
+        updateSnackBarMessage(data.error, 'error');
       } else if (data.success) {
         updateLoginContext(data.success);
+        sendToFirstBoard();
       } else {
         // should not get here from backend but this catch is for an unknown issue
-        console.error({ data });
-
         setSubmitting(false);
-        updateSnackBarMessage('An unexpected error occurred. Please try again');
+        updateSnackBarMessage('An unexpected error occurred. Please try again', 'error');
       }
     });
   };
