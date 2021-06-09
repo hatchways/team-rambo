@@ -28,7 +28,7 @@ const Dashboard = (): JSX.Element => {
     <Box>
       <CssBaseline />
       <Box>
-        <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
+        <NavBar handleDrawerToggle={toggleDrawer} />
         <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
       </Box>
       <Box className={classes.buttonOverlay}>
