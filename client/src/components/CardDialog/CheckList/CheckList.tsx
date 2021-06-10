@@ -15,12 +15,18 @@ const MenuProps = {
 
 const NAMES = ['Buy supplies', 'Contact teammates', 'Research', 'Book study hours'];
 
-const CheckList = (): JSX.Element => {
+interface CheckListProps {
+  content: string[] | string;
+  setContent: (content: string[]) => void;
+}
+
+const CheckList = ({ content, setContent }: CheckListProps): JSX.Element => {
   const classes = checkListStyles();
   const [checkListItem, setcheckListItem] = React.useState<string[]>([]);
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setcheckListItem(event.target.value as string[]);
+    setContent(event.target.value as string[]);
   };
 
   return (

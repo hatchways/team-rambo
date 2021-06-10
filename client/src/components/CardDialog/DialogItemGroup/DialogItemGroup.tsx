@@ -1,26 +1,18 @@
 import { Grid } from '@material-ui/core';
+import { useDialog } from '../../../context';
 import { IDialogItem, ICard } from '../../../interface';
 import DialogItem from '../DialogItem/DialogItem';
 
 type DialogItemGroupProps = {
-  items: IDialogItem[];
   activeCard: ICard;
 };
-const DialogItemGroup = ({ items, activeCard }: DialogItemGroupProps): JSX.Element => {
+const DialogItemGroup = ({ activeCard }: DialogItemGroupProps): JSX.Element => {
+  const { items } = useDialog();
   return (
     <Grid container>
-      {items.map((item: IDialogItem) => {
-        return (
-          <DialogItem
-            key={item.id}
-            title={item.title}
-            content={item.content}
-            icon={item.icon}
-            id={item.id}
-            activeCard={activeCard}
-          />
-        );
-      })}
+      {items.map((item: IDialogItem) => (
+        <DialogItem key={item.id} item={item} activeCard={activeCard} />
+      ))}
     </Grid>
   );
 };

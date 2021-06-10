@@ -19,6 +19,10 @@ const cardSchema = new mongoose.Schema(
       type: Date,
       required: false,
     },
+    date: {
+      type: String,
+      required: false,
+    },
     comment: {
       type: String,
       required: false,

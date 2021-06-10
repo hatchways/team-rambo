@@ -5,8 +5,10 @@ import Column from './Column/Column';
 import { IBoard } from '../../interface/';
 import { useKanban } from '../../context/';
 
-const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element => {
+const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element | null => {
   const { focusedCard, handleDragEnd } = useKanban();
+
+  if (!activeBoard) return null;
 
   return (
     <>
@@ -15,18 +17,16 @@ const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element => {
         <Droppable droppableId={activeBoard && activeBoard._id} type="column" direction="horizontal">
           {(provided: DroppableProvided) => (
             <Grid ref={provided.innerRef} container spacing={2} {...provided.droppableProps}>
-              {activeBoard &&
-                activeBoard.columns &&
-                activeBoard.columns.map((column, index) => (
-                  <Column
-                    key={column._id}
-                    index={index}
-                    _id={column._id}
-                    name={column.name}
-                    cards={column.cards}
-                    createdAt={column.createdAt}
-                  />
-                ))}
+              {activeBoard.columns.map((column, index) => (
+                <Column
+                  key={column._id}
+                  index={index}
+                  _id={column._id}
+                  name={column.name}
+                  cards={column.cards}
+                  createdAt={column.createdAt}
+                />
+              ))}
               {provided.placeholder}
             </Grid>
           )}

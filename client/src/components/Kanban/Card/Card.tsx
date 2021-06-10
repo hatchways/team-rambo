@@ -5,15 +5,19 @@ import { ICard } from '../../../interface';
 import { useKanban } from '../../../context/';
 import useColorTagStyles from '../shared/colorStyles';
 import useStyles from './useStyles';
+import { number } from 'yup';
 
-type CardProps = { index: number } & ICard;
+interface CardProps {
+  index: number;
+  card: ICard;
+}
 
-const Card = (card: CardProps): JSX.Element => {
+const Card = ({ index, card }: CardProps): JSX.Element => {
   const { setOpenCard } = useKanban();
   const classes = useStyles();
   const colorClasses = useColorTagStyles({ tag: card.tag });
   return (
-    <Draggable draggableId={card._id} index={card.index}>
+    <Draggable draggableId={card._id} index={index}>
       {(provided, snapshot) => {
         return (
           <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>

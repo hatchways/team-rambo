@@ -32,7 +32,7 @@ const CardDialog = ({ columnId, tag, activeCard }: DialogProps): JSX.Element => 
   const classes = cardDialogStyles();
   const theme = useTheme();
   const { resetOpenCard, getColumnById, updateActiveCard } = useKanban();
-  const { items, resetItems } = useDialog();
+  const { resetItems } = useDialog();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [tagColor, setTagColor] = useState(tag);
 
@@ -88,7 +88,7 @@ const CardDialog = ({ columnId, tag, activeCard }: DialogProps): JSX.Element => 
         <DialogContent dividers={false}>
           <Grid container className={classes.hasMargin}>
             <Grid item xs={10}>
-              <DialogItemGroup items={items} activeCard={activeCard} />
+              <DialogItemGroup activeCard={activeCard} />
             </Grid>
             <Grid item xs={2}>
               <Grid container direction="column" className={classes.buttonContainer}>
@@ -98,7 +98,7 @@ const CardDialog = ({ columnId, tag, activeCard }: DialogProps): JSX.Element => 
                       SECTIONS:
                     </Typography>
                     <DialogActionButton title="Description" content="description" icon="contacts" />
-                    <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
+                    <DialogActionButton title="Deadline" content="date" icon="schedule" />
                     <DialogActionButton title="Comment" content="comment" icon="bubble" />
                     <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
                     <DialogActionButton title="Checklist" content="checklist" icon="checklist" />
