@@ -12,7 +12,6 @@ import { TeamDialogList } from '../../components/Teams/TeamDialogList/TeamDialog
 const TeamsDashboard = (): JSX.Element => {
   const history = useHistory();
   const { loggedInUser } = useAuth();
-  const [selectedValue, setSelectedValue] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
 
   if (!loggedInUser) {
@@ -21,14 +20,9 @@ const TeamsDashboard = (): JSX.Element => {
     return <CircularProgress />;
   }
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const openTeamSwitch = () => setOpen(true);
 
-  const handleClose = (value: string) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
+  const handleClose = () => setOpen(false);
 
   return (
     <Box>
@@ -38,12 +32,12 @@ const TeamsDashboard = (): JSX.Element => {
       </Box>
       <Box>
         <Grid container alignItems="stretch">
-          <Sidebar switcherFunc={handleClickOpen} />
+          <Sidebar teamSwitchFunc={openTeamSwitch} />
           <BoardViewWrapper>
-            <TeamsAppBar switcherFunc={handleClickOpen} />
+            <TeamsAppBar teamSwitchFunc={openTeamSwitch} />
           </BoardViewWrapper>
         </Grid>
-        <DialogWrapper heading="Switch team" selectedValue={selectedValue} open={open} onClose={handleClose}>
+        <DialogWrapper heading="Switch team" open={open} onClose={handleClose}>
           <TeamDialogList />
         </DialogWrapper>
       </Box>

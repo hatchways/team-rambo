@@ -5,8 +5,7 @@ import { PropsWithChildren } from 'react';
 export interface DialogWrapperProps {
   heading: string;
   open: boolean;
-  selectedValue: string;
-  onClose: (value: string) => void;
+  onClose: () => void;
 }
 
 const Title = withStyles((theme: Theme) => ({
@@ -18,25 +17,21 @@ const Title = withStyles((theme: Theme) => ({
 
 export const DialogWrapper = ({
   heading,
-  selectedValue,
   open,
   children,
   onClose,
 }: PropsWithChildren<DialogWrapperProps>): JSX.Element => {
   const xsViewport = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'));
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
 
   return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} fullWidth fullScreen={xsViewport}>
+    <Dialog onClose={onClose} open={open} fullWidth fullScreen={xsViewport}>
       <Title>
         <Grid container justify="space-between">
           <Grid item>
             <Typography variant="h4">{heading}</Typography>
           </Grid>
           <Grid item>
-            <IconButton aria-label="close" onClick={handleClose}>
+            <IconButton onClick={onClose}>
               <Close />
             </IconButton>
           </Grid>

@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Box, Button, Container, Grid, Typography, Hidden, DialogTitle } from '@material-ui/core';
+import { Box, Button, Container, Grid, Typography, Hidden } from '@material-ui/core';
 import useStyles from './sidebarStyles';
 import useChildStyles from '../shared/childStyles';
 import clsx from 'clsx';
@@ -7,10 +6,10 @@ import { SwapVert } from '@material-ui/icons';
 import { Collaborator } from '../Collaborator/Collaborator';
 
 interface SidebarProps {
-  switcherFunc: () => void;
+  teamSwitchFunc: () => void;
 }
 
-export const Sidebar = ({ switcherFunc }: SidebarProps): JSX.Element => {
+export const Sidebar = ({ teamSwitchFunc }: SidebarProps): JSX.Element => {
   const classes = useStyles();
   const childClasses = useChildStyles();
 
@@ -25,7 +24,7 @@ export const Sidebar = ({ switcherFunc }: SidebarProps): JSX.Element => {
               variant="contained"
               disableElevation
               className={classes.teamSwitcherButton}
-              onClick={switcherFunc}
+              onClick={teamSwitchFunc}
               endIcon={<SwapVert />}
             >
               Team Rambo

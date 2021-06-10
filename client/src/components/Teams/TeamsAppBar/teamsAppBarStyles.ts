@@ -31,34 +31,11 @@ const useStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
-  teamSwitcherButton: {
-    fontWeight: 900,
-    width: '100%',
-    fontSize: 16,
-    justifyContent: 'space-between',
-  },
   appBarIconBtn: {
     marginLeft: theme.spacing(2),
   },
   dialogWrapper: {
     padding: theme.spacing(2),
-  },
-  dialogTitle: {
-    marginBottom: theme.spacing(3),
-    fontWeight: 900,
-    color: theme.palette.teams.text,
-  },
-  collaboratorsHeading: {
-    marginBottom: theme.spacing(2),
-  },
-  collaborators: {
-    '&:first-child': {
-      marginLeft: 0,
-    },
-    '& > div': {
-      marginLeft: 5,
-      marginBottom: 8,
-    },
   },
 }));
 

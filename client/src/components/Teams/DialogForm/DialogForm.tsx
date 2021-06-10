@@ -1,12 +1,13 @@
 import { Button, DialogActions } from '@material-ui/core';
 import { FormikErrors, FormikTouched, FormikValues, useFormik } from 'formik';
 import { ChangeEvent } from 'react';
-import { OptionalObjectSchema } from 'yup/lib/object';
+import { OptionalObjectSchema, AnyObject, TypeOfShape } from 'yup/lib/object';
 import useStyles from './dialogFormStyles';
 
 interface DialogFormProps<T> {
   initialValues: T;
-  validation: OptionalObjectSchema<Record<string, any>>;
+  // eslint-disable-next-line
+  validation: OptionalObjectSchema<Record<string, any>, AnyObject, TypeOfShape<Record<string, any>>>;
   onSubmit: (values: T) => void;
   children: (state: {
     errors: FormikErrors<T>;
@@ -16,7 +17,7 @@ interface DialogFormProps<T> {
   }) => JSX.Element;
 }
 
-export const DialogForm = <T,>({ initialValues, validation, onSubmit, children }: DialogFormProps<T>) => {
+export const DialogForm = <T,>({ initialValues, validation, onSubmit, children }: DialogFormProps<T>): JSX.Element => {
   const formik = useFormik({
     initialValues,
     validationSchema: validation,
