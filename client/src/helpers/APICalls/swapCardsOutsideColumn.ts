@@ -1,19 +1,23 @@
 import { DraggableLocation } from 'react-beautiful-dnd';
-import { IBoard, IFetchOptions } from '../../interface';
+import { Batch } from '../../hooks/useBatchUpdater';
+import { IFetchOptions } from '../../interface';
 
 const swapCardsOutsideColumn = async (
-  cardId: string,
-  source: DraggableLocation,
-  destination: DraggableLocation,
-): Promise<IBoard> => {
+  batch: Array<
+    Batch<{
+      source: DraggableLocation;
+      destination: DraggableLocation;
+    }>
+  >,
+): Promise<{ message: string }> => {
   const fetchOptions: IFetchOptions = {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    body: JSON.stringify({ cardId, source, destination }),
+    body: JSON.stringify(batch),
   };
 
-  return await fetch(`columns/${source.droppableId}/swapCardsOutsideColumn`, fetchOptions)
+  return await fetch(`columns/batch/swapCardsOutsideColumn`, fetchOptions)
     .then((res) => res.json())
     .catch((err) => ({
       error: { error: err, message: 'Unable to connect to server. Please try again' },

@@ -20,6 +20,7 @@ import {
 } from '../helpers/';
 import { useSnackBar, useAuth } from './';
 import { IKanbanContext, IColumn, ICard, IBoard, ICardUpdateData } from '../interface/';
+import { useBatchUpdater } from '../hooks/useBatchUpdater';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
@@ -36,6 +37,11 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
   const { updateSnackBarMessage } = useSnackBar();
   const { loggedInUser } = useAuth();
+
+  const [, cardOutsideColumnBatch] = useBatchUpdater<{
+    source: DraggableLocation;
+    destination: DraggableLocation;
+  }>(swapCardsOutsideColumn, 2500);
 
   useEffect(() => {
     if (loggedInUser) getFirstBoard();
@@ -59,14 +65,28 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
     // Reordering cards inside same column
     if (source.droppableId === destination.droppableId) {
-      swapCardsInColumn(draggableId, source, destination).then((board) => setActiveBoard(board));
-
       return;
     }
 
     // Moving card to different column
     if (source.droppableId !== destination.droppableId) {
-      swapCardsOutsideColumn(draggableId, source, destination).then((board) => setActiveBoard(board));
+      const homeColumn = activeBoard.columns[activeBoard.columns.findIndex((col) => col._id === source.droppableId)];
+      const newColumns =
+        activeBoard.columns[activeBoard.columns.findIndex((col) => col._id === destination.droppableId)];
+      const [card] = homeColumn.cards.splice(source.index, 1);
+      newColumns.cards.splice(destination.index, 0, card);
+
+      const batch = {
+        key: card._id,
+        change: {
+          destination,
+          source,
+        },
+      };
+
+      cardOutsideColumnBatch(batch);
+
+      setActiveBoard(activeBoard);
 
       return;
     }
