@@ -2,14 +2,16 @@ import { Avatar, Grid, Paper, Typography, Box, IconButton, Menu, MenuItem } from
 import { MoreHoriz } from '@material-ui/icons';
 import { useState, MouseEvent } from 'react';
 import useStyles from './collaboratorStyles';
+import { Draggable } from 'react-beautiful-dnd';
 
 interface CollaboratorProps {
   profile?: string;
   name: string;
   email: string;
+  index: number;
 }
 
-export const Collaborator = ({ profile, name, email }: CollaboratorProps): JSX.Element => {
+export const Collaborator = ({ profile, name, email, index }: CollaboratorProps): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -23,31 +25,39 @@ export const Collaborator = ({ profile, name, email }: CollaboratorProps): JSX.E
 
   const classes = useStyles();
   return (
-    <Paper elevation={0} className={classes.paper}>
-      <Grid container justify="space-between" alignItems="center">
-        <Grid item>
-          <Grid container alignItems="center">
-            <Grid item>
-              <Avatar className={classes.largeAvatar}>{!profile && 'E'}</Avatar>
-            </Grid>
-            <Grid item>
-              <Box className={classes.collaboratorInfo}>
-                <Typography variant="h6">{name}</Typography>
-                <Typography variant="body1">{email}</Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <IconButton onClick={handleClick}>
-            <MoreHoriz />
-          </IconButton>
-          <Menu open={open} anchorEl={anchorEl} onClose={handleClose} elevation={2} keepMounted>
-            <MenuItem>Add to Board</MenuItem>
-            <MenuItem>Remove from Team</MenuItem>
-          </Menu>
-        </Grid>
-      </Grid>
-    </Paper>
+    <Draggable draggableId={email} index={index}>
+      {(provided, snapshot) => {
+        return (
+          <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+            <Paper elevation={0} className={classes.paper}>
+              <Grid container justify="space-between" alignItems="center">
+                <Grid item>
+                  <Grid container alignItems="center">
+                    <Grid item>
+                      <Avatar className={classes.largeAvatar}>{!profile && 'E'}</Avatar>
+                    </Grid>
+                    <Grid item>
+                      <Box className={classes.collaboratorInfo}>
+                        <Typography variant="h6">{name}</Typography>
+                        <Typography variant="body1">{email}</Typography>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <IconButton onClick={handleClick}>
+                    <MoreHoriz />
+                  </IconButton>
+                  <Menu open={open} anchorEl={anchorEl} onClose={handleClose} elevation={2} keepMounted>
+                    <MenuItem>Add to Board</MenuItem>
+                    <MenuItem>Remove from Team</MenuItem>
+                  </Menu>
+                </Grid>
+              </Grid>
+            </Paper>
+          </div>
+        );
+      }}
+    </Draggable>
   );
 };

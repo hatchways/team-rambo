@@ -4,7 +4,7 @@ export const dummyBoards = [
     name: 'Gilette',
     columns: [],
     cards: [],
-    user: '1231321',
+    user: 'id01929312321',
     description: 'This is some description example for a board. Please use it carefully.',
     collaborators: [
       {
@@ -25,7 +25,7 @@ export const dummyBoards = [
     createdAt: Date.now(),
   },
   {
-    _id: '123123',
+    _id: 'id019sdas12321',
     name: 'Gilette',
     columns: [],
     cards: [],
@@ -50,7 +50,7 @@ export const dummyBoards = [
     createdAt: Date.now(),
   },
   {
-    _id: '123123',
+    _id: '23123sdasda',
     name: 'Gilette',
     columns: [],
     cards: [],
@@ -75,7 +75,7 @@ export const dummyBoards = [
     createdAt: Date.now(),
   },
   {
-    _id: '123123',
+    _id: 'id0192922312321123',
     name: 'Gilette',
     columns: [],
     cards: [],
@@ -100,7 +100,7 @@ export const dummyBoards = [
     createdAt: Date.now(),
   },
   {
-    _id: '123123',
+    _id: '1231asdasda23',
     name: 'Gilette',
     columns: [],
     cards: [],
@@ -125,7 +125,7 @@ export const dummyBoards = [
     createdAt: Date.now(),
   },
   {
-    _id: '123123',
+    _id: '1231ggfdfga23',
     name: 'Gilette',
     columns: [],
     cards: [],
@@ -150,7 +150,7 @@ export const dummyBoards = [
     createdAt: Date.now(),
   },
   {
-    _id: '123123',
+    _id: '1231cccasx23',
     name: 'Gilette',
     columns: [],
     cards: [],
@@ -175,7 +175,7 @@ export const dummyBoards = [
     createdAt: Date.now(),
   },
   {
-    _id: '123123',
+    _id: '12312asdasdsa3',
     name: 'Gilette',
     columns: [],
     cards: [],

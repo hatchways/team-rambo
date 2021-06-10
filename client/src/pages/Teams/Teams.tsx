@@ -7,6 +7,7 @@ import { TeamsAppBar } from '../../components/Teams/TeamsAppBar/TeamsAppBar';
 import { TeamBoardView } from '../../components/Teams/TeamBoardView/TeamBoardView';
 import { useAuth } from '../../context/';
 import { dummyBoards } from '../../components/Teams/TeamBoardView/boardsDummyData';
+import { DragDropContext, DragStart, DropResult } from 'react-beautiful-dnd';
 
 const TeamsDashboard = (): JSX.Element => {
   const history = useHistory();
@@ -18,6 +19,14 @@ const TeamsDashboard = (): JSX.Element => {
     return <CircularProgress />;
   }
 
+  const onDragEnd = (result: DropResult): void => {
+    if (!result.destination) return;
+  };
+
+  const onDragStart = (item: DragStart): void => {
+    if (item.source.droppableId != 'collaborators') return;
+  };
+
   return (
     <Box>
       <CssBaseline />
@@ -25,19 +34,21 @@ const TeamsDashboard = (): JSX.Element => {
         <NavBar loggedInUser={loggedInUser} />
       </Box>
       <Box>
-        <Grid container alignItems="stretch">
-          <Sidebar />
-          <BoardViewWrapper>
-            <Grid container direction="column">
-              <Grid item>
-                <TeamsAppBar />
+        <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+          <Grid container alignItems="stretch">
+            <Sidebar />
+            <BoardViewWrapper>
+              <Grid container direction="column">
+                <Grid item>
+                  <TeamsAppBar />
+                </Grid>
+                <Grid item>
+                  <TeamBoardView boards={dummyBoards} />
+                </Grid>
               </Grid>
-              <Grid item>
-                <TeamBoardView boards={dummyBoards} />
-              </Grid>
-            </Grid>
-          </BoardViewWrapper>
-        </Grid>
+            </BoardViewWrapper>
+          </Grid>
+        </DragDropContext>
       </Box>
     </Box>
   );
