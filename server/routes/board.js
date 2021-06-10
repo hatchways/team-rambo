@@ -15,7 +15,7 @@ router.use(protect);
 router.route("/").post(createBoard);
 router.route("/:id").get(getBoard);
 router.route("/:id").patch(updateBoardName);
-router.route("/:id/addColumn").patch(createBoardColumn);
+router.route("/:id/addColumn").post(createBoardColumn);
 router.route("/:id/swapColumns").patch(swapBoardColumns);
 router.route("/:id/removeColumn").delete(deleteBoardColumn);
 router.route("/:id").delete(deleteBoard);

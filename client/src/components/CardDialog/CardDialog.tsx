@@ -27,7 +27,7 @@ interface DialogProps {
   activeCard: ICard;
 }
 
-const CardDialog = ({ title, columnId, tag, activeCard }: DialogProps): JSX.Element => {
+const CardDialog = ({ columnId, tag, activeCard }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
   const classes = cardDialogStyles();
   const theme = useTheme();

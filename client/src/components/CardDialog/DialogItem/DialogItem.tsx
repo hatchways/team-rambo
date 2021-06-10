@@ -22,15 +22,27 @@ const DialogItem = ({
 }: IDialogItem): JSX.Element => {
   const classes = dialogItemStyles();
   const { removeItem } = useDialog();
-  const [updateContent, setUpdateContent] = useState('');
+  const [description, setDescription] = useState(activeCard?.description);
+  const [comment, setComment] = useState(activeCard?.comment);
   const { updateActiveCard } = useKanban();
 
   const handleSave = () => {
-    updateActiveCard(JSON.parse(`{"${content}": "${updateContent}"}`));
+    updateActiveCard({ description: description, comment: comment });
   };
 
   const handleClose = () => {
     removeItem(id);
+  };
+
+  const handleClear = (field: string) => {
+    switch (field) {
+      case 'description':
+        setDescription('');
+        break;
+      case 'comment':
+        setComment('');
+        break;
+    }
   };
 
   const chooseIcon = (icon: string): JSX.Element => {
@@ -58,18 +70,16 @@ const DialogItem = ({
     switch (item) {
       case 'description':
         return (
-          <>
-            <div>{activeCard ? activeCard.description : 'placeholder'}</div>
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              placeholder={'Description'}
-              variant="outlined"
-              className={classes.textField}
-              onChange={(e) => setUpdateContent(e.target.value)}
-            />
-          </>
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            placeholder={'Add a Description'}
+            value={description}
+            variant="outlined"
+            className={classes.textField}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         );
       case 'deadline':
         return <DatePicker />;
@@ -79,10 +89,11 @@ const DialogItem = ({
             fullWidth
             multiline
             rows={2}
-            placeholder="Add description"
+            placeholder="Add a Comment"
+            value={comment}
             variant="outlined"
             className={classes.textField}
-            onChange={(e) => setUpdateContent(e.target.value)}
+            onChange={(e) => setComment(e.target.value)}
           />
         );
       case 'tag':
@@ -121,7 +132,7 @@ const DialogItem = ({
       >
         Save
       </Button>
-      <IconButton onClick={handleClose}>
+      <IconButton onClick={() => handleClear(content)}>
         <ClearIcon color="primary" />
       </IconButton>
     </Grid>

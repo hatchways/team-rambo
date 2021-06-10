@@ -1,7 +1,7 @@
 import { useState, MouseEvent } from 'react';
-import { Avatar, Menu, MenuItem } from '@material-ui/core';
+import { Avatar, Menu, MenuItem, CircularProgress } from '@material-ui/core';
 import PictureModal from '../PictureModal/PictureModal';
-import { useAuth } from '../../context/';
+import { useAuth, useUser } from '../../context/';
 import { IUser } from '../../interface';
 import useStyles from './useStyles';
 
@@ -14,7 +14,8 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openImageModal, setOpenImageModal] = useState<boolean>(false);
   const open = Boolean(anchorEl);
-  const { logout } = useAuth();
+  const { logout, loggedInUser } = useAuth();
+  const { picture } = useUser();
   const classes = useStyles();
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -32,20 +33,26 @@ const AvatarDisplay = ({ user }: Props): JSX.Element => {
 
   const handleProfile = () => {
     setOpenImageModal((prevOpen) => !prevOpen);
+    setAnchorEl(null);
     // To do: implement component for profile page and backend routing
   };
 
   return (
     <div>
-      <Avatar
-        alt="Profile Image"
-        src={`https://robohash.org/${user.email}.png`}
-        aria-label="show auth menu"
-        aria-controls="auth-menu"
-        aria-haspopup="true"
-        className={classes.medium}
-        onClick={handleClick}
-      ></Avatar>
+      {picture ? (
+        <Avatar
+          alt="Profile Image"
+          src={picture.url}
+          aria-label="show auth menu"
+          aria-controls="auth-menu"
+          aria-haspopup="true"
+          className={classes.medium}
+          onClick={handleClick}
+        ></Avatar>
+      ) : (
+        <CircularProgress color="primary"></CircularProgress>
+      )}
+
       <Menu
         id="auth-menu"
         anchorEl={anchorEl}

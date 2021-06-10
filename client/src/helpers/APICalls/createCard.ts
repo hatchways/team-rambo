@@ -2,7 +2,7 @@ import { IFetchOptions, IBoard } from '../../interface';
 
 const createCard = async (title: string, tag: string, columnId: string): Promise<IBoard> => {
   const fetchOptions: IFetchOptions = {
-    method: 'PATCH',
+    method: 'POST',
     body: JSON.stringify({ title, tag }),
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',

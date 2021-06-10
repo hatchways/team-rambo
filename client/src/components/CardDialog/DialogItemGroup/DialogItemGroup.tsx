@@ -11,17 +11,14 @@ const DialogItemGroup = ({ items, activeCard }: DialogItemGroupProps): JSX.Eleme
     <Grid container>
       {items.map((item: IDialogItem) => {
         return (
-          <>
-            <div>{activeCard.description}</div>
-            <DialogItem
-              key={item.id}
-              title={item.title}
-              content={item.content}
-              icon={item.icon}
-              id={item.id}
-              activeCard={activeCard}
-            />
-          </>
+          <DialogItem
+            key={item.id}
+            title={item.title}
+            content={item.content}
+            icon={item.icon}
+            id={item.id}
+            activeCard={activeCard}
+          />
         );
       })}
     </Grid>
