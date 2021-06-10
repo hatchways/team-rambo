@@ -75,6 +75,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         activeBoard.columns[activeBoard.columns.findIndex((col) => col._id === destination.droppableId)];
       const [card] = homeColumn.cards.splice(source.index, 1);
       newColumns.cards.splice(destination.index, 0, card);
+      updateCard(card._id, { columnId: newColumns._id });
 
       const batch = {
         key: card._id,

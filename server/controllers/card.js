@@ -49,6 +49,7 @@ exports.moveCard = asyncHandler(async (req, res) => {
     (colCard) => colCard._id === card._id
   );
   oldColumn.cards.splice(cardIndex, 1);
+  await Card.findByIdAndUpdate(id, { columnId: newColumn._id });
   newColumn.cards.push(card);
 
   await oldColumn.save();
