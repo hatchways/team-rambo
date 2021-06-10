@@ -1,7 +1,8 @@
-import { Button } from '@material-ui/core';
+import { Button, DialogActions } from '@material-ui/core';
 import { FormikErrors, FormikTouched, FormikValues, useFormik } from 'formik';
 import { ChangeEvent } from 'react';
 import { OptionalObjectSchema } from 'yup/lib/object';
+import useStyles from './dialogFormStyles';
 
 interface DialogFormProps<T> {
   initialValues: T;
@@ -21,20 +22,23 @@ export const DialogForm = <T,>({ initialValues, validation, onSubmit, children }
     validationSchema: validation,
     onSubmit: (values: T) => onSubmit(values),
   });
+  const classes = useStyles();
 
   formik.handleChange;
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} className={classes.form}>
       {children({
         errors: formik.errors,
         values: formik.values,
         touched: formik.touched,
         handleChange: formik.handleChange,
       })}
-      <Button color="primary" variant="contained" fullWidth type="submit">
-        Submit
-      </Button>
+      <DialogActions>
+        <Button color="primary" variant="contained" fullWidth type="submit" size="large">
+          Create
+        </Button>
+      </DialogActions>
     </form>
   );
 };

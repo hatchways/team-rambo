@@ -5,23 +5,14 @@ import useChildStyles from '../shared/childStyles';
 import clsx from 'clsx';
 import { SwapVert } from '@material-ui/icons';
 import { Collaborator } from '../Collaborator/Collaborator';
-import { DialogWrapper } from '../shared/TeamDialog';
-import { TeamDialogList } from '../TeamDialogList/TeamDialogList';
 
-export const Sidebar = (): JSX.Element => {
+interface SidebarProps {
+  switcherFunc: () => void;
+}
+
+export const Sidebar = ({ switcherFunc }: SidebarProps): JSX.Element => {
   const classes = useStyles();
-  const [open, setOpen] = useState<boolean>(false);
-  const [selectedValue, setSelectedValue] = useState<string>('Rambo');
   const childClasses = useChildStyles();
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (value: string) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
 
   return (
     <Hidden smDown>
@@ -34,15 +25,11 @@ export const Sidebar = (): JSX.Element => {
               variant="contained"
               disableElevation
               className={classes.teamSwitcherButton}
-              onClick={handleClickOpen}
+              onClick={switcherFunc}
               endIcon={<SwapVert />}
             >
-              {selectedValue}
+              Team Rambo
             </Button>
-            <DialogWrapper selectedValue={selectedValue} open={open} onClose={handleClose}>
-              <DialogTitle>Switch Team</DialogTitle>
-              <TeamDialogList />
-            </DialogWrapper>
           </Box>
           <Box>
             <Box className={classes.collaboratorsWrapper}>
