@@ -20,7 +20,7 @@ export default interface IKanbanContext {
   ) => void;
   removeColumn: (columnId: string) => void;
   removeBoard: (boardId: string) => void;
-  fetchBoard: (id: string) => Promise<IBoard>;
+  fetchBoard: (id: string) => Promise<IBoard | void>;
   createNewBoard: (name: string) => Promise<INewBoardApiData>;
   moveCard: (destination: IColumn) => void;
   copyCard: (destination: IColumn) => void;

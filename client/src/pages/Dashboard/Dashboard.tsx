@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Box, Grid, CssBaseline, CircularProgress } from '@material-ui/core';
+import { useParams, useHistory } from 'react-router-dom';
 import Board from '../../components/Kanban/Board';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import { useAuth, useKanban } from '../../context/';
-import { useParams, useHistory, useLocation } from 'react-router-dom';
 import useStyles from './dashboardStyles';
 
 interface IBoardParams {
@@ -19,20 +19,17 @@ const Dashboard = (): JSX.Element => {
   const { fetchBoard, activeBoard } = useKanban();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const { id } = useParams<IBoardParams>();
-  const location = useLocation();
 
   const toggleDrawer = (): void => setOpenDrawer((prevOpen) => !prevOpen);
 
-  if (!loggedInUser) {
-    history.push('/login');
-
-    return <CircularProgress />;
-  }
-
   useEffect(() => {
     fetchBoard(id);
-  }, [location]);
+  }, []);
 
+  if (!loggedInUser) {
+    history.push('/login');
+    return <CircularProgress />;
+  }
   return (
     <Box>
       <CssBaseline />
@@ -49,7 +46,7 @@ const Dashboard = (): JSX.Element => {
             <Board activeBoard={activeBoard} />
           </Grid>
         ) : (
-          <Grid xs={12} className={classes.loading}>
+          <Grid item xs={12} className={classes.loading}>
             <CircularProgress size={150} />
           </Grid>
         )}
