@@ -4,6 +4,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import { BoardViewWrapper } from '../../components/Teams/BoardViewWrapper/BoardViewWrapper';
 import { Sidebar } from '../../components/Teams/Sidebar/Sidebar';
 import { TeamsAppBar } from '../../components/Teams/TeamsAppBar/TeamsAppBar';
+import { TeamBoard } from '../../components/Teams/TeamBoard/TeamBoard';
 import { useAuth } from '../../context/';
 
 const TeamsDashboard = (): JSX.Element => {

@@ -7,13 +7,13 @@ import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import { useAuth, useKanban } from '../../context/';
-import useStyles from '../shared/pageStyles';
+//import useStyles from '../shared/pageStyles';
 
 const Dashboard = (): JSX.Element => {
-  const classes = useStyles();
+  //const classes = useStyles();
   const history = useHistory();
   const { loggedInUser } = useAuth();
-  // const { activeBoard } = useKanban();
+  const { activeBoard } = useKanban();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   const toggleDrawer = (): void => setOpenDrawer((prevOpen) => !prevOpen);
