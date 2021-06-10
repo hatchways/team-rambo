@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SwapHorizontalCircleOutlinedIcon from '@material-ui/icons/SwapHorizontalCircleOutlined';
+import { useHistory } from 'react-router-dom';
 import useStyles from './optionsDrawerStyles';
 import { useKanban } from '../../context/';
 
@@ -22,7 +23,8 @@ interface Props {
 
 const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
   const classes = useStyles();
-  const { fetchBoard, userBoards, removeBoard } = useKanban();
+  const { userBoards, removeBoard } = useKanban();
+  const history = useHistory();
 
   return (
     <Drawer anchor={'right'} open={open} onClose={setOpen}>
@@ -39,7 +41,7 @@ const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
             key={board._id}
             button
             onClick={() => {
-              fetchBoard(board._id);
+              history.push(`/dashboard/board/${board._id}`);
               setOpen(false);
             }}
           >
