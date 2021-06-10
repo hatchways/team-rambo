@@ -17,6 +17,6 @@ router.route("/:id/swapCardsInColumn").patch(swapCardsInColumn);
 router.route("/:id/swapCardsOutsideColumn").patch(swapCardsOutsideColumn);
 router.route("/:id/reorder").patch(reorderColumn);
 router.route("/:id/rename").patch(renameColumn);
-router.route("/:id/addCard").patch(createColumnCard);
+router.route("/:id/addCard").post(createColumnCard);
 router.route("/:id/removeCard").delete(deleteColumnCard);
 module.exports = router;

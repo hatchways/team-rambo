@@ -70,7 +70,10 @@ exports.updateCard = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const update = req.body;
 
-  const card = await Card.findByIdAndUpdate(id, update, { upsert: true });
+  const card = await Card.findByIdAndUpdate(id, update, {
+    new: true,
+    upsert: true,
+  });
 
   if (!card) {
     res.status(404);
