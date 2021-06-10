@@ -1,5 +1,6 @@
 import { Grid, Card, CardContent, CardHeader, Avatar, IconButton, Typography } from '@material-ui/core';
 import { AvatarGroup } from '@material-ui/lab';
+import { DragDropContext, Droppable, DroppableProvided } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
 import { MoreHoriz, ArrowForward } from '@material-ui/icons';
 import { ITeamBoard, IUser } from '../../../interface';

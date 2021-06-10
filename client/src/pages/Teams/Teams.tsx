@@ -4,8 +4,9 @@ import NavBar from '../../components/NavBar/NavBar';
 import { BoardViewWrapper } from '../../components/Teams/BoardViewWrapper/BoardViewWrapper';
 import { Sidebar } from '../../components/Teams/Sidebar/Sidebar';
 import { TeamsAppBar } from '../../components/Teams/TeamsAppBar/TeamsAppBar';
-import { TeamBoard } from '../../components/Teams/TeamBoard/TeamBoard';
+import { TeamBoardView } from '../../components/Teams/TeamBoardView/TeamBoardView';
 import { useAuth } from '../../context/';
+import { dummyBoards } from '../../components/Teams/TeamBoardView/boardsDummyData';
 
 const TeamsDashboard = (): JSX.Element => {
   const history = useHistory();
@@ -27,7 +28,14 @@ const TeamsDashboard = (): JSX.Element => {
         <Grid container alignItems="stretch">
           <Sidebar />
           <BoardViewWrapper>
-            <TeamsAppBar />
+            <Grid container direction="column">
+              <Grid item>
+                <TeamsAppBar />
+              </Grid>
+              <Grid item>
+                <TeamBoardView boards={dummyBoards} />
+              </Grid>
+            </Grid>
           </BoardViewWrapper>
         </Grid>
       </Box>

@@ -1,4 +1,4 @@
-import { Grid } from '@material-ui/core';
+import { Grid, Box } from '@material-ui/core';
 import { ITeamBoard } from '../../../interface';
 import { TeamBoard } from '../TeamBoard/TeamBoard';
 import useStyles from './teamBoardViewStyles';
@@ -8,13 +8,13 @@ interface Props {
 }
 
 export const TeamBoardView = ({ boards }: Props): JSX.Element => {
+  const classes = useStyles();
+
   return (
-    <Grid container spacing={2}>
+    <Box className={classes.box}>
       {boards.map((board) => (
-        <Grid item key={board._id}>
-          <TeamBoard board={board} />
-        </Grid>
+        <TeamBoard key={board._id} board={board} />
       ))}
-    </Grid>
+    </Box>
   );
 };

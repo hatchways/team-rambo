@@ -6,7 +6,7 @@ export interface IBoard {
   columns: Array<IColumn>;
   cards: Array<ICard>;
   user: string;
-  createdAt: string;
+  createdAt: number;
 }
 
 export interface ITeamBoard {
@@ -18,7 +18,7 @@ export interface ITeamBoard {
   user: string;
   collaborators: Array<IUser>;
   admins: Array<IUser>;
-  createdAt: string;
+  createdAt: number;
 }
 
 export interface BoardApiData {
