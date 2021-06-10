@@ -8,7 +8,7 @@ import AddBoardDialog from '../AddBoardDialog/AddBoardDialog';
 import NotificationCenter from './Notifications/NotificationCenter/NotificationCenter';
 import { testNotifications } from './Notifications/sampleNotificationData';
 import logo from '../../Images/logo.png';
-import { IUser, IBoard } from '../../interface/';
+import { IUser } from '../../interface/';
 import { useKanban } from '../../context';
 
 interface Props {
@@ -59,7 +59,7 @@ const NavBar = ({ loggedInUser, handleDrawerToggle }: Props): JSX.Element => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            {activeBoard._id != 'Initial' && activeBoard.name}
+            {activeBoard && activeBoard.name}
           </Typography>
           <IconButton
             onClick={handleDrawerToggle}

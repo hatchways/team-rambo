@@ -1,97 +1,163 @@
 const asyncHandler = require("express-async-handler");
 const Board = require("../models/Board");
-const { v4: uuidv4, v4 } = require("uuid");
-
-exports.getBoards = asyncHandler(async (req, res) => {
-  const boards = await Board.find();
-
-  return res.json(boards);
-});
+const User = require("../models/User");
 
 exports.getBoard = asyncHandler(async (req, res) => {
-  try {
-    const board = await Board.findById(req.params.id);
+  const board = await Board.findOne({ _id: req.params.id }).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+      model: "card",
+    },
+  });
 
-    if (!board) return res.status(404).json({ error: "Board not found" });
-
-    return res.status(200).json({ board });
-  } catch (error) {
-    return res.json({ error });
+  if (!board) {
+    res.status(404);
+    throw new Error("Board not found");
   }
+
+  return res.status(200).json(board);
 });
 
 exports.createBoard = asyncHandler(async (req, res) => {
   const { name } = req.body;
+
   const newBoard = await Board.create({
     name: name,
-    columns: [
-      {
-        name: "Not Started",
-        cards: [
-          {
-            _id: "car-1",
-            columnId: "col-1",
-            name: "Essay on the environment",
-            tag: "green",
-          },
-        ],
-        _id: v4(),
-        createdAt: Date.now(),
-      },
-      {
-        name: "In Progress",
-        cards: [
-          {
-            _id: "car-2",
-            columnId: "col-2",
-            name: "Midterm exam",
-            dueDate: new Date(),
-            tag: "red",
-          },
-          {
-            _id: "car-3",
-            columnId: "car-3",
-            name: "Homework",
-            tag: "red",
-          },
-        ],
-        _id: v4(),
-        createdAt: Date.now(),
-      },
-      {
-        _id: v4(),
-        name: "Completed",
-        cards: [],
-        createdAt: Date.now(),
-      },
-    ],
     user: req.user.id,
   });
 
-  return res.status(200).json({ board: newBoard });
+  if (!newBoard) {
+    res.status(400);
+    throw new Error("Board could not be created.");
+  }
+
+  await newBoard.createTemplateBoard();
+
+  return res.status(200).json(
+    await Board.populate(newBoard, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
 });
 
-exports.updateBoard = asyncHandler(async (req, res, next) => {
-  const { _id, name, user, columns, createdAt } = req.body;
+exports.updateBoardName = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
 
-  try {
-    const filter = { _id };
-    const update = {
-      _id,
-      user,
-      name,
-      columns,
-      createdAt,
-    };
+  const board = await Board.findById(id);
 
-    const board = await Board.findOneAndUpdate(filter, update, {
-      new: true,
-    });
-
-    const newBoard = board.removePassword();
-
-    return res.status(200).json(newBoard);
-  } catch (error) {
-    return res.json(error);
+  if (!board) {
+    res.status(404);
+    throw new Error("Board not found");
   }
+
+  await board.updateName(name);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
+});
+
+exports.deleteBoard = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const deletedBoard = await Board.findOneAndDelete({ _id: id });
+
+  if (!deletedBoard) {
+    res.status(404);
+    throw new Error("Couldn't find a board to delete!");
+  }
+
+  const boards = await Board.find({ user: deletedBoard.user });
+
+  return res.status(200).json(
+    await Board.populate(boards, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
+});
+
+exports.swapBoardColumns = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { column1, column2 } = req.body;
+
+  console.log(column1, column2);
+
+  const board = await Board.findById(id);
+
+  await Board.populate(board, {
+    path: "columns",
+    populate: {
+      path: "cards",
+    },
+  });
+
+  await board.swapColumns(column1, column2);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
+});
+
+exports.createBoardColumn = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { side, name } = req.body;
+
+  const board = await Board.findById(id);
+
+  if (!board) {
+    res.status(404);
+    throw new Error("Board not found");
+  }
+
+  await board.addColumn(side, name);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
+});
+
+exports.deleteBoardColumn = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { columnId } = req.body;
+
+  const board = await Board.findById(id);
+
+  if (!board) {
+    res.status(404);
+    throw new Error("Board not found");
+  }
+
+  await board.deleteColumn(columnId);
+
+  return res.status(200).json(
+    await Board.populate(board, {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    })
+  );
 });

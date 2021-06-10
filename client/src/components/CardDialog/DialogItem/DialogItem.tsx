@@ -1,4 +1,4 @@
-import { cloneElement } from 'react';
+import { cloneElement, useState } from 'react';
 import { Button, IconButton, Grid, Box, TextField, Typography } from '@material-ui/core';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -9,26 +9,21 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import AttachFileOutlinedIcon from '@material-ui/icons/AttachFileOutlined';
 import CheckList from '../CheckList/CheckList';
 import dialogItemStyles from './dialogItemStyles';
-import { useDialog } from '../../../context/';
-import { IDialogItem } from '../../../interface';
+import { useKanban } from '../../../context/';
+import { ICard, IDialogItem } from '../../../interface';
 import { DatePicker } from '..';
 
-const DialogItem = ({
-  title = 'blank',
-  content = 'description',
-  icon = 'clear',
-  id = 'testId',
-}: IDialogItem): JSX.Element => {
+const DialogItem = ({ item, activeCard }: { item: IDialogItem; activeCard: ICard }): JSX.Element => {
   const classes = dialogItemStyles();
-  const { removeItem } = useDialog();
+  const [content, setContent] = useState(activeCard[`${item.content}`] || '');
+  const { updateActiveCard } = useKanban();
 
-  const handleSave = () => {
-    console.log(`Saving DialogItem with id: ${id}`);
-  };
+  const handleSave = () => updateActiveCard({ [`${item.content}`]: content });
 
-  const handleClose = () => {
-    removeItem(id);
-  };
+  // const { removeItem } = useDialog();
+  // const handleClose = () => removeItem(item.id);
+
+  const handleClear = () => setContent('');
 
   const chooseIcon = (icon: string): JSX.Element => {
     switch (icon) {
@@ -59,35 +54,37 @@ const DialogItem = ({
             fullWidth
             multiline
             rows={4}
-            placeholder="Add description"
+            placeholder={'Add a Description'}
+            value={content}
             variant="outlined"
             className={classes.textField}
+            onChange={(e) => setContent(e.target.value)}
           />
         );
-      case 'deadline':
-        return <DatePicker />;
+      case 'date':
+        return <DatePicker content={content} setContent={setContent} />;
       case 'comment':
         return (
           <TextField
             fullWidth
             multiline
             rows={2}
-            placeholder="Add description"
+            placeholder="Add a Comment"
+            value={content}
             variant="outlined"
             className={classes.textField}
+            onChange={(e) => setContent(e.target.value)}
           />
         );
-      case 'tag':
-        break;
       case 'checklist':
-        return <CheckList />;
+        return <CheckList content={content} setContent={setContent} />;
       case 'attachment':
         return (
           <Box>
             <input multiple type="file" className={classes.dialogButton} />
           </Box>
         );
-      case 'cover':
+      case 'cover' || 'tag':
         break;
       default:
         return <ClearIcon />;
@@ -96,15 +93,13 @@ const DialogItem = ({
 
   return (
     <Grid item xs={12} className={classes.mainSection}>
-      {cloneElement(chooseIcon(icon), { className: classes.icons, color: 'primary' })}
+      {cloneElement(chooseIcon(item.icon), { className: classes.icons, color: 'primary' })}
       <Typography variant="h6" className={classes.dialogHeading}>
-        {title}
+        {item.title}
       </Typography>
-      {chooseItemType(content)}
+      {chooseItemType(item.content)}
       <Button
-        onClick={() => {
-          handleSave();
-        }}
+        onClick={() => handleSave()}
         className={classes.dialogButton}
         color="primary"
         variant="contained"
@@ -113,7 +108,7 @@ const DialogItem = ({
       >
         Save
       </Button>
-      <IconButton onClick={handleClose}>
+      <IconButton onClick={() => handleClear()}>
         <ClearIcon color="primary" />
       </IconButton>
     </Grid>

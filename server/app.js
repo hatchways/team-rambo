@@ -15,6 +15,8 @@ const userRouter = require("./routes/user");
 const fileRouter = require("./routes/file");
 const notificationRouter = require("./routes/notification");
 const boardsRouter = require("./routes/board");
+const columnsRouter = require("./routes/column");
+const cardsRouter = require("./routes/card");
 
 const { json, urlencoded } = express;
 
@@ -51,6 +53,8 @@ app.use("/users", userRouter);
 app.use("/files", fileRouter);
 app.use("/notifications/", notificationRouter);
 app.use("/boards", boardsRouter);
+app.use("/cards", cardsRouter);
+app.use("/columns", columnsRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));

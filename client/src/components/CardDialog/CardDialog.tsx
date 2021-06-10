@@ -15,22 +15,24 @@ import {
 import ClearIcon from '@material-ui/icons/Clear';
 import ImportContactsOutlinedIcon from '@material-ui/icons/ImportContactsOutlined';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { ICard } from '../../interface';
 import { cardDialogStyles, DialogItemGroup, DialogActionButton, DialogMenuButton } from '../CardDialog';
 import { useDialog, useKanban } from '../../context/';
 
 interface DialogProps {
-  name: string;
+  title: string;
   tag: string;
   columnId: string;
   id: string;
+  activeCard: ICard;
 }
 
-const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
+const CardDialog = ({ columnId, tag, activeCard }: DialogProps): JSX.Element => {
   const [open, setOpen] = useState(true);
   const classes = cardDialogStyles();
   const theme = useTheme();
-  const { resetOpenCard, getColumnById } = useKanban();
-  const { items, resetItems } = useDialog();
+  const { resetOpenCard, getColumnById, updateActiveCard } = useKanban();
+  const { resetItems } = useDialog();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [tagColor, setTagColor] = useState(tag);
 
@@ -47,6 +49,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
   const handleMenuClose = (tag: string) => {
     setAnchorEl(null);
     setTagColor(tag);
+    updateActiveCard({ tag: tag });
   };
 
   return (
@@ -57,7 +60,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
             <Grid container className={classes.titleContainer}>
               <ImportContactsOutlinedIcon color="primary" className={classes.icons} />
               <Typography variant="h5" className={classes.dialogTitle}>
-                {name}
+                {activeCard.title}
               </Typography>
               <Box className={`${classes.cardTag}`} style={{ backgroundColor: theme.palette.tags[tagColor] }}></Box>
               <IconButton onClick={handleClick}>
@@ -85,7 +88,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
         <DialogContent dividers={false}>
           <Grid container className={classes.hasMargin}>
             <Grid item xs={10}>
-              <DialogItemGroup items={items} />
+              <DialogItemGroup activeCard={activeCard} />
             </Grid>
             <Grid item xs={2}>
               <Grid container direction="column" className={classes.buttonContainer}>
@@ -95,7 +98,7 @@ const CardDialog = ({ name, columnId, tag }: DialogProps): JSX.Element => {
                       SECTIONS:
                     </Typography>
                     <DialogActionButton title="Description" content="description" icon="contacts" />
-                    <DialogActionButton title="Deadline" content="deadline" icon="schedule" />
+                    <DialogActionButton title="Deadline" content="date" icon="schedule" />
                     <DialogActionButton title="Comment" content="comment" icon="bubble" />
                     <DialogActionButton title="Attachment" content="attachment" icon="attachment" />
                     <DialogActionButton title="Checklist" content="checklist" icon="checklist" />

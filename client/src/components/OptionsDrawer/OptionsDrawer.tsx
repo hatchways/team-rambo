@@ -1,5 +1,16 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Typography, ListItem, ListItemText, ListItemIcon, List, Divider, Drawer } from '@material-ui/core';
+import {
+  Typography,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  List,
+  Divider,
+  Drawer,
+  IconButton,
+} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 import SwapHorizontalCircleOutlinedIcon from '@material-ui/icons/SwapHorizontalCircleOutlined';
 import { useHistory } from 'react-router-dom';
 import useStyles from './optionsDrawerStyles';
@@ -12,8 +23,7 @@ interface Props {
 
 const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
   const classes = useStyles();
-  const history = useHistory();
-  const { userBoards } = useKanban();
+  const { fetchBoard, userBoards, removeBoard } = useKanban();
 
   return (
     <Drawer anchor={'right'} open={open} onClose={setOpen}>
@@ -37,10 +47,21 @@ const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
             <ListItemIcon>
               <SwapHorizontalCircleOutlinedIcon className={classes.icon} />
             </ListItemIcon>
+
             <ListItemText
               primary={<Typography className={classes.primary}>{board.name}</Typography>}
               className={classes.primary}
             />
+            <ListItemSecondaryAction>
+              <IconButton
+                edge="end"
+                onClick={() => {
+                  removeBoard(board._id);
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
           </ListItem>
         ))}
       </List>

@@ -1,16 +1,23 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const protect = require("../middleware/auth");
 const {
-  getBoards,
   createBoard,
   getBoard,
-  updateBoard,
+  updateBoardName,
+  deleteBoard,
+  swapBoardColumns,
+  createBoardColumn,
+  deleteBoardColumn,
 } = require("../controllers/board");
 
-router.route("/").get(protect, getBoards);
-router.route("/").post(protect, createBoard);
-router.route("/:id").get(protect, getBoard);
-router.route("/:id").patch(protect, updateBoard);
+router.use(protect);
+
+router.route("/").post(createBoard);
+router.route("/:id").get(getBoard);
+router.route("/:id").patch(updateBoardName);
+router.route("/:id/addColumn").post(createBoardColumn);
+router.route("/:id/swapColumns").patch(swapBoardColumns);
+router.route("/:id/removeColumn").delete(deleteBoardColumn);
+router.route("/:id").delete(deleteBoard);
 
 module.exports = router;

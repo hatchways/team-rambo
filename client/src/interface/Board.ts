@@ -21,5 +21,5 @@ export interface IBoardsApiData {
 
 export interface INewBoardApiData {
   board: IBoard;
-  error?: string;
+  error?: { message: string };
 }
