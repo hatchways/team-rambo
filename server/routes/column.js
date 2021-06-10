@@ -14,7 +14,7 @@ router.use(protect);
 
 router.route("/:id").patch(updateColumn);
 router.route("/:id/swapCardsInColumn").patch(swapCardsInColumn);
-router.route("/:id/swapCardsOutsideColumn").patch(swapCardsOutsideColumn);
+router.route("/batch/swapCardsOutsideColumn").patch(swapCardsOutsideColumn);
 router.route("/:id/reorder").patch(reorderColumn);
 router.route("/:id/rename").patch(renameColumn);
 router.route("/:id/addCard").patch(createColumnCard);

@@ -1,7 +1,9 @@
+const mongoose = require("mongoose");
 const asyncHandler = require("express-async-handler");
 const Column = require("../models/Column");
 const Board = require("../models/Board");
 const Card = require("../models/Card");
+const { update } = require("../models/Card");
 
 exports.updateColumn = asyncHandler(async (req, res, next) => {
   const { _id, name, cards } = req.body;
@@ -100,36 +102,48 @@ exports.swapCardsInColumn = asyncHandler(async (req, res) => {
 });
 
 exports.swapCardsOutsideColumn = asyncHandler(async (req, res) => {
-  const { cardId, source, destination } = req.body;
+  const batch = req.body;
+  const bulkOps = [];
 
-  const column1 = await Column.findById(source.droppableId).populate("cards");
-  const column2 = await Column.findById(destination.droppableId).populate(
-    "cards"
-  );
-
-  const card = await Card.findById(cardId);
-
-  const clonedCards1 = column1.cards.slice();
-  const clonedCards2 = column2.cards.slice();
-  clonedCards1.splice(source.index, 1);
-  clonedCards2.splice(destination.index, 0, card);
-
-  column1.cards = clonedCards1;
-  column2.cards = clonedCards2;
-
-  await column1.save();
-  await column2.save();
-
-  const board = await Board.findById(column1.boardId);
-
-  return res.status(200).json(
-    await Board.populate(board, {
-      path: "columns",
-      populate: {
-        path: "cards",
+  for (const update of batch) {
+    bulkOps.push(
+      {
+        updateOne: {
+          filter: {
+            cards: {
+              $in: [mongoose.Types.ObjectId(update.key)],
+            },
+          },
+          update: {
+            $pull: {
+              cards: mongoose.Types.ObjectId(update.key),
+            },
+          },
+          upsert: true,
+        },
       },
-    })
-  );
+      {
+        updateOne: {
+          filter: {
+            _id: mongoose.Types.ObjectId(update.change.destination.droppableId),
+          },
+          update: {
+            $push: {
+              cards: {
+                $each: [mongoose.Types.ObjectId(update.key)],
+                $position: update.change.destination.index,
+              },
+            },
+          },
+          upsert: true,
+        },
+      }
+    );
+  }
+
+  Column.collection.bulkWrite(bulkOps);
+
+  return res.status(200).json({ message: "working" });
 });
 
 exports.deleteColumnCard = asyncHandler(async (req, res) => {});
