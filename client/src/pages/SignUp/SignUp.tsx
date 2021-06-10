@@ -3,12 +3,13 @@ import { FormikHelpers } from 'formik';
 import useStyles from './signUpStyles';
 import { register } from '../../helpers/';
 import SignUpForm from './SignUpForm/SignUpForm';
-import { useAuth, useSnackBar } from '../../context/';
+import { useAuth, useSnackBar, useKanban } from '../../context/';
 
 export default function Register(): JSX.Element {
   const classes = useStyles();
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
+  const { sendToFirstBoard } = useKanban();
 
   const handleSubmit = (
     { email, password }: { email: string; password: string },
@@ -16,17 +17,14 @@ export default function Register(): JSX.Element {
   ) => {
     register(email, password).then((data) => {
       if (data.error) {
-        console.error({ error: data.error.message });
         setSubmitting(false);
-        updateSnackBarMessage(data.error.message);
+        updateSnackBarMessage(data.error, 'error');
       } else if (data.success) {
         updateLoginContext(data.success);
+        sendToFirstBoard();
       } else {
-        // should not get here from backend but this catch is for an unknown issue
-        console.error({ data });
-
         setSubmitting(false);
-        updateSnackBarMessage('An unexpected error occurred. Please try again');
+        updateSnackBarMessage('An unexpected error occurred. Please try again', 'error');
       }
     });
   };

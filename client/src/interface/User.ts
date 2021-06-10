@@ -1,5 +1,6 @@
 export interface IUser {
   email: string;
+  picture: { url: string };
 }
 
 export interface ISearchUsersApiData {

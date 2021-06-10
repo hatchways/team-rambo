@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   calendarEvent: {
     height: '100px',
   },
+  loading: {
+    textAlign: 'center',
+  },
 }));
 
 export default useStyles;
