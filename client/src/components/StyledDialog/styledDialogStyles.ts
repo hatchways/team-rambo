@@ -1,6 +1,16 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
-const styledDialogStyles = makeStyles(() => ({
+const styledDialogStyles = makeStyles((theme: Theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
   textField: {
     display: 'flex',
     textAlign: 'center',
@@ -11,7 +21,7 @@ const styledDialogStyles = makeStyles(() => ({
   },
   dialogTitle: {
     fontWeight: 'bold',
-    marginBottom: '40px',
+    textAlign: 'center',
   },
   inputs: {
     height: '3rem',
@@ -26,15 +36,16 @@ const styledDialogStyles = makeStyles(() => ({
       opacity: 1,
     },
   },
-  dialogButton: { padding: '8px 30px', marginTop: '30px' },
-  topRight: {
-    position: 'absolute',
-    left: '85%',
-    top: '2%',
-  },
   formGrid: {
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  dialogContent: {
+    height: 'auto',
+    padding: 20,
+  },
+  component: {
+    marginTop: 20,
   },
 }));
 

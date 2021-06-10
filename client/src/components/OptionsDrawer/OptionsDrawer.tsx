@@ -18,7 +18,7 @@ const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
   return (
     <Drawer anchor={'right'} open={open} onClose={setOpen}>
       <List className={classes.list}>
-        <ListItem>
+        <ListItem className={classes.listItem}>
           <ListItemText
             primary={<Typography className={classes.title}>Boards</Typography>}
             className={classes.primary}
@@ -34,7 +34,7 @@ const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
               setOpen(false);
             }}
           >
-            <ListItemIcon>
+            <ListItemIcon className={classes.listItemIcon}>
               <SwapHorizontalCircleOutlinedIcon className={classes.icon} />
             </ListItemIcon>
             <ListItemText

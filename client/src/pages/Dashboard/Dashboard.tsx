@@ -4,6 +4,7 @@ import Board from '../../components/Kanban/Board';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
+import LoadingBoard from '../../components/LoadingBoard/LoadingBoard';
 import { useAuth, useKanban } from '../../context/';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import useStyles from './dashboardStyles';
@@ -26,7 +27,7 @@ const Dashboard = (): JSX.Element => {
   if (!loggedInUser) {
     history.push('/login');
 
-    return <CircularProgress />;
+    return <LoadingBoard />;
   }
 
   useEffect(() => {
@@ -37,7 +38,7 @@ const Dashboard = (): JSX.Element => {
     <Box>
       <CssBaseline />
       <Box>
-        <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
+        <NavBar handleDrawerToggle={toggleDrawer} />
         <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
       </Box>
       <Box className={classes.buttonOverlay}>
