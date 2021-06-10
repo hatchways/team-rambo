@@ -7,7 +7,7 @@ import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import { useAuth, useKanban } from '../../context/';
-import useStyles from '../shared/pageStyles';
+import useStyles from './dashboardStyles';
 
 const Dashboard = (): JSX.Element => {
   const classes = useStyles();

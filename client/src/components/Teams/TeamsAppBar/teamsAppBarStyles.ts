@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   appBarIconBtn: {
     marginLeft: theme.spacing(2),
   },
+  dialogWrapper: {
+    padding: theme.spacing(2),
+  },
 }));
 
 export default useStyles;

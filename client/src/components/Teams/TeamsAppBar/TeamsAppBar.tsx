@@ -1,8 +1,20 @@
-import { AppBar, Button, Grid, IconButton, TextField, Toolbar, Typography, withStyles } from '@material-ui/core';
+import {
+  AppBar,
+  Button,
+  Grid,
+  IconButton,
+  TextField,
+  Box,
+  Toolbar,
+  Typography,
+  withStyles,
+  DialogTitle,
+  Container,
+} from '@material-ui/core';
 import { Add, MoreHoriz } from '@material-ui/icons';
-import { Form, Formik } from 'formik';
 import { useState } from 'react';
 import * as yup from 'yup';
+import { DialogForm } from '../DialogForm/DialogForm';
 import { DialogWrapper } from '../shared/TeamDialog';
 import useStyles from './teamsAppBarStyles';
 
@@ -38,14 +50,14 @@ export const TeamsAppBar = (): JSX.Element => {
   const [selectedValue, setSelectedValue] = useState<string>('');
   const [action, setAction] = useState<{ display: string; action: string }>({ display: '', action: '' });
   const classes = useStyles();
-  const initialTeamValues: TeamForm = {
-    name: '',
-    description: '',
-  };
 
   const handleClickOpen = (display: string, action: string) => {
     setAction({ display, action });
     setOpen(true);
+  };
+
+  const submitHandler = (values: TeamForm) => {
+    console.log(values);
   };
 
   const handleClose = (value: string) => {
@@ -64,7 +76,7 @@ export const TeamsAppBar = (): JSX.Element => {
                 size="medium"
                 variant="outlined"
                 startIcon={<Add />}
-                onClick={() => handleClickOpen('Invite collaborator', 'team')}
+                onClick={() => handleClickOpen('Invite collaborator', 'collaborator')}
               >
                 Invite Collaborator
               </AppBarButton>
@@ -72,7 +84,7 @@ export const TeamsAppBar = (): JSX.Element => {
                 size="medium"
                 variant="outlined"
                 startIcon={<Add />}
-                onClick={() => handleClickOpen('Create new board', 'collaborator')}
+                onClick={() => handleClickOpen('Create new board', 'team')}
               >
                 New Team Board
               </AppBarButton>
@@ -87,27 +99,44 @@ export const TeamsAppBar = (): JSX.Element => {
       </AppBar>
       <DialogWrapper open={open} selectedValue={selectedValue} onClose={handleClose}>
         {action.action === 'team' ? (
-          <Formik
-            initialValues={initialTeamValues}
-            onSubmit={(values, actions) => {
-              console.log({ values, actions });
-
-              alert(JSON.stringify(values, null, 2));
-
-              actions.setSubmitting(false);
-            }}
-            validationSchema={teamValidation}
-          >
-            {({ errors }) => {
-              console.log(errors);
-              return (
-                <Form>
-                  <TextField id="name" variant="outlined" placeholder="Enter name" name="name" />
-                  <button type="submit">Create</button>
-                </Form>
-              );
-            }}
-          </Formik>
+          <Box className={classes.dialogWrapper}>
+            <DialogTitle>
+              <Typography variant="h5">Create a new team board</Typography>
+            </DialogTitle>
+            <Container>
+              <DialogForm<TeamForm>
+                initialValues={{ name: '', description: '' }}
+                validation={teamValidation}
+                onSubmit={submitHandler}
+              >
+                {(formik) => (
+                  <>
+                    <TextField
+                      fullWidth
+                      id="name"
+                      name="name"
+                      label="Board name"
+                      value={formik.values.name}
+                      onChange={formik.handleChange}
+                      error={formik.touched.name && Boolean(formik.errors.name)}
+                      helperText={formik.touched.name && formik.errors.name}
+                    />
+                    <TextField
+                      fullWidth
+                      id="description"
+                      name="description"
+                      label="Description"
+                      type="text"
+                      value={formik.values.description}
+                      onChange={formik.handleChange}
+                      error={formik.touched.description && Boolean(formik.errors.description)}
+                      helperText={formik.touched.description && formik.errors.description}
+                    />
+                  </>
+                )}
+              </DialogForm>
+            </Container>
+          </Box>
         ) : (
           <h1>Collaborator action</h1>
         )}
