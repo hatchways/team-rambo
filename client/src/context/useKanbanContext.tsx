@@ -61,11 +61,12 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const sendToFirstBoard = useCallback(async () => {
     const { boards } = await getUserBoards();
     if (boards && boards.length > 0) {
-      history.push(`/dashboard/boards/${boards[0]._id}`);
+      history.push(`/dashboard/board/${boards[0]._id}`);
+      setActiveBoard(boards[0]);
       return;
     }
     history.push(`/newboard`);
-  }, [history]);
+  }, []);
   /** Dragging function for columns/cards */
   const handleDragEnd = async (result: DropResult): Promise<void> => {
     if (!result.destination) return;
@@ -102,10 +103,14 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   };
 
   /*    Boards Section   */
-  const fetchBoard = async (id: string): Promise<IBoard> => {
-    const request = await getBoard(id);
-    setActiveBoard(request.board);
-    return request.board;
+  const fetchBoard = async (id: string): Promise<IBoard | void> => {
+    const { board } = await getBoard(id);
+    if (!board) {
+      sendToFirstBoard();
+      return;
+    }
+    setActiveBoard(board);
+    return board;
   };
   const createNewBoard = async (name: string): Promise<INewBoardApiData> => {
     const request = await createBoard(name);
@@ -132,7 +137,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const updateActiveCard = async (data: ICardUpdateData) => {
     if (focusedCard) {
       const request = await updateCard(focusedCard._id, data);
-      console.log(request);
       // setActiveBoard(request);
     }
     return;
@@ -162,7 +166,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     setActiveBoard(request);
   };
   const getColumnById = (columnId: string): IColumn => {
-    console.log(activeBoard.columns, columnId);
     const colIndex = activeBoard.columns.findIndex((col) => col._id === columnId);
     if (colIndex > -1) return activeBoard.columns[colIndex];
     return activeBoard.columns[colIndex];

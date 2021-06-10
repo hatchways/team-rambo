@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Popover, IconButton } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import NotificationItem from '../NotificationItem/NotificationItem';
@@ -22,15 +22,15 @@ const NotificationCenter = ({ loggedInUser, notifications }: NotificationProps):
 
   const handleClose = () => setAnchorEl(null);
 
-  const countNotifications = () => {
+  const countNotifications = useCallback(() => {
     return notifications.filter((item) => item.read === false && item.user === loggedInUser.email).length;
-  };
+  }, [loggedInUser.email, notifications]);
 
   const open = Boolean(anchorEl);
 
   useEffect(() => {
     setUnread(countNotifications);
-  });
+  }, [countNotifications]);
 
   return (
     <div>

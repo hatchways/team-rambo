@@ -17,7 +17,7 @@ const SplashScreen = (): JSX.Element => {
     const { error } = await createNewBoard(name);
 
     if (error) {
-      updateSnackBarMessage(error, 'error');
+      updateSnackBarMessage(error.message, 'error');
 
       return;
     }
