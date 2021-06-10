@@ -20,7 +20,7 @@ import {
 } from '../helpers/';
 import { useSnackBar, useAuth } from './';
 import { IKanbanContext, IColumn, ICard, IBoard, ICardUpdateData } from '../interface/';
-import { Batch, useBatchUpdater } from '../hooks/useBatchUpdater';
+import { useBatchUpdater } from '../hooks/useBatchUpdater';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
 
@@ -38,8 +38,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   const { updateSnackBarMessage } = useSnackBar();
   const { loggedInUser } = useAuth();
 
-  const [batch, cardOutsideColumnBatch] = useBatchUpdater<{
-    name: string;
+  const [, cardOutsideColumnBatch] = useBatchUpdater<{
     source: DraggableLocation;
     destination: DraggableLocation;
   }>(swapCardsOutsideColumn, 2500);
@@ -80,7 +79,6 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       const batch = {
         key: card._id,
         change: {
-          name: newColumns.name,
           destination,
           source,
         },

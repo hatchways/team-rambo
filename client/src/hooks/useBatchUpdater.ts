@@ -23,7 +23,6 @@ export const useBatchUpdater = <T>(
   const [batch, setBatch] = useState<Array<Batch<T>>>([]);
 
   useEffect(() => {
-    console.log(batch);
     if (batch.length !== 0) {
       _triggerBatchUpdateDebounced(batch);
     }

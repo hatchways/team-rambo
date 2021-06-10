@@ -5,7 +5,6 @@ import { IFetchOptions } from '../../interface';
 const swapCardsOutsideColumn = async (
   batch: Array<
     Batch<{
-      name: string;
       source: DraggableLocation;
       destination: DraggableLocation;
     }>
