@@ -13,7 +13,7 @@ const Dashboard = (): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
   const { loggedInUser } = useAuth();
-  // const { activeBoard } = useKanban();
+  const { activeBoard } = useKanban();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   const toggleDrawer = (): void => setOpenDrawer((prevOpen) => !prevOpen);
@@ -32,14 +32,14 @@ const Dashboard = (): JSX.Element => {
         <BoardAppBar activeBoard={activeBoard} toggleDrawer={toggleDrawer} />
         <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
       </Box>
-      {/* <Box className={classes.buttonOverlay}>
+      <Box className={classes.buttonOverlay}>
         <AddColumnDialog />
-      </Box> */}
-      {/* <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
+      </Box>
+      <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
         <Grid item xs={10}>
           <Board activeBoard={activeBoard} />
         </Grid>
-      </Grid> */}
+      </Grid>
     </Box>
   );
 };
