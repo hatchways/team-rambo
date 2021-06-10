@@ -25,7 +25,7 @@ const DialogItem = ({ item, activeCard }: { item: IDialogItem; activeCard: ICard
 
   const handleClear = () => setContent('');
 
-  const chooseIcon = (icon: string): JSX.Element => {
+  const chooseIcon = (icon: string | undefined): JSX.Element => {
     switch (icon) {
       case 'clear':
         return <ClearIcon />;
@@ -84,8 +84,6 @@ const DialogItem = ({ item, activeCard }: { item: IDialogItem; activeCard: ICard
             <input multiple type="file" className={classes.dialogButton} />
           </Box>
         );
-      case 'cover' || 'tag':
-        break;
       default:
         return <ClearIcon />;
     }
