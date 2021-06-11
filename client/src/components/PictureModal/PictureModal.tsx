@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   Box,
@@ -10,8 +10,9 @@ import {
   DialogTitle,
   DialogContent,
   Typography,
+  IconButton,
 } from '@material-ui/core';
-import { Save, CloudUpload } from '@material-ui/icons';
+import { Save, Clear, CloudUpload } from '@material-ui/icons';
 import Dropzone, { DropzoneState } from 'react-dropzone';
 import { useUser, useSnackBar } from '../../context';
 import uploadImage from '../../helpers/APICalls/uploadImage';
@@ -19,18 +20,18 @@ import useStyles from './PictureModalStyles';
 
 interface Props {
   open: boolean;
-  setOpen: () => void;
+  onClose: () => void;
 }
 
-const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
+const PictureModal = ({ open, onClose }: Props): JSX.Element => {
   const classes = useStyles();
   const maxFileSize = 5e8;
   const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
+  const { updateSnackBarMessage } = useSnackBar();
   const [preview, setPreview] = useState<string>('');
   const [image, setImage] = useState<Blob>(new Blob());
   const [canUpload, setCanUpload] = useState<boolean>(false);
   const { updatePicture } = useUser();
-  const { updateSnackBarMessage } = useSnackBar();
 
   const handleFile = (files: File[]) => {
     const reader = new FileReader();
@@ -67,7 +68,7 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
   };
 
   const handleClose = () => {
-    setOpen();
+    onClose();
   };
 
   const resetDialog = () => {
@@ -83,10 +84,13 @@ const PictureModal = ({ open, setOpen }: Props): JSX.Element => {
           <Typography variant="h6" className={classes.title}>
             Upload profile picture
           </Typography>
+          <IconButton onClick={onClose} className={classes.closeButton}>
+            <Clear />
+          </IconButton>
         </DialogTitle>
         <Divider />
-        <DialogContent>
-          <Grid container direction="column" justify="center" alignItems="center" spacing={1}>
+        <DialogContent className={classes.dialogContent}>
+          <Grid container direction="column" alignItems="center" spacing={4}>
             <Grid item>
               <Box className={classes.avatarBox}>
                 <Typography variant="h6">Preview</Typography>

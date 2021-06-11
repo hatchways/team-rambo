@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   dropZonePaper: {
     height: 'fit-content',
     padding: 10,
+    cursor: 'pointer',
     '&:hover': {
       background: '#CECECE',
     },
@@ -38,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     height: 100,
     width: 100,
+  },
+  dialogContent: {
+    height: 'auto',
+    padding: 20,
   },
 }));
 

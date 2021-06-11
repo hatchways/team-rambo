@@ -5,6 +5,7 @@ import Board from '../../components/Kanban/Board';
 import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
+import LoadingBoard from '../../components/LoadingBoard/LoadingBoard';
 import { useAuth, useKanban } from '../../context/';
 import useStyles from './dashboardStyles';
 
@@ -16,7 +17,7 @@ const Dashboard = (): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
   const { loggedInUser } = useAuth();
-  const { fetchBoard, activeBoard } = useKanban();
+  const { fetchBoard, activeBoard, fetchingBoard } = useKanban();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const { id } = useParams<IBoardParams>();
 
@@ -24,30 +25,33 @@ const Dashboard = (): JSX.Element => {
 
   useEffect(() => {
     fetchBoard(id);
-  }, []);
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }, [id]);
 
   if (!loggedInUser) {
     history.push('/login');
-    return <CircularProgress />;
+
+    return <LoadingBoard />;
   }
+
   return (
     <Box>
       <CssBaseline />
       <Box>
-        <NavBar loggedInUser={loggedInUser} handleDrawerToggle={toggleDrawer} />
+        <NavBar handleDrawerToggle={toggleDrawer} />
         <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
       </Box>
       <Box className={classes.buttonOverlay}>
         <AddColumnDialog />
       </Box>
       <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
-        {activeBoard._id != 'Initial' ? (
-          <Grid item xs={10}>
-            <Board activeBoard={activeBoard} />
-          </Grid>
-        ) : (
+        {fetchingBoard ? (
           <Grid item xs={12} className={classes.loading}>
             <CircularProgress size={150} />
+          </Grid>
+        ) : (
+          <Grid item xs={10}>
+            <Board activeBoard={activeBoard} />
           </Grid>
         )}
       </Grid>

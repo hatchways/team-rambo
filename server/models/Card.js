@@ -44,15 +44,6 @@ const cardSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-cardSchema.methods.deleteSelf = async function () {
-  await Card.findOneAndDelete({ _id: this._id }, function (err) {
-    if (err) {
-      res.status(404);
-      throw new Error("Card not found!");
-    }
-  });
-};
-
 cardSchema.methods.duplicate = async function (
   /** @type {string} */ columnId,
   column
@@ -65,6 +56,16 @@ cardSchema.methods.duplicate = async function (
 
   column.cards.push(newCard);
   await column.save();
+};
+
+cardSchema.methods.updateColumnId = async function (oldColumn, newColumn) {
+  this.columnId = newColumn._id;
+  await this.save();
+
+  newColumn.cards.push(this);
+
+  await oldColumn.save();
+  await newColumn.save();
 };
 
 const Card = mongoose.model("card", cardSchema);

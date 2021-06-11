@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import loginPageImage from '../../Images/loginPageImage.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Open Sans'",
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: `url(${loginPageImage})`,
     backgroundRepeat: 'no-repeat',
     backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     backgroundSize: 'cover',

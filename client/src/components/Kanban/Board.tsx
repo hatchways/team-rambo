@@ -12,7 +12,7 @@ const Board = ({ activeBoard }: { activeBoard: IBoard }): JSX.Element | null => 
 
   return (
     <>
-      {focusedCard && <FocusCard />}
+      {focusedCard.title && <FocusCard />}
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId={activeBoard && activeBoard._id} type="column" direction="horizontal">
           {(provided: DroppableProvided) => (

@@ -6,7 +6,7 @@ const getUserBoards = async (): Promise<IBoardsApiData> => {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   };
-  return fetch(`/users/board`, fetchOptions)
+  return await fetch(`/users/board`, fetchOptions)
     .then((res) => res.json())
     .catch((err) => ({
       error: { error: err, message: 'Unable to connect to server. Please try again' },

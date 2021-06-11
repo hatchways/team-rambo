@@ -5,103 +5,59 @@ const Board = require("../models/Board");
 const Card = require("../models/Card");
 const { update } = require("../models/Card");
 
-exports.updateColumn = asyncHandler(async (req, res, next) => {
-  const { _id, name, cards } = req.body;
+exports.createColumn = asyncHandler(async (req, res) => {
+  const { boardId } = req.params;
+  const { side, name } = req.body;
 
-  const update = {
-    name,
-    cards,
-  };
+  const column = await Column.create({ side, name, boardId });
 
-  const column = await Column.findOneAndUpdate(_id, update, {
-    new: true,
+  const board = await Board.findById(boardId).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+    },
   });
 
-  await column.save();
-  return res.status(200).json(column);
+  side === "left" ? board.columns.unshift(column) : board.columns.push(column);
+  await board.save();
+
+  return res.status(200).json({ board });
 });
 
-exports.reorderColumn = asyncHandler(async (req, res) => {
-  //to be completed
-  return;
-});
-
-exports.renameColumn = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { columnName } = req.body;
-
-  const column = await Column.findById(id).populate("cards");
-
-  if (!column) {
-    res.status(404);
-    throw new Error("Column not found!");
-  }
-
-  await column.updateName(columnName);
-
-  const board = await Board.findById(column.boardId);
-
-  return res.status(200).json(
-    await Board.populate(board, {
-      path: "columns",
-      populate: {
-        path: "cards",
-      },
-    })
-  );
-});
-
-exports.createColumnCard = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { title, tag } = req.body;
+exports.updateColumn = asyncHandler(async (req, res, next) => {
+  const { boardId, id } = req.params;
+  const { name } = req.body;
 
   const column = await Column.findById(id);
+  column.name = name;
+  await column.save();
 
-  if (!column) {
-    res.status(404);
-    throw new Error("Column not found");
-  }
+  const board = await Board.findById(boardId).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+    },
+  });
 
-  await column.addCard(title, tag);
-
-  const board = await Board.findById(column.boardId);
-
-  if (!board) {
-    res.status(404);
-    throw new Error("Board not found");
-  }
-
-  return res.status(200).json(
-    await Board.populate(board, {
-      path: "columns",
-      populate: {
-        path: "cards",
-      },
-    })
-  );
+  return res.status(200).json({ board });
 });
 
-exports.swapCardsInColumn = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { cardId, source, destination } = req.body;
+exports.deleteColumn = asyncHandler(async (req, res) => {
+  const { id, boardId } = req.params;
 
-  const column = await Column.findById(id).populate("cards");
+  await Column.findOneAndDelete({ _id: id });
 
-  await column.swapPosition(cardId, source, destination);
+  const board = await Board.findById(boardId).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+    },
+  });
 
-  const board = await Board.findById(column.boardId);
-
-  return res.status(200).json(
-    await Board.populate(board, {
-      path: "columns",
-      populate: {
-        path: "cards",
-      },
-    })
-  );
+  return res.status(200).json({ board });
 });
 
-exports.swapCardsOutsideColumn = asyncHandler(async (req, res) => {
+exports.swapCards = asyncHandler(async (req, res) => {
   const batch = req.body;
   const bulkOps = [];
 
@@ -145,5 +101,3 @@ exports.swapCardsOutsideColumn = asyncHandler(async (req, res) => {
 
   return res.status(200).json({ message: "working" });
 });
-
-exports.deleteColumnCard = asyncHandler(async (req, res) => {});

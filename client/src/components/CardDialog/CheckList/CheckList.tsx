@@ -22,8 +22,7 @@ interface CheckListProps {
 
 const CheckList = ({ content, setContent }: CheckListProps): JSX.Element => {
   const classes = checkListStyles();
-  const [checkListItem, setcheckListItem] = React.useState<string[]>([]);
-
+  const [checkListItem, setcheckListItem] = React.useState<string[]>([...content]);
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setcheckListItem(event.target.value as string[]);
     setContent(event.target.value as string[]);
@@ -40,7 +39,7 @@ const CheckList = ({ content, setContent }: CheckListProps): JSX.Element => {
           value={checkListItem}
           onChange={handleChange}
           input={<Input />}
-          renderValue={(selected) => (selected as string[]).join(', ')}
+          renderValue={(content) => (content as string[]).join(', ')}
           MenuProps={MenuProps}
         >
           {NAMES.map((name) => (
