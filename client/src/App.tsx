@@ -4,8 +4,8 @@ import { theme } from './themes/theme';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
+import ProtectedRoute from '../src/components/ProtectedRoute/ProtectedRoute';
 import SplashScreen from './pages/SplashScreen/SplashScreen';
-import ProtectedRoute from '../src/components/ProtectedRoute';
 import {
   AuthProvider,
   SocketProvider,
