@@ -6,6 +6,7 @@ import { StyledBadge } from './notificationCenterStyles';
 import { INotificationItem } from '../../../../interface/';
 import { useAuth } from '../../../../context';
 import { notifications } from '../sampleNotificationData';
+import { useCallback } from 'react';
 
 const NotificationCenter = (): JSX.Element => {
   const { loggedInUser } = useAuth();
@@ -20,10 +21,10 @@ const NotificationCenter = (): JSX.Element => {
 
   const handleClose = () => setAnchorEl(null);
 
-  const countNotifications = () => {
+  const countNotifications = useCallback(() => {
     return notifications.filter((item: INotificationItem) => item.read === false && item.user === loggedInUser?.email)
       .length;
-  };
+  }, [loggedInUser]);
 
   const open = Boolean(anchorEl);
 
