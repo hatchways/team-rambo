@@ -174,7 +174,8 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     const remainingBoards = await deleteBoard(id);
     setUserBoards(remainingBoards);
     //show first board if we deleted the activeBoard
-    if (activeBoard._id === id) setActiveBoard(remainingBoards[0]);
+    if (activeBoard._id === id && remainingBoards.length > 0) setActiveBoard(remainingBoards[0]);
+    else if (remainingBoards.length < 1) history.push('/newboard');
     return;
   };
 
