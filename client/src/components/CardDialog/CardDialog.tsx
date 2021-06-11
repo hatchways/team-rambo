@@ -48,8 +48,10 @@ const CardDialog = ({ columnId, tag, activeCard }: DialogProps): JSX.Element => 
 
   const handleMenuClose = (tag: string) => {
     setAnchorEl(null);
-    setTagColor(tag);
-    updateActiveCard({ tag: tag });
+    if (typeof tag === 'string') {
+      setTagColor(tag);
+      updateActiveCard({ tag: tag });
+    }
   };
 
   return (
