@@ -34,21 +34,9 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     const secondsInWeek = 604800;
     const board = await Board.create({
       name: "My board",
-      columns: [
-        {
-          name: "In progress",
-          cards: [],
-          createdAt: Date.now(),
-        },
-        {
-          name: "Completed",
-          cards: [],
-          createdAt: Date.now(),
-        },
-      ],
       user: user._id,
     });
-
+    await board.createTemplateBoard();
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: secondsInWeek * 1000,
@@ -61,6 +49,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
           email: user.email,
           picture: user.picture,
         },
+        board,
       },
     });
   } else {

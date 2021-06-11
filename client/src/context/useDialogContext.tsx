@@ -18,8 +18,8 @@ export const DialogProvider: FunctionComponent = ({ children }): JSX.Element => 
     setItems(itemsPlusOne);
   };
 
-  const removeItem = (itemId: string): void => {
-    const remaining = items.filter((item) => item.id !== itemId);
+  const removeItem = (itemContent: string): void => {
+    const remaining = items.filter((item) => item.content !== itemContent);
     setItems(remaining);
   };
 

@@ -1,10 +1,12 @@
 import { useState, MouseEvent } from 'react';
-import { Avatar, Menu, MenuItem, CircularProgress } from '@material-ui/core';
-import PictureModal from '../PictureModal/PictureModal';
+import { Avatar, Menu, MenuItem, ListItemText, ListItemIcon, AvatarProps } from '@material-ui/core';
+import { AccountCircle, PowerSettingsNew } from '@material-ui/icons';
 import { useAuth, useUser } from '../../context/';
 import useStyles from './useStyles';
+import profileFallback from '../../Images/profileFallback.png';
+import PictureModal from '../../components/PictureModal/PictureModal';
 
-const AvatarDisplay = (): JSX.Element => {
+const AvatarDisplay = (avatarProps: AvatarProps): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openImageModal, setOpenImageModal] = useState<boolean>(false);
   const open = Boolean(anchorEl);
@@ -18,6 +20,7 @@ const AvatarDisplay = (): JSX.Element => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    closeImageModal();
   };
 
   const handleLogout = () => {
@@ -26,27 +29,26 @@ const AvatarDisplay = (): JSX.Element => {
   };
 
   const handleProfile = () => {
-    setOpenImageModal((prevOpen) => !prevOpen);
-    setAnchorEl(null);
+    setOpenImageModal(true);
     // To do: implement component for profile page and backend routing
+  };
+
+  const closeImageModal = () => {
+    setOpenImageModal(false);
   };
 
   return (
     <div>
-      {picture ? (
-        <Avatar
-          alt="Profile Image"
-          src={picture.url}
-          aria-label="show auth menu"
-          aria-controls="auth-menu"
-          aria-haspopup="true"
-          className={classes.medium}
-          onClick={handleClick}
-        ></Avatar>
-      ) : (
-        <CircularProgress color="primary"></CircularProgress>
-      )}
-
+      <Avatar
+        alt="Profile Image"
+        src={picture?.url || profileFallback}
+        aria-label="show auth menu"
+        aria-controls="auth-menu"
+        aria-haspopup="true"
+        className={classes.medium}
+        onClick={handleClick}
+        {...avatarProps}
+      ></Avatar>
       <Menu
         id="auth-menu"
         anchorEl={anchorEl}
@@ -59,10 +61,20 @@ const AvatarDisplay = (): JSX.Element => {
         }}
         getContentAnchorEl={null}
       >
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        <MenuItem onClick={handleProfile}>Profile</MenuItem>
+        <MenuItem onClick={handleProfile}>
+          <ListItemIcon className={classes.listItemIcon}>
+            <AccountCircle color="primary" />
+          </ListItemIcon>
+          <ListItemText className={classes.listItemText}>Profile</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon className={classes.listItemIcon}>
+            <PowerSettingsNew color="primary" />
+          </ListItemIcon>
+          <ListItemText className={classes.listItemText}>Logout</ListItemText>
+        </MenuItem>
       </Menu>
-      <PictureModal open={openImageModal} setOpen={handleProfile} />
+      <PictureModal open={openImageModal} onClose={closeImageModal} />
     </div>
   );
 };

@@ -3,17 +3,16 @@ import { Popover, IconButton } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import NotificationItem from '../NotificationItem/NotificationItem';
 import { StyledBadge } from './notificationCenterStyles';
-import { IUser, INotificationItem } from '../../../../interface/';
+import { INotificationItem } from '../../../../interface/';
+import { useAuth } from '../../../../context';
+import { notifications } from '../sampleNotificationData';
+import { useCallback } from 'react';
 
-type NotificationProps = {
-  loggedInUser: IUser;
-  notifications: INotificationItem[];
-};
-
-const NotificationCenter = ({ loggedInUser, notifications }: NotificationProps): JSX.Element => {
+const NotificationCenter = (): JSX.Element => {
+  const { loggedInUser } = useAuth();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [unread, setUnread] = useState(
-    notifications.filter((item: INotificationItem) => item.user === loggedInUser.email).length,
+    notifications.filter((item: INotificationItem) => item.user === loggedInUser?.email).length,
   );
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -22,21 +21,22 @@ const NotificationCenter = ({ loggedInUser, notifications }: NotificationProps):
 
   const handleClose = () => setAnchorEl(null);
 
-  const countNotifications = () => {
-    return notifications.filter((item) => item.read === false && item.user === loggedInUser.email).length;
-  };
+  const countNotifications = useCallback(() => {
+    return notifications.filter((item: INotificationItem) => item.read === false && item.user === loggedInUser?.email)
+      .length;
+  }, [loggedInUser]);
 
   const open = Boolean(anchorEl);
 
   useEffect(() => {
     setUnread(countNotifications);
-  });
+  }, [countNotifications]);
 
   return (
     <div>
       <IconButton onClick={handleClick}>
         <StyledBadge badgeContent={unread > 0 && unread} invisible={unread < 1 ? true : false} color="secondary">
-          <NotificationsIcon color="primary" style={{ fontSize: 45 }} />
+          <NotificationsIcon color="primary" style={{ fontSize: 30 }} />
         </StyledBadge>
       </IconButton>
       <Popover
@@ -53,7 +53,7 @@ const NotificationCenter = ({ loggedInUser, notifications }: NotificationProps):
         }}
       >
         {notifications
-          .filter((item: INotificationItem) => item.user === loggedInUser.email)
+          .filter((item: INotificationItem) => item.user === loggedInUser?.email)
           .map((item: INotificationItem) => {
             return (
               <NotificationItem

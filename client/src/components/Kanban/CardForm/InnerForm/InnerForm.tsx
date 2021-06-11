@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useTheme, Box, InputBase, Divider, Grid, Typography, Button } from '@material-ui/core';
-import { v4 as uuidv4 } from 'uuid';
 import { Color } from '../Color/Color';
 import { useKanban } from '../../../../context/useKanbanContext';
 import useStyles from './useStyles';
@@ -12,7 +11,7 @@ type InnerFormProps = {
 
 // IMPORTANT TODO - Change this to a formik form instead (see login/signup forms) to keep consistent cross app
 export const InnerForm = ({ columnId, formAction }: InnerFormProps): JSX.Element => {
-  const [name, setName] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
   const [selectedTagColor, setTagColor] = useState<string>('white');
   const { addCard } = useKanban();
   const theme = useTheme();
@@ -24,8 +23,8 @@ export const InnerForm = ({ columnId, formAction }: InnerFormProps): JSX.Element
         <Box className={classes.cardForm}>
           <InputBase
             className={classes.input}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="Add title..."
           />
         </Box>
@@ -56,15 +55,8 @@ export const InnerForm = ({ columnId, formAction }: InnerFormProps): JSX.Element
       </Box>
       <Button
         onClick={() => {
-          const isSuccess = addCard({
-            name,
-            columnId: columnId,
-            _id: uuidv4(),
-            tag: selectedTagColor,
-          });
-          if (isSuccess) formAction(false);
-
-          return undefined;
+          addCard(title, selectedTagColor, columnId);
+          formAction(false);
         }}
         variant="contained"
         size="large"

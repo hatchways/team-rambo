@@ -8,7 +8,7 @@ import { TeamsAppBar } from '../../components/Teams/TeamsAppBar/TeamsAppBar';
 import { DialogWrapper } from '../../components/Teams/DialogWrapper/DialogWrapper';
 import { TeamDialogList } from '../../components/Teams/TeamDialogList/TeamDialogList';
 import { TeamBoardView } from '../../components/Teams/TeamBoardView/TeamBoardView';
-import { useAuth, useUser, SnackBarContext, useSnackBar } from '../../context/';
+import { useAuth, useUser, useSnackBar } from '../../context/';
 import { DragDropContext, DragStart, DropResult } from 'react-beautiful-dnd';
 import { useTeam } from '../../context/useTeams';
 
@@ -47,7 +47,7 @@ const TeamsDashboard = (): JSX.Element => {
     <Box>
       <CssBaseline />
       <Box>
-        <NavBar loggedInUser={loggedInUser} />
+        <NavBar />
       </Box>
       <Box>
         <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>

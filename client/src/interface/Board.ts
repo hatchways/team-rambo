@@ -22,12 +22,17 @@ export interface ITeamBoard {
 
 export type IBoard = ITeamBoard | IPersonalBoard;
 
-export interface BoardApiData {
-  boards: Array<IBoard>;
-  error?: { message: string };
+export interface IBoardApiData {
+  board: IBoard;
+  error?: string;
 }
 
-export interface NewBoardApiData {
+export interface IBoardsApiData {
+  boards: Array<IBoard>;
+  error?: string;
+}
+
+export interface INewBoardApiData {
   board: IBoard;
-  error?: { messge: string };
+  error?: { message: string };
 }

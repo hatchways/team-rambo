@@ -5,7 +5,7 @@ const logout = async (): Promise<IAuthApiData> => {
     method: 'GET',
     credentials: 'include',
   };
-  return fetch(`/auth/logout`, fetchOptions)
+  return await fetch(`/auth/logout`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },

@@ -41,6 +41,20 @@ const useStyles = makeStyles((theme) => ({
       flex: 1,
     },
   },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+  dialog: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  dialogTitle: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 }));
 
 export default useStyles;

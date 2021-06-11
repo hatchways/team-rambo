@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, TextField, Grid, Box } from '@material-ui/core';
-import { useKanban } from '../../context/useKanbanContext';
+import { useKanban } from '../../context';
 import addColumnDialogStyles from './AddColumnDialogStyles';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import StyledDialog from '../StyledDialog/StyledDialog';
@@ -15,6 +15,14 @@ const AddColumnDialog = (): JSX.Element => {
   const handleClickOpen = (addToSide: string) => {
     setOpen(true);
     setSide(addToSide);
+  };
+
+  const handleSubmit = (): void => {
+    const board = addColumn(side, columnName);
+
+    if (!board) return;
+
+    setOpen(false);
   };
 
   return (
@@ -38,7 +46,7 @@ const AddColumnDialog = (): JSX.Element => {
         toggleFunction={() => {
           setOpen(false);
         }}
-        buttonFunction={() => addColumn(columnName, side)}
+        buttonFunction={handleSubmit}
         component={
           <TextField
             required

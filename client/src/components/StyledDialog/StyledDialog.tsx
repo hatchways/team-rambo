@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, IconButton, Dialog, Typography, DialogActions } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear';
+import { Button, IconButton, Grid, Dialog, Typography, DialogTitle, Divider, DialogContent } from '@material-ui/core';
+import { Clear } from '@material-ui/icons/';
 import styledDialogStyles from './styledDialogStyles';
 
 type Props = {
@@ -21,32 +21,39 @@ const StyledDialog = ({ open, buttonText, title, toggleFunction, buttonFunction,
 
   const handleSubmit = () => {
     buttonFunction && buttonFunction();
-    toggleFunction(false);
   };
 
   return (
     <>
-      <Dialog maxWidth="sm" open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
-        <Typography variant="h5" className={classes.dialogTitle}>
-          {title}
-        </Typography>
-        {component}
-        <Button
-          type="submit"
-          className={classes.dialogButton}
-          onClick={handleSubmit}
-          color="primary"
-          variant="contained"
-          size="large"
-          disableElevation
-        >
-          {buttonText}
-        </Button>
-        <DialogActions>
-          <IconButton className={classes.topRight} onClick={handleClose}>
-            <ClearIcon />
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle disableTypography className={classes.root}>
+          <Typography variant="h6" className={classes.dialogTitle}>
+            {title}
+          </Typography>
+          <IconButton onClick={handleClose} className={classes.closeButton}>
+            <Clear />
           </IconButton>
-        </DialogActions>
+        </DialogTitle>
+        <Divider />
+        <DialogContent className={classes.dialogContent}>
+          <Grid container direction="column" alignItems="center" spacing={4}>
+            <Grid item className={classes.component}>
+              {component}
+            </Grid>
+            <Grid item>
+              <Button
+                type="submit"
+                onClick={handleSubmit}
+                color="primary"
+                variant="contained"
+                size="large"
+                disableElevation
+              >
+                {buttonText}
+              </Button>
+            </Grid>
+          </Grid>
+        </DialogContent>
       </Dialog>
     </>
   );

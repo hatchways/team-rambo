@@ -5,7 +5,8 @@ import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
 import { TeamsWrapper } from './components/Teams/TeamsWrapper/TeamsWrapper';
-import ProtectedRoute from '../src/components/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import SplashScreen from './pages/SplashScreen/SplashScreen';
 import {
   AuthProvider,
   SocketProvider,
@@ -27,8 +28,9 @@ const App = (): JSX.Element => (
                   <Switch>
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/signup" component={Signup} />
-                    <ProtectedRoute exact path="/dashboard" component={Dashboard} />
                     <ProtectedRoute exact path="/teams" component={TeamsWrapper} />
+                    <ProtectedRoute exact path="/dashboard/boards/:id" component={Dashboard} />
+                    <ProtectedRoute exact path="/newboard" component={SplashScreen} />
                     <Route path="*">
                       <Redirect to="/login" />
                     </Route>

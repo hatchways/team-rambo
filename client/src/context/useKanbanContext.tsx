@@ -1,14 +1,39 @@
-import { useState, useContext, createContext, FunctionComponent, useEffect, Dispatch, SetStateAction } from 'react';
+import {
+  useState,
+  useContext,
+  createContext,
+  FunctionComponent,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+} from 'react';
 import { DraggableLocation, DropResult } from 'react-beautiful-dnd';
-import cloneDeep from 'lodash.clonedeep';
-import { v4 as uuidv4 } from 'uuid';
-import { getBoard, getUserBoards, updateBoard, createBoard } from '../helpers/';
+import {
+  getBoard,
+  getUserBoards,
+  createBoard,
+  updateBoard,
+  createColumn,
+  deleteColumn,
+  updateColumn,
+  createCard,
+  deleteCard,
+  updateCard,
+  swapCards,
+  moveFocusedCard,
+  deleteBoard,
+  copyFocusedCard,
+  swapColumns,
+} from '../helpers';
 import { useSnackBar, useAuth } from './';
-import { IKanbanContext, IColumn, ICard, IBoard, NewBoardApiData } from '../interface/';
+import { IKanbanContext, IColumn, ICard, IBoard, ICardUpdateData, IBoardApiData } from '../interface/';
+import { useBatchUpdater } from '../hooks/useBatchUpdater';
+import { useHistory } from 'react-router-dom';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
-
 export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => {
+  const [fetchingBoard, setFetchingBoard] = useState<boolean>(false);
   const [activeBoard, setActiveBoard] = useState<IBoard>({
     _id: 'Initial',
     name: 'Initial',
@@ -18,302 +43,224 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     createdAt: 0,
   });
   const [userBoards, setUserBoards] = useState<IBoard[]>([]);
-  const [columns, setColumns] = useState<IColumn[]>(activeBoard.columns);
-  const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
+  const [focusedCard, setFocusedCard] = useState<ICard>({} as ICard);
   const { updateSnackBarMessage } = useSnackBar();
   const { loggedInUser } = useAuth();
+  const history = useHistory();
+
+  const [, swapColumnsBatch] = useBatchUpdater<{
+    source: DraggableLocation;
+    destination: DraggableLocation;
+  }>(swapColumns, 2500);
+
+  const [, swapCardsBatch] = useBatchUpdater<{
+    source: DraggableLocation;
+    destination: DraggableLocation;
+  }>(swapCards, 2500);
 
   useEffect(() => {
-    if (loggedInUser) getFirstBoard();
-
-    return;
+    if (loggedInUser) {
+      fetchUserBoards();
+    }
   }, [loggedInUser]);
 
-  const getFirstBoard = async (): Promise<IBoard> => {
+  const fetchUserBoards = async () => {
     const request = await getUserBoards();
 
     if (request.boards[0]) {
       const board = request.boards[0];
       setActiveBoard(board);
       setUserBoards(request.boards);
-      setColumns(board.columns);
       return board;
     }
 
     return { _id: 'Initial', name: 'Initial', columns: [], cards: [], user: 'Initial', createdAt: 0 };
   };
 
-  const fetchBoard = async (id: string): Promise<IBoard> => {
-    const board = await getBoard(id);
+  const sendToFirstBoard = useCallback(async () => {
+    const { boards } = await getUserBoards();
+    if (boards && boards.length > 0) {
+      history.push(`/dashboard/boards/${boards[0]._id}`);
+      setActiveBoard(boards[0]);
+      return;
+    }
+    history.push(`/newboard`);
+  }, [history]);
+
+  /** Dragging function for columns/cards */
+  const handleDragEnd = async (result: DropResult): Promise<void> => {
+    if (!result.destination) return;
+    const { destination, source, type } = result;
+    if (type === 'column') {
+      const [homeColumn] = activeBoard.columns.splice(source.index, 1);
+      activeBoard.columns.splice(destination.index, 0, homeColumn);
+      const batch = {
+        key: homeColumn._id,
+        change: {
+          destination,
+          source,
+        },
+      };
+      swapColumnsBatch(batch);
+      setActiveBoard(activeBoard);
+      return;
+    }
+    const sourceColumnIndex = activeBoard.columns.findIndex((col) => col._id === source.droppableId);
+    const destinationColumnIndex = activeBoard.columns.findIndex((col) => col._id === destination.droppableId);
+    if (sourceColumnIndex < 0 || destinationColumnIndex < 0) return;
+
+    // Reordering cards inside same column
+    if (source.droppableId === destination.droppableId) {
+      const homeColumn = activeBoard.columns[sourceColumnIndex];
+      const [card] = homeColumn.cards.splice(source.index, 1);
+      homeColumn.cards.splice(destination.index, 0, card);
+      const batch = {
+        key: card._id,
+        change: {
+          destination,
+          source,
+        },
+      };
+      swapCardsBatch(batch);
+      setActiveBoard(activeBoard);
+      return;
+    }
+    // Moving card to different column
+    if (source.droppableId !== destination.droppableId) {
+      const homeColumn = activeBoard.columns[activeBoard.columns.findIndex((col) => col._id === source.droppableId)];
+      const newColumns =
+        activeBoard.columns[activeBoard.columns.findIndex((col) => col._id === destination.droppableId)];
+      const [card] = homeColumn.cards.splice(source.index, 1);
+      newColumns.cards.splice(destination.index, 0, card);
+      const batch = {
+        key: card._id,
+        change: {
+          destination,
+          source,
+        },
+      };
+      swapCardsBatch(batch);
+      setActiveBoard(activeBoard);
+      return;
+    }
+  };
+
+  /*    Boards Section   */
+  const fetchBoard = async (id: string): Promise<IBoardApiData | void> => {
+    setFetchingBoard(true);
+    const { board } = await getBoard(id);
+    if (!board) {
+      sendToFirstBoard();
+      return;
+    }
+
     setActiveBoard(board);
-    setColumns(board.columns);
+    setFetchingBoard(false);
+    return;
+  };
+
+  const createNewBoard = async (name: string): Promise<IBoardApiData> => {
+    const request = await createBoard(name);
+    const { board } = request;
+    if (board) setUserBoards((boards) => [...boards, board]);
+    setActiveBoard(board);
+
+    return request;
+  };
+  const updateBoardsName = async (id: string, name: string, setSubmitting: (isSubmitting: boolean) => void) => {
+    const { board } = await updateBoard(id, name);
+    const clonedUserBoards = userBoards.slice();
+    const updatedBoardIndex = userBoards.findIndex((board) => board._id === activeBoard._id);
+    clonedUserBoards[updatedBoardIndex] = board;
+    setSubmitting(false);
+    setActiveBoard(board);
+    setUserBoards(clonedUserBoards);
+    return board;
+  };
+
+  const removeBoard = async (id: string) => {
+    const remainingBoards = await deleteBoard(id);
+    setUserBoards(remainingBoards);
+    //show first board if we deleted the activeBoard
+    if (activeBoard._id === id && remainingBoards.length > 0) setActiveBoard(remainingBoards[0]);
+    else if (remainingBoards.length < 1) history.push('/newboard');
+    return;
+  };
+
+  const updateActiveCard = async (data: ICardUpdateData) => {
+    if (focusedCard) {
+      const { board } = await updateCard(activeBoard._id, focusedCard.columnId, focusedCard._id, data);
+      setActiveBoard(board);
+    }
+    return;
+  };
+
+  /*    Columns Section   */
+  const addColumn = async (side: string, name: string): Promise<IBoard> => {
+    const { board } = await createColumn(activeBoard._id, side, name);
+    setActiveBoard(board);
 
     return board;
   };
 
-  const createNewBoard = async (name: string): Promise<NewBoardApiData> => {
-    const request = await createBoard(name);
-    if (request.board) setUserBoards((boards) => [...boards, request.board]);
-
-    return request;
+  const removeColumn = async (columnId: string): Promise<void> => {
+    const { board } = await deleteColumn(activeBoard._id, columnId);
+    setActiveBoard(board);
   };
 
-  const handleDragEnd = (result: DropResult): void => {
-    if (!result.destination) return;
-
-    const { destination, source, draggableId, type } = result;
-
-    const dupBoard = Object.assign({}, activeBoard);
-    const columnsCopy: IColumn[] = cloneDeep(columns);
-    const colIndex = columns.findIndex((col) => col._id === source.droppableId);
-
-    if (type === 'column') {
-      // reorder the column.
-      const reorderedColumns = swapColumns(columnsCopy, source, destination);
-      dupBoard.columns = reorderedColumns;
-
-      updateBoard(dupBoard);
-
-      setActiveBoard(dupBoard);
-
-      setColumns(reorderedColumns);
-
-      return;
-    }
-
-    if (source.droppableId === destination.droppableId && colIndex > -1) {
-      const cards = Array.from(columnsCopy[colIndex].cards);
-      const newCards = swapCards(cards, source, destination, draggableId);
-      columnsCopy[colIndex].cards = newCards;
-      dupBoard.columns = columnsCopy;
-
-      updateBoard(dupBoard);
-
-      setActiveBoard(dupBoard);
-      setColumns(columnsCopy);
-
-      return;
-    }
-
-    if (source.droppableId !== destination.droppableId) {
-      const targetColumnIndex = columnsCopy.findIndex((col) => col._id === destination.droppableId);
-      if (targetColumnIndex > -1) {
-        const targetColumn = columnsCopy[targetColumnIndex];
-        const originalColumn = columnsCopy[colIndex];
-        const [card] = originalColumn.cards.splice(source.index, 1);
-        card.columnId = targetColumn._id;
-        targetColumn.cards.splice(destination.index, 0, card);
-      }
-    }
-
-    dupBoard.columns = columnsCopy;
-
-    updateBoard(dupBoard);
-
-    setActiveBoard(dupBoard);
-    setColumns(columnsCopy);
+  const renameColumn = async (
+    columnId: string,
+    columnName: string,
+    setIsRenaming: Dispatch<SetStateAction<boolean>>,
+    setSubmitting: (isSubmitting: boolean) => void,
+  ) => {
+    const { board } = await updateColumn(activeBoard._id, columnId, columnName);
+    setSubmitting(false);
+    setIsRenaming(false);
+    setActiveBoard(board);
   };
 
-  const swapCards = (
-    cards: ICard[],
-    source: DraggableLocation,
-    destination: DraggableLocation,
-    draggableId: string,
-  ): ICard[] => {
-    const cardsCopy = [...cards];
-    const cardIndex = cardsCopy.findIndex((card: ICard) => card._id === draggableId);
-    if (cardIndex > -1) {
-      const [card] = cardsCopy.splice(source.index, 1);
-      cardsCopy.splice(destination.index, 0, card);
-
-      return cardsCopy;
-    }
-
-    return cards;
+  const getColumnById = (columnId: string): IColumn => {
+    const colIndex = activeBoard.columns.findIndex((col) => col._id === columnId);
+    if (colIndex > -1) return activeBoard.columns[colIndex];
+    return activeBoard.columns[colIndex];
+  };
+  /*    Cards Section   */
+  const addCard = async (title: string, tag: string, columnId: string): Promise<void> => {
+    const { board } = await createCard(title, tag, columnId, activeBoard._id);
+    setActiveBoard(board);
   };
 
-  const moveCard = (destination: IColumn): void => {
+  const removeCard = async (cardId: string): Promise<void> => {
+    const { board } = await deleteCard(activeBoard._id, focusedCard?.columnId, cardId);
+    setActiveBoard(board);
+  };
+
+  const moveCard = async (destination: IColumn): Promise<void> => {
     if (!focusedCard) {
       updateSnackBarMessage('No focus card found!', 'error');
       return;
     }
-
-    const dupBoard = Object.assign({}, activeBoard);
-    const columnsCopy: IColumn[] = cloneDeep(columns);
-
-    const colIndex = columns.findIndex((col) => col._id === focusedCard.columnId);
-
-    if (focusedCard.columnId !== destination._id) {
-      const targetColumnIndex = columnsCopy.findIndex((col) => col._id === destination._id);
-      if (targetColumnIndex > -1) {
-        const targetColumn = columnsCopy[targetColumnIndex];
-        const originalColumn = columnsCopy[colIndex];
-        const cardIndex = originalColumn.cards.findIndex((card) => card._id === focusedCard._id);
-        const [card] = originalColumn.cards.splice(cardIndex, 1);
-        card.columnId = targetColumn._id;
-        targetColumn.cards.push(card);
-      }
+    const { board } = await moveFocusedCard(activeBoard._id, destination._id, focusedCard._id);
+    setActiveBoard(board);
+    resetOpenCard();
+  };
+  const copyCard = async (destination: IColumn): Promise<void> => {
+    if (!focusedCard) {
+      updateSnackBarMessage('No focus card found!', 'error');
+      return;
     }
-
-    dupBoard.columns = columnsCopy;
-
-    updateBoard(dupBoard);
-    setActiveBoard(dupBoard);
-    setColumns(columnsCopy);
+    const { board } = await copyFocusedCard(activeBoard._id, destination._id, focusedCard._id);
+    setActiveBoard(board);
     resetOpenCard();
   };
 
-  const copyCard = (destination: IColumn): void => {
-    if (!focusedCard) {
-      updateSnackBarMessage('No focus card found!', 'error');
-      return;
-    }
-    const source = getColumnById(focusedCard?.columnId);
-    const dupBoard = Object.assign({}, activeBoard);
-    const columnsCopy: IColumn[] = cloneDeep(columns);
-
-    if (source._id !== destination._id) {
-      const targetColumnIndex = columnsCopy.findIndex((col) => col._id === destination._id);
-      if (targetColumnIndex > -1) {
-        const targetColumn = columnsCopy[targetColumnIndex];
-        const card = Object.assign({}, focusedCard);
-        card._id = uuidv4();
-        card.columnId = targetColumn._id;
-        targetColumn.cards.push(card);
-      }
-    } else updateSnackBarMessage("Can't copy card to same column!", 'warning');
-    dupBoard.columns = columnsCopy;
-
-    updateBoard(dupBoard);
-    setActiveBoard(dupBoard);
-    setColumns(columnsCopy);
-  };
-
-  const addCard = (card: ICard): boolean => {
-    if (card.name === '') {
-      updateSnackBarMessage('Please enter a card name');
-
-      return false;
-    }
-
-    const columnsCopy = cloneDeep(columns);
-    const columnIndex = columnsCopy.findIndex((col) => col._id === card.columnId);
-    if (columnIndex > -1) {
-      const columnCopy = cloneDeep(columns[columnIndex]);
-      columnCopy.cards.push(card);
-      columnsCopy[columnIndex] = columnCopy;
-      const copyBoard = Object.assign({}, activeBoard);
-      copyBoard.columns = columnsCopy;
-
-      updateBoard(copyBoard);
-      setActiveBoard(copyBoard);
-      setColumns(columnsCopy);
-
-      return true;
-    }
-
-    return false;
-  };
-
-  const removeActiveCard = (): void => {
-    const columnsCopy = cloneDeep(columns);
-    const columnIndex = columnsCopy.findIndex((col) => col._id === focusedCard?.columnId);
-
-    if (columnIndex > -1) {
-      const columnCopy = cloneDeep(columns[columnIndex]);
-      columnCopy.cards = columnCopy.cards.filter((card) => card._id !== focusedCard?._id);
-      columnsCopy[columnIndex] = columnCopy;
-      const copyBoard = Object.assign({}, activeBoard);
-      copyBoard.columns = columnsCopy;
-
-      updateBoard(copyBoard);
-      setActiveBoard(copyBoard);
-      setColumns(columnsCopy);
-      resetOpenCard();
-    }
-  };
-
-  const swapColumns = (columns: IColumn[], source: DraggableLocation, destination: DraggableLocation): IColumn[] => {
-    const [sourceCol] = columns.splice(source.index, 1);
-    columns.splice(destination.index, 0, sourceCol);
-
-    return columns;
-  };
-
-  const renameColumn = (
-    columnId: string,
-    name: string,
-    setIsRenaming: Dispatch<SetStateAction<boolean>>,
-    setSubmitting: (isSubmitting: boolean) => void,
-  ): undefined => {
-    const colId = columns.findIndex((col) => col._id === columnId);
-
-    if (colId < 0) return undefined;
-
-    const dupColumns = cloneDeep(columns);
-    const dupBoard = Object.assign({}, activeBoard);
-
-    dupColumns[colId].name = name;
-    dupBoard.columns = dupColumns;
-
-    updateBoard(dupBoard).then(() => {
-      setSubmitting(false);
-      setIsRenaming((prev) => !prev);
-    });
-
-    setActiveBoard(dupBoard);
-    setColumns(dupColumns);
-
-    return undefined;
-  };
-
-  const removeColumn = (columnId: string): undefined => {
-    const colId = columns.findIndex((col) => col._id === columnId);
-
-    if (colId < 0) return undefined;
-
-    const dupBoard = Object.assign({}, activeBoard);
-    const dupColumnsArray = dupBoard.columns.slice();
-    const newColumns = dupColumnsArray.slice(0, colId).concat(dupColumnsArray.slice(colId + 1));
-    dupBoard.columns = newColumns;
-
-    updateBoard(dupBoard);
-    setActiveBoard(dupBoard);
-    setColumns(newColumns);
-
-    return undefined;
-  };
-
-  const addColumn = (columnName: string, side: string): void => {
-    const blankColumn: IColumn = {
-      _id: uuidv4(),
-      name: columnName,
-      cards: [],
-      createdAt: new Date(),
-    };
-    const dupBoard = Object.assign({}, activeBoard);
-    const dupColumnsArray = dupBoard.columns.slice();
-    side === 'right' ? dupColumnsArray.push(blankColumn) : dupColumnsArray.unshift(blankColumn);
-    dupBoard.columns = dupColumnsArray;
-
-    updateBoard(dupBoard);
-    setActiveBoard(dupBoard);
-    setColumns(dupColumnsArray);
-  };
-
   const setOpenCard = (card: ICard): void => setFocusedCard(card);
-
-  const resetOpenCard = (): void => setFocusedCard(null);
-
-  const getColumnById = (columnId: string): IColumn => {
-    const colIndex = columns.findIndex((col) => col._id === columnId);
-    if (colIndex > -1) return columns[colIndex];
-    return activeBoard.columns[0];
-  };
-
+  const resetOpenCard = (): void => setFocusedCard({} as ICard);
   return (
     <KanbanContext.Provider
       value={{
+        fetchingBoard,
         activeBoard,
         focusedCard,
         userBoards,
@@ -329,18 +276,20 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         createNewBoard,
         moveCard,
         copyCard,
-        removeActiveCard,
         addColumn,
+        updateBoardsName,
+        removeBoard,
+        removeCard,
+        updateActiveCard,
+        sendToFirstBoard,
       }}
     >
       {children}
     </KanbanContext.Provider>
   );
 };
-
 export function useKanban(): IKanbanContext {
   const ctx = useContext(KanbanContext);
   if (!ctx) throw new Error('useKanban must be used within KanbanProvider');
-
   return ctx;
 }

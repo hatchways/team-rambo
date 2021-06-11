@@ -15,12 +15,17 @@ const MenuProps = {
 
 const NAMES = ['Buy supplies', 'Contact teammates', 'Research', 'Book study hours'];
 
-const CheckList = (): JSX.Element => {
-  const classes = checkListStyles();
-  const [checkListItem, setcheckListItem] = React.useState<string[]>([]);
+interface CheckListProps {
+  content: string[] | string;
+  setContent: (content: string[]) => void;
+}
 
+const CheckList = ({ content, setContent }: CheckListProps): JSX.Element => {
+  const classes = checkListStyles();
+  const [checkListItem, setcheckListItem] = React.useState<string[]>([...content]);
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setcheckListItem(event.target.value as string[]);
+    setContent(event.target.value as string[]);
   };
 
   return (
@@ -34,7 +39,7 @@ const CheckList = (): JSX.Element => {
           value={checkListItem}
           onChange={handleChange}
           input={<Input />}
-          renderValue={(selected) => (selected as string[]).join(', ')}
+          renderValue={(content) => (content as string[]).join(', ')}
           MenuProps={MenuProps}
         >
           {NAMES.map((name) => (

@@ -7,7 +7,7 @@ const register = async (email: string, password: string): Promise<IAuthApiData> 
     body: JSON.stringify({ email, password }),
     credentials: 'include',
   };
-  return fetch(`/auth/register`, fetchOptions)
+  return await fetch(`/auth/register`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },

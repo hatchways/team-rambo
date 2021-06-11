@@ -3,12 +3,15 @@ import { FormikHelpers } from 'formik';
 import useStyles from './signUpStyles';
 import { register } from '../../helpers/';
 import SignUpForm from './SignUpForm/SignUpForm';
-import { useAuth, useSnackBar } from '../../context/';
+import { useAuth, useSnackBar, useKanban } from '../../context/';
+import { useHistory } from 'react-router-dom';
 
 export default function Register(): JSX.Element {
   const classes = useStyles();
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
+  const { setActiveBoard } = useKanban();
+  const history = useHistory();
 
   const handleSubmit = (
     { email, password }: { email: string; password: string },
@@ -16,17 +19,15 @@ export default function Register(): JSX.Element {
   ) => {
     register(email, password).then((data) => {
       if (data.error) {
-        console.error({ error: data.error.message });
         setSubmitting(false);
-        updateSnackBarMessage(data.error.message);
-      } else if (data.success) {
+        updateSnackBarMessage(data.error, 'error');
+      } else if (data.success && data.success.board) {
         updateLoginContext(data.success);
+        setActiveBoard(data.success.board);
+        history.push(`/dashboard/boards/${data.success.board._id}`);
       } else {
-        // should not get here from backend but this catch is for an unknown issue
-        console.error({ data });
-
         setSubmitting(false);
-        updateSnackBarMessage('An unexpected error occurred. Please try again');
+        updateSnackBarMessage('An unexpected error occurred. Please try again', 'error');
       }
     });
   };

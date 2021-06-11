@@ -26,13 +26,11 @@ const AddBoardDialog = (): JSX.Element => {
   };
 
   const handleSubmit = async ({ name }: Values): Promise<void> => {
-    const { error } = await createNewBoard(name);
-    if (!error) {
-      updateSnackBarMessage('Board created', 'success');
-      handleClose();
-      return;
-    }
-    updateSnackBarMessage('Could not create board!', 'error');
+    const { board } = await createNewBoard(name);
+    if (!board) updateSnackBarMessage('Could not create board!', 'error');
+    updateSnackBarMessage(`Board "${board.name}" created`, 'success');
+    handleClose();
+    return;
   };
 
   const formik = useFormik({

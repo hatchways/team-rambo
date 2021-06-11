@@ -8,9 +8,10 @@ export const FocusCard = (): JSX.Element => {
       {focusedCard && (
         <CardDialog
           id={focusedCard._id}
-          name={focusedCard.name}
+          title={focusedCard.title}
           columnId={focusedCard.columnId}
           tag={focusedCard?.tag || 'white'}
+          activeCard={focusedCard}
         />
       )}
     </>

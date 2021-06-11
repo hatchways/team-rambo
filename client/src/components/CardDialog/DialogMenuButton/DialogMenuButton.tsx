@@ -11,7 +11,7 @@ const DialogMenuButton = ({ name }: Props): JSX.Element => {
   const classes = dialogActionButtonStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { updateSnackBarMessage } = useSnackBar();
-  const { activeBoard, moveCard, copyCard, removeActiveCard, getColumnById, focusedCard } = useKanban();
+  const { activeBoard, moveCard, copyCard, removeCard, getColumnById, focusedCard, resetOpenCard } = useKanban();
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -33,17 +33,26 @@ const DialogMenuButton = ({ name }: Props): JSX.Element => {
     switch (name) {
       case 'Move':
         if (getColumnById(target) !== null) {
-          moveCard(getColumnById(target));
+          if (target === focusedCard?.columnId)
+            updateSnackBarMessage("Can't move a card to its own column!", 'warning');
+          else {
+            moveCard(getColumnById(target));
+            resetOpenCard();
+          }
         }
         break;
       case 'Copy':
         if (getColumnById(target) !== null) {
           copyCard(getColumnById(target));
+          resetOpenCard();
         }
         break;
       case 'Delete':
-        updateSnackBarMessage(`Deleting card: "${focusedCard?.name}"`);
-        removeActiveCard();
+        updateSnackBarMessage(`Deleting card: "${focusedCard?.title}"`);
+        if (focusedCard) {
+          removeCard(focusedCard?._id);
+          resetOpenCard();
+        }
         break;
       default:
         return;
@@ -70,7 +79,7 @@ const DialogMenuButton = ({ name }: Props): JSX.Element => {
   } else {
     return (
       <>
-        <Button className={classes.columnButton} onClick={() => handleMenuClose('Delete')}>
+        <Button className={classes.columnButton} onClick={() => focusedCard && handleMenuClose(focusedCard?.columnId)}>
           {name}
         </Button>
       </>

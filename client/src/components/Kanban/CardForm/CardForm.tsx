@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Box, Button } from '@material-ui/core';
 import { InnerForm } from './InnerForm/InnerForm';
 import useStyles from './useStyles';
@@ -14,11 +14,9 @@ const CardForm = ({ columnId }: CardFormProps): JSX.Element => {
   const openForm = (): void => setFormIsOpen(true);
   const closeForm = (): void => setFormIsOpen(false);
 
-  const handleClose = (event: globalThis.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      closeForm();
-    }
-  };
+  const handleClose = useCallback((event: globalThis.KeyboardEvent) => {
+    if (event.key === 'Escape') closeForm();
+  }, []);
 
   // Can we handle the eventListeners in a more React manner here
   useEffect(() => {
@@ -26,7 +24,7 @@ const CardForm = ({ columnId }: CardFormProps): JSX.Element => {
     return () => {
       document.removeEventListener('keydown', handleClose, false);
     };
-  }, []);
+  }, [handleClose]);
 
   return (
     <Box>

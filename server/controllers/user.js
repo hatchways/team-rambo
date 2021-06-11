@@ -64,7 +64,19 @@ exports.createBoard = asyncHandler(async (req, res) => {
 
 exports.getUserBoards = asyncHandler(async (req, res, next) => {
   //@ts-ignore
-  const boards = await Board.find({ user: req.user.id });
+  const boards = await Board.find({ user: req.user.id }).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+      model: "card",
+    },
+  });
+  /* If no no boards, create a single template board */
+  if (!boards) {
+    const newBoard = await Board.create().createTemplateBoard();
+    boards.push(newBoard);
+    await boards.populate();
+  }
 
   return res.status(200).send({ boards });
 });

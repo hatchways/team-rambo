@@ -1,7 +1,7 @@
 export type { IUser, ISearchUsersApiData } from './User';
-export type { IBoard, ITeamBoard, NewBoardApiData, BoardApiData } from './Board';
-export type { default as ICard } from './Card';
-export type { default as IColumn } from './Column';
+export type { ICard, NewCardApiData, CardApiData, ICardUpdateData } from './Card';
+export type { IColumn, NewColumnApiData, ColumnApiData } from './Column';
+export type { IBoard, ITeamBoard, INewBoardApiData, IBoardApiData, IBoardsApiData } from './Board';
 export type { IDialogItem } from './DialogItem';
 export type { IUploadProfilePicture, IUploadOptions } from './File';
 export type { default as IFetchOptions } from './FetchOptions';

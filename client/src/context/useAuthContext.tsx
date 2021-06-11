@@ -16,15 +16,10 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [loggedInUser, setLoggedInUser] = useState<IUser | null | undefined>();
   const history = useHistory();
 
-  const updateLoginContext = useCallback(
-    (data: IAuthApiDataSuccess) => {
-      setLoggedInUser(data.user);
-      history.push('/dashboard');
-
-      return;
-    },
-    [history],
-  );
+  const updateLoginContext = useCallback(async (data: IAuthApiDataSuccess) => {
+    setLoggedInUser(data.user);
+    return;
+  }, []);
 
   const logout = useCallback(async () => {
     // needed to remove token cookie
@@ -44,7 +39,6 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
       loginWithCookies().then((data: IAuthApiData) => {
         if (data.success) {
           updateLoginContext(data.success);
-          history.push('/dashboard');
 
           return;
         }
