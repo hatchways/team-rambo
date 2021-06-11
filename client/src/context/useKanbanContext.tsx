@@ -25,7 +25,7 @@ import {
   deleteBoard,
   copyFocusedCard,
   swapColumns,
-} from '../helpers/';
+} from '../helpers';
 import { useSnackBar, useAuth } from './';
 import { IKanbanContext, IColumn, ICard, IBoard, ICardUpdateData, IBoardApiData } from '../interface/';
 import { useBatchUpdater } from '../hooks/useBatchUpdater';
@@ -155,6 +155,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     const request = await createBoard(name);
     const { board } = request;
     if (board) setUserBoards((boards) => [...boards, board]);
+    setActiveBoard(board);
 
     return request;
   };
@@ -186,9 +187,11 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
   };
 
   /*    Columns Section   */
-  const addColumn = async (side: string, name: string): Promise<void> => {
+  const addColumn = async (side: string, name: string): Promise<IBoard> => {
     const { board } = await createColumn(activeBoard._id, side, name);
     setActiveBoard(board);
+
+    return board;
   };
 
   const removeColumn = async (columnId: string): Promise<void> => {

@@ -15,12 +15,13 @@ const SplashScreen = (): JSX.Element => {
 
   const handleSubmit = async ({ name }: Values): Promise<void> => {
     const { error } = await createNewBoard(name);
+
     if (error) {
       updateSnackBarMessage(error, 'error');
 
       return;
     }
-    updateSnackBarMessage('Board!');
+    updateSnackBarMessage('Board created!');
     sendToFirstBoard();
   };
 

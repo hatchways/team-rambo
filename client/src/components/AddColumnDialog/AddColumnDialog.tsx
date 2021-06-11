@@ -17,6 +17,14 @@ const AddColumnDialog = (): JSX.Element => {
     setSide(addToSide);
   };
 
+  const handleSubmit = (): void => {
+    const board = addColumn(side, columnName);
+
+    if (!board) return;
+
+    setOpen(false);
+  };
+
   return (
     <Box className={classes.outerContainer}>
       <Grid container direction="row" alignItems="stretch" justify="space-between">
@@ -38,7 +46,7 @@ const AddColumnDialog = (): JSX.Element => {
         toggleFunction={() => {
           setOpen(false);
         }}
-        buttonFunction={() => addColumn(side, columnName)}
+        buttonFunction={handleSubmit}
         component={
           <TextField
             required
