@@ -1,7 +1,8 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
-const styledDialogStyles = makeStyles(() => ({
+const styledDialogStyles = makeStyles((theme: Theme) => ({
   box: {
+    paddingTop: theme.spacing(2),
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',

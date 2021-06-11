@@ -1,5 +1,9 @@
-import { Box, TextField, Chip, Avatar, Grid, Typography, Button } from '@material-ui/core';
+import { Box, TextField } from '@material-ui/core';
 import * as yup from 'yup';
+import { CREATE_TEAM_BOARD } from '../../../actions/team';
+import { useTeam } from '../../../context/useTeams';
+import request from '../../../helpers/APICalls/teams/request';
+import { createTeamBoard } from '../../../helpers/APICalls/teams/requests';
 import { DialogForm } from '../DialogForm/DialogForm';
 import useStyles from './teamBoardFormStyle';
 
@@ -14,14 +18,18 @@ const teamValidation = yup.object({
 });
 
 export const TeamBoardForm = (): JSX.Element => {
+  const { state, dispatch } = useTeam();
   const classes = useStyles();
   return (
     <DialogForm<TeamForm>
       initialValues={{ name: '', description: '' }}
       validation={teamValidation}
-      onSubmit={(values) => {
-        // TODO: this will dispatch the CREATE_TEAM_BOARD action
-        console.log(values);
+      onSubmit={async (values) => {
+        const response = await request(createTeamBoard(state.activeTeam._id, values));
+        dispatch({
+          type: CREATE_TEAM_BOARD,
+          payload: response.payload,
+        });
       }}
     >
       {(formik) => (
@@ -53,26 +61,6 @@ export const TeamBoardForm = (): JSX.Element => {
             rows={4}
             multiline
           />
-          <Box>
-            <Grid container justify="space-between">
-              <Grid item>
-                <Typography variant="h6" className={classes.collaboratorsHeading}>
-                  Select collaborators to add.
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Button color="primary" variant="contained" size="small">
-                  Add everyone
-                </Button>
-              </Grid>
-            </Grid>
-            <Box className={classes.collaborators}>
-              <Chip avatar={<Avatar>E</Avatar>} label="Ethan Moffat" />
-              <Chip avatar={<Avatar>A</Avatar>} label="Ahmed" />
-              <Chip avatar={<Avatar>J</Avatar>} label="Jon Myers" />
-              <Chip avatar={<Avatar>G</Avatar>} label="Gabriel" />
-            </Box>
-          </Box>
         </Box>
       )}
     </DialogForm>

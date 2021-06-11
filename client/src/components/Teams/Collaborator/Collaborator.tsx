@@ -1,13 +1,13 @@
 import { Avatar, Grid, Paper, Typography, Box, IconButton, Menu, MenuItem } from '@material-ui/core';
 import { MoreHoriz } from '@material-ui/icons';
 import { useState, MouseEvent } from 'react';
-import { ICollaborator } from '../../../interface';
+import { IUser } from '../../../interface';
 import useStyles from './collaboratorStyles';
 import { Draggable } from 'react-beautiful-dnd';
 
 interface Props {
   index: number;
-  collaborator: ICollaborator;
+  collaborator: IUser;
 }
 
 export const Collaborator = ({ index, collaborator }: Props): JSX.Element => {
@@ -25,7 +25,7 @@ export const Collaborator = ({ index, collaborator }: Props): JSX.Element => {
   const classes = useStyles();
   return (
     <Draggable draggableId={collaborator.email} index={index}>
-      {(provided, snapshot) => {
+      {(provided) => {
         return (
           <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
             <Paper elevation={0} className={classes.paper}>

@@ -9,4 +9,4 @@ export type { IAuthApiDataSuccess, IAuthApiData } from './AuthApiData';
 export type { default as IKanbanContext } from './KanbanContext';
 export type { default as IDialogItemContext } from './DialogItemContext';
 export type { default as INotificationItem } from './Notification';
-export type { ICollaborator } from './Teams';
+export type { ICollaborator, IInvite, ITeam, ITeamState, ITeamContext, ITeamAction } from './Teams';

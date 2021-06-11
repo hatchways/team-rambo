@@ -20,14 +20,20 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   appBarActionGroup: {
     flex: 1,
-    '& > div:first-child > button:first-child': {
+    '& > div > button': {
       marginRight: 8,
+    },
+    '& > div:last-child > button:last-child': {
+      marginRight: 0,
     },
     [theme.breakpoints.down('sm')]: {
       justifyContent: 'flex-start',
       margin: 4,
       '& > div:first-child': {
         flex: 1,
+      },
+      '& > div > button': {
+        marginTop: 5,
       },
     },
   },

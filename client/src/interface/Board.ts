@@ -1,6 +1,6 @@
 import { IColumn, ICard, IUser } from './';
 
-export interface IBoard {
+export interface IPersonalBoard {
   _id: string;
   name: string;
   columns: Array<IColumn>;
@@ -8,18 +8,19 @@ export interface IBoard {
   user: string;
   createdAt: number;
 }
-
 export interface ITeamBoard {
   _id: string;
   name: string;
   description: string;
   columns: Array<IColumn>;
   cards: Array<ICard>;
-  user: string;
+  user: IUser;
   collaborators: Array<IUser>;
   admins: Array<IUser>;
   createdAt: number;
 }
+
+export type IBoard = ITeamBoard | IPersonalBoard;
 
 export interface BoardApiData {
   boards: Array<IBoard>;

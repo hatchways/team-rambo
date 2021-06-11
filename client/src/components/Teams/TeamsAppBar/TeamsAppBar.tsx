@@ -14,6 +14,8 @@ import {
 } from '@material-ui/core';
 import { Add, MoreHoriz, SwapVert } from '@material-ui/icons';
 import { useEffect, useState } from 'react';
+import { useTeam } from '../../../context/useTeams';
+import { CollaboratorSearch } from '../CollaboratorSearch/CollaboratorSearch';
 import { DialogWrapper } from '../DialogWrapper/DialogWrapper';
 import { TeamBoardForm } from '../TeamBoardForm/TeamBoardForm';
 import useStyles from './teamsAppBarStyles';
@@ -40,6 +42,7 @@ interface TeamsAppBarProps {
 }
 
 export const TeamsAppBar = ({ teamSwitchFunc }: TeamsAppBarProps): JSX.Element => {
+  const { state } = useTeam();
   const [open, setOpen] = useState<boolean>(false);
   const [action, setAction] = useState<{ display: string; action: string }>({ display: '', action: '' });
   const smViewport = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -60,12 +63,12 @@ export const TeamsAppBar = ({ teamSwitchFunc }: TeamsAppBarProps): JSX.Element =
         <Toolbar className={classes.flexDirection}>
           <Grid container={smViewport} justify="space-between" alignItems="center">
             <Grid item>
-              <Typography variant="h5">Your boards</Typography>
+              <Typography variant="h5">{`${state.activeTeam?.name}'s`} boards</Typography>
             </Grid>
             <Hidden mdUp>
               <Grid item>
                 <AppBarButton size="large" variant="outlined" onClick={teamSwitchFunc} endIcon={<SwapVert />}>
-                  Team Rambo
+                  {state.activeTeam?.name}
                 </AppBarButton>
               </Grid>
             </Hidden>
@@ -89,11 +92,6 @@ export const TeamsAppBar = ({ teamSwitchFunc }: TeamsAppBarProps): JSX.Element =
                 New Team Board
               </AppBarButton>
             </Grid>
-            <Grid item className={classes.appBarIconBtn}>
-              <AppBarIconButton size="medium">
-                <MoreHoriz />
-              </AppBarIconButton>
-            </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
@@ -104,7 +102,9 @@ export const TeamsAppBar = ({ teamSwitchFunc }: TeamsAppBarProps): JSX.Element =
               <TeamBoardForm />
             </Box>
           ) : (
-            <h1>Collaborator action</h1>
+            <Box className={classes.dialogWrapper}>
+              <CollaboratorSearch />
+            </Box>
           )}
         </Container>
       </DialogWrapper>

@@ -12,7 +12,7 @@ const invitationTemplate = (team, inviteId) => `
     </p>
     <hr />
     <div>
-      <a style="padding: 8px 12px;background-color: #759CFC;color: white; text-decoration: none;border-radius: 8px;" href="http://localhost:3000/team/${team._id}/invite/${inviteId}/accept">Join ${team.name}</a>
+      <a style="padding: 8px 12px;background-color: #759CFC;color: white; text-decoration: none;border-radius: 8px;" href="http://localhost:3001/team/${team._id}/invite/${inviteId}/accept">Join ${team.name}</a>
     </div>
   <div>
 `;
@@ -109,9 +109,7 @@ exports.acceptInvite = asyncHandler(async (req, res, next) => {
 
   await invite.remove();
 
-  return res.status(200).json({
-    message: `Added you to ${team.name}`,
-  });
+  return res.redirect("http://localhost:3000/teams");
 });
 
 /**

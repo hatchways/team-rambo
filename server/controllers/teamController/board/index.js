@@ -8,18 +8,23 @@ const TeamBoard = require("../../../models/TeamBoard");
  */
 exports.createTeamBoard = asyncHandler(async (req, res, next) => {
   const { team } = req;
-  const { name } = req.body;
+  const { name, description } = req.body;
   const teamBoard = await TeamBoard.create({
     name,
+    description,
     user: req.user.id,
   });
 
   team.boards.push(teamBoard.id);
   await team.save();
 
+  const boardResponse = await TeamBoard.populate(teamBoard, {
+    path: "user",
+    select: "-password",
+  });
   return res.status(200).json({
     message: `Created board ${name}`,
-    payload: teamBoard,
+    payload: boardResponse,
   });
 });
 

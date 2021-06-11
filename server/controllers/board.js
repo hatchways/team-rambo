@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const Board = require("../models/Board");
+const { Board } = require("../models/Board");
 const { v4: uuidv4, v4 } = require("uuid");
 
 exports.getBoards = asyncHandler(async (req, res) => {

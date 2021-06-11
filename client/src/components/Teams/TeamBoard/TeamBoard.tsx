@@ -1,4 +1,4 @@
-import { Grid, Card, CardContent, CardHeader, Avatar, IconButton, Typography } from '@material-ui/core';
+import { Grid, Card, CardContent, CardHeader, Avatar, IconButton, Typography, Menu, MenuItem } from '@material-ui/core';
 import { AvatarGroup } from '@material-ui/lab';
 import { Droppable, DroppableProvided } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
@@ -6,8 +6,9 @@ import clsx from 'clsx';
 import { useState, useEffect } from 'react';
 import { MoreHoriz, ArrowForward } from '@material-ui/icons';
 import { ITeamBoard, IUser } from '../../../interface';
-import { useUser, useAuth } from '../../../context';
+import { useUser, useAuth, useKanban } from '../../../context';
 import useStyles from './teamBoardStyles';
+import { useTeam } from '../../../context/useTeams';
 
 interface Props {
   board: ITeamBoard;
@@ -15,10 +16,14 @@ interface Props {
 
 export const TeamBoard = ({ board }: Props): JSX.Element => {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
   const history = useHistory();
   const { loggedInUser } = useAuth();
   const { isAddingMember } = useUser();
   const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
+  const { state } = useTeam();
+  const { setActiveBoard } = useKanban();
 
   useEffect(() => {
     if (!loggedInUser) {
@@ -32,7 +37,16 @@ export const TeamBoard = ({ board }: Props): JSX.Element => {
   }, [loggedInUser]);
 
   const handleClick = (): void => {
-    history.push(`dashboard/${board._id}`);
+    setActiveBoard(board);
+    history.push(`/dashboard/${board._id}`);
+  };
+
+  const handleBoardOptionsClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (): void => {
+    setAnchorEl(null);
   };
 
   return (
@@ -47,9 +61,14 @@ export const TeamBoard = ({ board }: Props): JSX.Element => {
               }}
               title={board.name}
               action={
-                <IconButton aria-label="settings">
-                  <MoreHoriz style={{ fontSize: 20 }} />
-                </IconButton>
+                <>
+                  <IconButton onClick={handleBoardOptionsClick} aria-label="settings">
+                    <MoreHoriz style={{ fontSize: 20 }} />
+                  </IconButton>
+                  <Menu open={open} anchorEl={anchorEl} onClose={handleClose} elevation={2} keepMounted>
+                    <MenuItem>Remove Board</MenuItem>
+                  </Menu>
+                </>
               }
             />
             <CardContent
@@ -65,6 +84,7 @@ export const TeamBoard = ({ board }: Props): JSX.Element => {
                   <Grid container alignItems="center" spacing={2}>
                     <Grid item xs={4}>
                       <AvatarGroup max={3} spacing="small">
+                        <Avatar alt={board.user.email} src={board.user.picture.url} className={classes.avatar} />
                         {board.collaborators.map((user: IUser) => (
                           <Avatar key={user.email} alt={user.email} src={user.picture.url} className={classes.avatar} />
                         ))}

@@ -16,6 +16,10 @@ const teamBoardSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  description: {
+    type: String,
+    default: "",
+  },
 });
 
 /**

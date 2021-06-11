@@ -9,8 +9,8 @@ import { DialogWrapper } from '../../components/Teams/DialogWrapper/DialogWrappe
 import { TeamDialogList } from '../../components/Teams/TeamDialogList/TeamDialogList';
 import { TeamBoardView } from '../../components/Teams/TeamBoardView/TeamBoardView';
 import { useAuth, useUser, SnackBarContext, useSnackBar } from '../../context/';
-import { dummyBoards } from '../../components/Teams/TeamBoardView/boardsDummyData';
 import { DragDropContext, DragStart, DropResult } from 'react-beautiful-dnd';
+import { useTeam } from '../../context/useTeams';
 
 const TeamsDashboard = (): JSX.Element => {
   const history = useHistory();
@@ -18,6 +18,7 @@ const TeamsDashboard = (): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const { startAddingMember, endAddingMember } = useUser();
   const { updateSnackBarMessage } = useSnackBar();
+  const { state } = useTeam();
 
   if (!loggedInUser) {
     history.push('/login');
@@ -51,21 +52,21 @@ const TeamsDashboard = (): JSX.Element => {
       <Box>
         <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
           <Grid container alignItems="stretch">
-            <Sidebar />
+            <Sidebar teamSwitchFunc={openTeamSwitch} />
             <BoardViewWrapper>
               <Grid container direction="column">
                 <Grid item>
-                  <TeamsAppBar />
+                  <TeamsAppBar teamSwitchFunc={openTeamSwitch} />
                 </Grid>
                 <Grid item>
-                  <TeamBoardView boards={dummyBoards} />
+                  <TeamBoardView boards={state.activeTeam.boards} />
                 </Grid>
               </Grid>
             </BoardViewWrapper>
           </Grid>
         </DragDropContext>
         <DialogWrapper heading="Switch team" open={open} onClose={handleClose}>
-          <TeamDialogList />
+          <TeamDialogList close={handleClose} />
         </DialogWrapper>
       </Box>
     </Box>

@@ -9,7 +9,13 @@ exports.hasAccessToTeam = asyncHandler(async (req, res, next) => {
   const { teamId } = req.params;
   const team = await Team.findById(teamId)
     .populate("collaborators")
-    .populate("boards")
+    .populate({
+      path: "boards",
+      populate: {
+        path: "user",
+        select: "-password",
+      },
+    })
     .populate({
       path: "invites",
       populate: {

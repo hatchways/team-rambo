@@ -3,16 +3,15 @@ import useStyles from './sidebarStyles';
 import useChildStyles from '../shared/childStyles';
 import clsx from 'clsx';
 import { SwapVert } from '@material-ui/icons';
-import { Collaborator } from '../Collaborator/Collaborator';
-import { DialogWrapper } from '../shared/TeamDialog';
-import { TeamDialogList } from '../TeamDialogList/TeamDialogList';
 import { CollaboratorView } from '../CollaboratorView/CollaboratorView';
+import { useTeam } from '../../../context/useTeams';
 
 interface SidebarProps {
   teamSwitchFunc: () => void;
 }
 
 export const Sidebar = ({ teamSwitchFunc }: SidebarProps): JSX.Element => {
+  const { state } = useTeam();
   const classes = useStyles();
   const childClasses = useChildStyles();
 
@@ -30,7 +29,7 @@ export const Sidebar = ({ teamSwitchFunc }: SidebarProps): JSX.Element => {
               onClick={teamSwitchFunc}
               endIcon={<SwapVert />}
             >
-              Team Rambo
+              {state.activeTeam?.name}
             </Button>
           </Box>
           <Box>

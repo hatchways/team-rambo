@@ -1,5 +1,10 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 
-const useStyles = makeStyles(() => ({}));
+const useStyles = makeStyles((theme: Theme) => ({
+  inviteText: {
+    color: `darken(${theme.palette.teams.text}, 10%)`,
+    marginBottom: theme.spacing(2),
+  },
+}));
 
 export default useStyles;

@@ -15,11 +15,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'space-between',
   },
   collaboratorsWrapper: {
-    marginTop: theme.spacing(5),
+    marginTop: theme.spacing(3),
     color: theme.palette.teams.text,
   },
   collaboratorList: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(2),
   },
 }));
 
