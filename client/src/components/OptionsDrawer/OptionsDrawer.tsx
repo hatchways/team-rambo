@@ -23,12 +23,13 @@ interface Props {
 
 const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
   const classes = useStyles();
-  const { fetchBoard, userBoards, removeBoard } = useKanban();
+  const { userBoards, removeBoard } = useKanban();
+  const history = useHistory();
 
   return (
     <Drawer anchor={'right'} open={open} onClose={setOpen}>
       <List className={classes.list}>
-        <ListItem>
+        <ListItem className={classes.listItem}>
           <ListItemText
             primary={<Typography className={classes.title}>Boards</Typography>}
             className={classes.primary}
@@ -40,11 +41,11 @@ const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
             key={board._id}
             button
             onClick={() => {
-              history.push(`/dashboard/board/${board._id}`);
+              history.push(`/dashboard/boards/${board._id}`);
               setOpen(false);
             }}
           >
-            <ListItemIcon>
+            <ListItemIcon className={classes.listItemIcon}>
               <SwapHorizontalCircleOutlinedIcon className={classes.icon} />
             </ListItemIcon>
 

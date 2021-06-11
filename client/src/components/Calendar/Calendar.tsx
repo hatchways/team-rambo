@@ -2,11 +2,11 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useKanban } from '../../context';
-import { initCalendarCards } from '../../helpers';
 
 const Calendar = (): JSX.Element => {
   const { activeBoard } = useKanban();
 
+  console.log(activeBoard);
   // Needs to be integrated here with backend (updating, etc);
   // Leaving in a console.log to display data that is accessible
   const eventDrop = (info: any) => {
@@ -21,7 +21,8 @@ const Calendar = (): JSX.Element => {
       editable={true}
       // initCalendarCards is a function that temp sets the data as the calendar expects it;
       // will be adapted to work with BE integration
-      events={initCalendarCards(activeBoard)}
+
+      // events={initCalendarCards(activeBoard)}
       eventDrop={eventDrop}
       showNonCurrentDates={false}
     />

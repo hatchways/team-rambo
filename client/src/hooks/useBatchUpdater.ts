@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import debounced from 'lodash.debounce';
 import { cloneDeep } from 'lodash';
 
@@ -22,14 +22,24 @@ export const useBatchUpdater = <T>(
   // changeset store for the invocation period.
   const [batch, setBatch] = useState<Array<Batch<T>>>([]);
 
+  /**
+   * After the delay, call the provided function with the batch changes for that invocation period.
+   * @private
+   */
+  const _triggerBatchUpdateDebounced = useMemo(() => {
+    return debounced((batch: Array<Batch<T>>) => {
+      callFunc(batch);
+    }, delay);
+  }, [callFunc, delay]);
+
   useEffect(() => {
     if (batch.length !== 0) {
-      _triggerBatchUpdateDebounced(batch);
+      _triggerBatchUpdateDebounced;
     }
     return () => {
       _triggerBatchUpdateDebounced.cancel();
     };
-  }, [batch]);
+  }, [_triggerBatchUpdateDebounced, batch]);
 
   /**
    *
@@ -49,17 +59,6 @@ export const useBatchUpdater = <T>(
     setBatch(batchSet);
     return;
   };
-
-  /**
-   * After the delay, call the provided function with the batch changes for that invocation period.
-   * @private
-   */
-  const _triggerBatchUpdateDebounced = useCallback(
-    debounced((batch: Array<Batch<T>>) => {
-      callFunc(batch);
-    }, delay),
-    [batch],
-  );
 
   return [batch, appendChangeToBatch];
 };

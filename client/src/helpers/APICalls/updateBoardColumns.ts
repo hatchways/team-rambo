@@ -1,6 +1,6 @@
-import { IBoard, IColumn, IFetchOptions } from '../../interface';
+import { IBoardApiData, IColumn, IFetchOptions } from '../../interface';
 
-const updateBoardColumns = async (boardId: string, columns: IColumn): Promise<IBoard> => {
+const updateBoardColumns = async (boardId: string, columns: IColumn): Promise<IBoardApiData> => {
   const fetchOptions: IFetchOptions = {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },

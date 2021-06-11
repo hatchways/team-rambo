@@ -26,7 +26,7 @@ const AddBoardDialog = (): JSX.Element => {
   };
 
   const handleSubmit = async ({ name }: Values): Promise<void> => {
-    const board = await createNewBoard(name);
+    const { board } = await createNewBoard(name);
     if (!board) updateSnackBarMessage('Could not create board!', 'error');
     updateSnackBarMessage(`Board "${board.name}" created`, 'success');
     handleClose();

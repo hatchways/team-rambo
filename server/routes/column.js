@@ -1,22 +1,17 @@
 const router = require("express").Router();
 const protect = require("../middleware/auth");
 const {
+  createColumn,
   updateColumn,
-  swapCardsInColumn,
-  swapCardsOutsideColumn,
-  reorderColumn,
-  renameColumn,
-  createColumnCard,
-  deleteColumnCard,
+  deleteColumn,
+  swapCards,
 } = require("../controllers/column");
 
 router.use(protect);
 
-router.route("/:id").patch(updateColumn);
-router.route("/:id/swapCardsInColumn").patch(swapCardsInColumn);
-router.route("/batch/swapCardsOutsideColumn").patch(swapCardsOutsideColumn);
-router.route("/:id/reorder").patch(reorderColumn);
-router.route("/:id/rename").patch(renameColumn);
-router.route("/:id/addCard").post(createColumnCard);
-router.route("/:id/removeCard").delete(deleteColumnCard);
+router.route("/:boardId/columns/").post(createColumn);
+router.route("/:boardId/columns/:id").patch(updateColumn);
+router.route("/:boardId/columns/:id").delete(deleteColumn);
+router.route("/columns/batch/swapCards").patch(swapCards);
+
 module.exports = router;

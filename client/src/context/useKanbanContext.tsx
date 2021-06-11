@@ -13,27 +13,27 @@ import {
   getBoard,
   getUserBoards,
   createBoard,
-  updateBoardName,
+  updateBoard,
   createColumn,
   deleteColumn,
-  updateColumnName,
+  updateColumn,
   createCard,
   deleteCard,
   updateCard,
-  swapBoardColumns,
-  swapCardsInColumn,
-  swapCardsOutsideColumn,
+  swapCards,
   moveFocusedCard,
   deleteBoard,
   copyFocusedCard,
+  swapColumns,
 } from '../helpers/';
 import { useSnackBar, useAuth } from './';
-import { IKanbanContext, IColumn, ICard, IBoard, ICardUpdateData } from '../interface/';
+import { IKanbanContext, IColumn, ICard, IBoard, ICardUpdateData, IBoardApiData } from '../interface/';
 import { useBatchUpdater } from '../hooks/useBatchUpdater';
+import { useHistory } from 'react-router-dom';
 
 export const KanbanContext = createContext<IKanbanContext>({} as IKanbanContext);
-
 export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => {
+  const [fetchingBoard, setFetchingBoard] = useState<boolean>(false);
   const [activeBoard, setActiveBoard] = useState<IBoard>({
     _id: 'Initial',
     name: 'Initial',
@@ -43,48 +43,69 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     createdAt: 'Initial',
   });
   const [userBoards, setUserBoards] = useState<IBoard[]>([]);
-  const [focusedCard, setFocusedCard] = useState<ICard | null>(null);
+  const [focusedCard, setFocusedCard] = useState<ICard>({} as ICard);
   const { updateSnackBarMessage } = useSnackBar();
   const { loggedInUser } = useAuth();
+  const history = useHistory();
 
-  const [, cardOutsideColumnBatch] = useBatchUpdater<{
+  const [, swapColumnsBatch] = useBatchUpdater<{
     source: DraggableLocation;
     destination: DraggableLocation;
-  }>(swapCardsOutsideColumn, 2500);
+  }>(swapColumns, 2500);
+
+  const [, swapCardsBatch] = useBatchUpdater<{
+    source: DraggableLocation;
+    destination: DraggableLocation;
+  }>(swapCards, 2500);
 
   useEffect(() => {
-    if (loggedInUser) getFirstBoard();
+    if (loggedInUser) {
+      fetchUserBoards();
+    }
   }, [loggedInUser]);
+
+  const fetchUserBoards = async () => {
+    const request = await getUserBoards();
+    setUserBoards(request.boards);
+  };
+
+  const sendToFirstBoard = useCallback(async () => {
+    const { boards } = await getUserBoards();
+    if (boards && boards.length > 0) {
+      history.push(`/dashboard/boards/${boards[0]._id}`);
+      setActiveBoard(boards[0]);
+      return;
+    }
+    history.push(`/newboard`);
+  }, []);
 
   /** Dragging function for columns/cards */
   const handleDragEnd = async (result: DropResult): Promise<void> => {
     if (!result.destination) return;
-
-    const { destination, source, draggableId, type } = result;
-
+    const { destination, source, type } = result;
     if (type === 'column') {
-      await swapColumns(source, destination);
-
+      const [homeColumn] = activeBoard.columns.splice(source.index, 1);
+      activeBoard.columns.splice(destination.index, 0, homeColumn);
+      const batch = {
+        key: homeColumn._id,
+        change: {
+          destination,
+          source,
+        },
+      };
+      swapColumnsBatch(batch);
+      setActiveBoard(activeBoard);
       return;
     }
-
     const sourceColumnIndex = activeBoard.columns.findIndex((col) => col._id === source.droppableId);
     const destinationColumnIndex = activeBoard.columns.findIndex((col) => col._id === destination.droppableId);
     if (sourceColumnIndex < 0 || destinationColumnIndex < 0) return;
 
     // Reordering cards inside same column
     if (source.droppableId === destination.droppableId) {
-      return;
-    }
-
-    // Moving card to different column
-    if (source.droppableId !== destination.droppableId) {
-      const homeColumn = activeBoard.columns[activeBoard.columns.findIndex((col) => col._id === source.droppableId)];
-      const newColumns =
-        activeBoard.columns[activeBoard.columns.findIndex((col) => col._id === destination.droppableId)];
+      const homeColumn = activeBoard.columns[sourceColumnIndex];
       const [card] = homeColumn.cards.splice(source.index, 1);
-      newColumns.cards.splice(destination.index, 0, card);
-
+      homeColumn.cards.splice(destination.index, 0, card);
       const batch = {
         key: card._id,
         change: {
@@ -92,50 +113,60 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
           source,
         },
       };
-
-      cardOutsideColumnBatch(batch);
-
+      swapCardsBatch(batch);
       setActiveBoard(activeBoard);
-
+      return;
+    }
+    // Moving card to different column
+    if (source.droppableId !== destination.droppableId) {
+      const homeColumn = activeBoard.columns[activeBoard.columns.findIndex((col) => col._id === source.droppableId)];
+      const newColumns =
+        activeBoard.columns[activeBoard.columns.findIndex((col) => col._id === destination.droppableId)];
+      const [card] = homeColumn.cards.splice(source.index, 1);
+      newColumns.cards.splice(destination.index, 0, card);
+      const batch = {
+        key: card._id,
+        change: {
+          destination,
+          source,
+        },
+      };
+      swapCardsBatch(batch);
+      setActiveBoard(activeBoard);
       return;
     }
   };
 
   /*    Boards Section   */
-  const getFirstBoard = async (): Promise<IBoard> => {
-    const request = await getUserBoards();
-    const board = request.boards[0];
-    setActiveBoard(board);
-    setUserBoards(request.boards);
+  const fetchBoard = async (id: string): Promise<IBoardApiData | void> => {
+    setFetchingBoard(true);
+    const { board } = await getBoard(id);
+    if (!board) {
+      sendToFirstBoard();
+      return;
+    }
 
-    return board;
+    setActiveBoard(board);
+    setFetchingBoard(false);
+    return;
   };
 
-  const fetchBoard = async (id: string): Promise<IBoard> => {
-    const board = await getBoard(id);
-    setActiveBoard(board);
-
-    return board;
-  };
-
-  const createNewBoard = async (name: string): Promise<IBoard> => {
+  const createNewBoard = async (name: string): Promise<IBoardApiData> => {
     const request = await createBoard(name);
-    if (request) setUserBoards((boards) => [...boards, request]);
+    const { board } = request;
+    if (board) setUserBoards((boards) => [...boards, board]);
+
     return request;
   };
-
   const updateBoardsName = async (id: string, name: string, setSubmitting: (isSubmitting: boolean) => void) => {
-    const request = await updateBoardName(id, name);
-
+    const { board } = await updateBoard(id, name);
     const clonedUserBoards = userBoards.slice();
     const updatedBoardIndex = userBoards.findIndex((board) => board._id === activeBoard._id);
-    clonedUserBoards[updatedBoardIndex] = request;
-
+    clonedUserBoards[updatedBoardIndex] = board;
     setSubmitting(false);
-    setActiveBoard(request);
+    setActiveBoard(board);
     setUserBoards(clonedUserBoards);
-
-    return request;
+    return board;
   };
 
   const removeBoard = async (id: string) => {
@@ -148,24 +179,21 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const updateActiveCard = async (data: ICardUpdateData) => {
     if (focusedCard) {
-      const request = await updateCard(focusedCard._id, data);
-      console.log(request);
-      setActiveBoard(request);
+      const { board } = await updateCard(activeBoard._id, focusedCard.columnId, focusedCard._id, data);
+      setActiveBoard(board);
     }
     return;
   };
 
   /*    Columns Section   */
   const addColumn = async (side: string, name: string): Promise<void> => {
-    const request = await createColumn(activeBoard._id, side, name);
-
-    setActiveBoard(request);
+    const { board } = await createColumn(activeBoard._id, side, name);
+    setActiveBoard(board);
   };
 
   const removeColumn = async (columnId: string): Promise<void> => {
-    const request = await deleteColumn(activeBoard._id, columnId);
-
-    setActiveBoard(request);
+    const { board } = await deleteColumn(activeBoard._id, columnId);
+    setActiveBoard(board);
   };
 
   const renameColumn = async (
@@ -174,17 +202,10 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     setIsRenaming: Dispatch<SetStateAction<boolean>>,
     setSubmitting: (isSubmitting: boolean) => void,
   ) => {
-    const request = await updateColumnName(columnId, columnName);
-
+    const { board } = await updateColumn(activeBoard._id, columnId, columnName);
     setSubmitting(false);
     setIsRenaming(false);
-    setActiveBoard(request);
-  };
-
-  const swapColumns = async (source: DraggableLocation, destination: DraggableLocation): Promise<void> => {
-    const request = await swapBoardColumns(activeBoard._id, source, destination);
-
-    setActiveBoard(request);
+    setActiveBoard(board);
   };
 
   const getColumnById = (columnId: string): IColumn => {
@@ -192,18 +213,15 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     if (colIndex > -1) return activeBoard.columns[colIndex];
     return activeBoard.columns[colIndex];
   };
-
   /*    Cards Section   */
   const addCard = async (title: string, tag: string, columnId: string): Promise<void> => {
-    const request = await createCard(title, tag, columnId);
-
-    setActiveBoard(request);
+    const { board } = await createCard(title, tag, columnId, activeBoard._id);
+    setActiveBoard(board);
   };
 
   const removeCard = async (cardId: string): Promise<void> => {
-    const request = await deleteCard(cardId);
-
-    setActiveBoard(request);
+    const { board } = await deleteCard(activeBoard._id, focusedCard?.columnId, cardId);
+    setActiveBoard(board);
   };
 
   const moveCard = async (destination: IColumn): Promise<void> => {
@@ -211,32 +229,26 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       updateSnackBarMessage('No focus card found!', 'error');
       return;
     }
-
-    const request = await moveFocusedCard(destination._id, focusedCard._id);
-
-    setActiveBoard(request);
+    const { board } = await moveFocusedCard(activeBoard._id, destination._id, focusedCard._id);
+    setActiveBoard(board);
     resetOpenCard();
   };
-
   const copyCard = async (destination: IColumn): Promise<void> => {
     if (!focusedCard) {
       updateSnackBarMessage('No focus card found!', 'error');
       return;
     }
-
-    const request = await copyFocusedCard(destination._id, focusedCard._id);
-
-    setActiveBoard(request);
+    const { board } = await copyFocusedCard(activeBoard._id, destination._id, focusedCard._id);
+    setActiveBoard(board);
     resetOpenCard();
   };
 
   const setOpenCard = (card: ICard): void => setFocusedCard(card);
-
-  const resetOpenCard = (): void => setFocusedCard(null);
-
+  const resetOpenCard = (): void => setFocusedCard({} as ICard);
   return (
     <KanbanContext.Provider
       value={{
+        fetchingBoard,
         activeBoard,
         focusedCard,
         userBoards,
@@ -257,16 +269,15 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
         removeBoard,
         removeCard,
         updateActiveCard,
+        sendToFirstBoard,
       }}
     >
       {children}
     </KanbanContext.Provider>
   );
 };
-
 export function useKanban(): IKanbanContext {
   const ctx = useContext(KanbanContext);
   if (!ctx) throw new Error('useKanban must be used within KanbanProvider');
-
   return ctx;
 }
