@@ -15,7 +15,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
     columns: [],
     cards: [],
     user: 'Initial',
-    createdAt: 'Initial',
+    createdAt: 0,
   });
   const [userBoards, setUserBoards] = useState<IBoard[]>([]);
   const [columns, setColumns] = useState<IColumn[]>(activeBoard.columns);
@@ -31,12 +31,16 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
 
   const getFirstBoard = async (): Promise<IBoard> => {
     const request = await getUserBoards();
-    const board = request.boards[0];
-    setActiveBoard(board);
-    setUserBoards(request.boards);
-    setColumns(board.columns);
 
-    return board;
+    if (request.boards[0]) {
+      const board = request.boards[0];
+      setActiveBoard(board);
+      setUserBoards(request.boards);
+      setColumns(board.columns);
+      return board;
+    }
+
+    return { _id: 'Initial', name: 'Initial', columns: [], cards: [], user: 'Initial', createdAt: 0 };
   };
 
   const fetchBoard = async (id: string): Promise<IBoard> => {

@@ -10,7 +10,7 @@ import { useAuth, useKanban } from '../../context/';
 import useStyles from './dashboardStyles';
 
 const Dashboard = (): JSX.Element => {
-  const classes = useStyles();
+  //const classes = useStyles();
   const history = useHistory();
   const { loggedInUser } = useAuth();
   const { activeBoard } = useKanban();

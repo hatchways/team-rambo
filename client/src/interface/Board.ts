@@ -1,4 +1,4 @@
-import { IColumn, ICard } from './';
+import { IColumn, ICard, IUser } from './';
 
 export interface IBoard {
   _id: string;
@@ -6,7 +6,19 @@ export interface IBoard {
   columns: Array<IColumn>;
   cards: Array<ICard>;
   user: string;
-  createdAt: string;
+  createdAt: number;
+}
+
+export interface ITeamBoard {
+  _id: string;
+  name: string;
+  description: string;
+  columns: Array<IColumn>;
+  cards: Array<ICard>;
+  user: string;
+  collaborators: Array<IUser>;
+  admins: Array<IUser>;
+  createdAt: number;
 }
 
 export interface BoardApiData {

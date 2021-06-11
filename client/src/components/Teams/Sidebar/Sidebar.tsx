@@ -4,6 +4,9 @@ import useChildStyles from '../shared/childStyles';
 import clsx from 'clsx';
 import { SwapVert } from '@material-ui/icons';
 import { Collaborator } from '../Collaborator/Collaborator';
+import { DialogWrapper } from '../shared/TeamDialog';
+import { TeamDialogList } from '../TeamDialogList/TeamDialogList';
+import { CollaboratorView } from '../CollaboratorView/CollaboratorView';
 
 interface SidebarProps {
   teamSwitchFunc: () => void;
@@ -35,10 +38,7 @@ export const Sidebar = ({ teamSwitchFunc }: SidebarProps): JSX.Element => {
               <Typography variant="h6">Available collaborators</Typography>
             </Box>
             <Box className={classes.collaboratorList}>
-              <Collaborator name="Ethan" email="ethanmoffat@hey.com" />
-              <Collaborator name="Ahmed" email="ethanmoffat@hey.com" />
-              <Collaborator name="Jon" email="ethanmoffat@hey.com" />
-              <Collaborator name="Gabriel" email="ethanmoffat@hey.com" />
+              <CollaboratorView />
             </Box>
           </Box>
         </Container>
