@@ -4,12 +4,14 @@ import useStyles from './signUpStyles';
 import { register } from '../../helpers/';
 import SignUpForm from './SignUpForm/SignUpForm';
 import { useAuth, useSnackBar, useKanban } from '../../context/';
+import { useHistory } from 'react-router-dom';
 
 export default function Register(): JSX.Element {
   const classes = useStyles();
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
-  const { sendToFirstBoard } = useKanban();
+  const { setActiveBoard } = useKanban();
+  const history = useHistory();
 
   const handleSubmit = (
     { email, password }: { email: string; password: string },
@@ -19,9 +21,10 @@ export default function Register(): JSX.Element {
       if (data.error) {
         setSubmitting(false);
         updateSnackBarMessage(data.error, 'error');
-      } else if (data.success) {
+      } else if (data.success && data.success.board) {
         updateLoginContext(data.success);
-        sendToFirstBoard();
+        setActiveBoard(data.success.board);
+        history.push(`/dashboard/boards/${data.success.board._id}`);
       } else {
         setSubmitting(false);
         updateSnackBarMessage('An unexpected error occurred. Please try again', 'error');
