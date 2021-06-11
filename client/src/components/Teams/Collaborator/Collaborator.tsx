@@ -1,17 +1,16 @@
 import { Avatar, Grid, Paper, Typography, Box, IconButton, Menu, MenuItem } from '@material-ui/core';
 import { MoreHoriz } from '@material-ui/icons';
 import { useState, MouseEvent } from 'react';
+import { ICollaborator } from '../../../interface';
 import useStyles from './collaboratorStyles';
 import { Draggable } from 'react-beautiful-dnd';
 
-interface CollaboratorProps {
-  profile?: string;
-  name: string;
-  email: string;
+interface Props {
   index: number;
+  collaborator: ICollaborator;
 }
 
-export const Collaborator = ({ profile, name, email, index }: CollaboratorProps): JSX.Element => {
+export const Collaborator = ({ index, collaborator }: Props): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -25,7 +24,7 @@ export const Collaborator = ({ profile, name, email, index }: CollaboratorProps)
 
   const classes = useStyles();
   return (
-    <Draggable draggableId={email} index={index}>
+    <Draggable draggableId={collaborator.email} index={index}>
       {(provided, snapshot) => {
         return (
           <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
@@ -34,12 +33,12 @@ export const Collaborator = ({ profile, name, email, index }: CollaboratorProps)
                 <Grid item>
                   <Grid container alignItems="center">
                     <Grid item>
-                      <Avatar className={classes.largeAvatar}>{!profile && 'E'}</Avatar>
+                      <Avatar className={classes.largeAvatar} src={collaborator.picture.url}></Avatar>
                     </Grid>
                     <Grid item>
                       <Box className={classes.collaboratorInfo}>
-                        <Typography variant="h6">{name}</Typography>
-                        <Typography variant="body1">{email}</Typography>
+                        <Typography variant="h6">{collaborator.name}</Typography>
+                        <Typography variant="body1">{collaborator.email}</Typography>
                       </Box>
                     </Grid>
                   </Grid>

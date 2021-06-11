@@ -6,12 +6,12 @@ const styledDialogStyles = makeStyles((theme: Theme) => ({
     height: 'fit-content',
     borderStyle: 'solid',
     borderWidth: 0.6,
-    borderColor: theme.palette.primary.main,
+    borderColor: 'rgb(0,0,0,0)',
     boxShadow: '1px 1px 4px rgb(0,0,0,0.2)',
     borderRadius: 10,
     margin: 5,
     '&:hover': {
-      borderWidth: 4,
+      borderColor: theme.palette.primary.main,
     },
   },
   header: {
