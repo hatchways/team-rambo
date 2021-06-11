@@ -146,7 +146,9 @@ export const dummyBoards = [
       },
       { email: 'email3', picture: { url: 'https://cdn.mos.cms.futurecdn.net/VSy6kJDNq2pSXsCzb6cvYF.jpg' } },
     ],
-    admins: [{ email: 'email3', picture: { url: 'https://cdn.mos.cms.futurecdn.net/VSy6kJDNq2pSXsCzb6cvYF.jpg' } }],
+    admins: [
+      { email: `poc@poc.com`, picture: { url: 'https://cdn.mos.cms.futurecdn.net/VSy6kJDNq2pSXsCzb6cvYF.jpg' } },
+    ],
     createdAt: Date.now(),
   },
   {
@@ -196,7 +198,9 @@ export const dummyBoards = [
       },
       { email: 'email3', picture: { url: 'https://cdn.mos.cms.futurecdn.net/VSy6kJDNq2pSXsCzb6cvYF.jpg' } },
     ],
-    admins: [{ email: 'email3', picture: { url: 'https://cdn.mos.cms.futurecdn.net/VSy6kJDNq2pSXsCzb6cvYF.jpg' } }],
+    admins: [
+      { email: 'poc@poc.com', picture: { url: 'https://cdn.mos.cms.futurecdn.net/VSy6kJDNq2pSXsCzb6cvYF.jpg' } },
+    ],
     createdAt: Date.now(),
   },
 ];

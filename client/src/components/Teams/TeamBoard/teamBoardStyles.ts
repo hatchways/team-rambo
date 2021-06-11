@@ -10,6 +10,9 @@ const styledDialogStyles = makeStyles((theme: Theme) => ({
     boxShadow: '1px 1px 4px rgb(0,0,0,0.2)',
     borderRadius: 10,
     margin: 5,
+    '&:hover': {
+      borderWidth: 4,
+    },
   },
   header: {
     paddingBottom: 0,
@@ -27,6 +30,9 @@ const styledDialogStyles = makeStyles((theme: Theme) => ({
   },
   date: {
     color: '#c4c8d0',
+  },
+  cannotModify: {
+    opacity: 0.1,
   },
 }));
 

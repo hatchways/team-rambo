@@ -5,13 +5,15 @@ import { BoardViewWrapper } from '../../components/Teams/BoardViewWrapper/BoardV
 import { Sidebar } from '../../components/Teams/Sidebar/Sidebar';
 import { TeamsAppBar } from '../../components/Teams/TeamsAppBar/TeamsAppBar';
 import { TeamBoardView } from '../../components/Teams/TeamBoardView/TeamBoardView';
-import { useAuth } from '../../context/';
+import { useAuth, useUser, SnackBarContext, useSnackBar } from '../../context/';
 import { dummyBoards } from '../../components/Teams/TeamBoardView/boardsDummyData';
 import { DragDropContext, DragStart, DropResult } from 'react-beautiful-dnd';
 
 const TeamsDashboard = (): JSX.Element => {
   const history = useHistory();
   const { loggedInUser } = useAuth();
+  const { startAddingMember, endAddingMember } = useUser();
+  const { updateSnackBarMessage } = useSnackBar();
 
   if (!loggedInUser) {
     history.push('/login');
@@ -20,11 +22,16 @@ const TeamsDashboard = (): JSX.Element => {
   }
 
   const onDragEnd = (result: DropResult): void => {
+    console.log(result);
+    endAddingMember();
     if (!result.destination) return;
+    //implement fetch and then success or error message
+    updateSnackBarMessage('success!');
   };
 
   const onDragStart = (item: DragStart): void => {
     if (item.source.droppableId != 'collaborators') return;
+    startAddingMember();
   };
 
   return (

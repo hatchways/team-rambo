@@ -2,8 +2,11 @@ import { Grid, Card, CardContent, CardHeader, Avatar, IconButton, Typography } f
 import { AvatarGroup } from '@material-ui/lab';
 import { Droppable, DroppableProvided } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
+import clsx from 'clsx';
+import { useState, useEffect } from 'react';
 import { MoreHoriz, ArrowForward } from '@material-ui/icons';
 import { ITeamBoard, IUser } from '../../../interface';
+import { useUser, useAuth } from '../../../context';
 import useStyles from './teamBoardStyles';
 
 interface Props {
@@ -13,16 +16,30 @@ interface Props {
 export const TeamBoard = ({ board }: Props): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
+  const { loggedInUser } = useAuth();
+  const { isAddingMember } = useUser();
+  const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!loggedInUser) {
+      setIsUserAdmin(false);
+      return;
+    }
+    const admins = board.admins.map((user) => user.email);
+    if (admins.includes(loggedInUser.email)) setIsUserAdmin(true);
+
+    return;
+  }, [loggedInUser]);
 
   const handleClick = (): void => {
     history.push(`dashboard/${board._id}`);
   };
 
   return (
-    <Droppable droppableId={board._id}>
+    <Droppable droppableId={board._id} isDropDisabled={!isUserAdmin}>
       {(provided: DroppableProvided) => (
         <div ref={provided.innerRef} {...provided.droppableProps}>
-          <Card className={classes.root}>
+          <Card className={clsx(classes.root, isAddingMember && !isUserAdmin && classes.cannotModify)}>
             <CardHeader
               classes={{
                 title: classes.title,
@@ -76,6 +93,7 @@ export const TeamBoard = ({ board }: Props): JSX.Element => {
               </Grid>
             </CardContent>
           </Card>
+          {provided.placeholder}
         </div>
       )}
     </Droppable>

@@ -8,12 +8,22 @@ interface IPicture {
 interface IUserContext {
   picture: IPicture | null | undefined;
   updatePicture: (picture: IPicture) => void;
+  isAddingMember: boolean;
+  startAddingMember: () => void;
+  endAddingMember: () => void;
 }
 
-export const UserContext = createContext<IUserContext>({ picture: null, updatePicture: () => null });
+export const UserContext = createContext<IUserContext>({
+  picture: null,
+  updatePicture: () => null,
+  isAddingMember: false,
+  startAddingMember: () => null,
+  endAddingMember: () => null,
+});
 
 export const UserProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [picture, setPicture] = useState<IPicture | null | undefined>(null);
+  const [isAddingMember, setIsAddingMember] = useState<boolean>(false);
   const { loggedInUser } = useAuth();
 
   useEffect(() => {
@@ -24,7 +34,19 @@ export const UserProvider: FunctionComponent = ({ children }): JSX.Element => {
     setPicture(picture);
   }, []);
 
-  return <UserContext.Provider value={{ picture, updatePicture }}>{children}</UserContext.Provider>;
+  const startAddingMember = (): void => {
+    setIsAddingMember(true);
+  };
+
+  const endAddingMember = (): void => {
+    setIsAddingMember(false);
+  };
+
+  return (
+    <UserContext.Provider value={{ picture, updatePicture, isAddingMember, startAddingMember, endAddingMember }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export const useUser = (): IUserContext => {
