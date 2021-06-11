@@ -17,6 +17,7 @@ const notificationRouter = require("./routes/notification");
 const boardsRouter = require("./routes/board");
 const columnsRouter = require("./routes/column");
 const cardsRouter = require("./routes/card");
+const newBoardRouter = require("./controllers/newBoard");
 
 const { json, urlencoded } = express;
 
@@ -55,6 +56,7 @@ app.use("/notifications/", notificationRouter);
 app.use("/dashboard/boards", boardsRouter);
 app.use("/dashboard/boards/", columnsRouter);
 app.use("/dashboard/boards/", cardsRouter);
+app.use("/newboard", newBoardRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
