@@ -25,7 +25,7 @@ export default interface IKanbanContext {
   createNewBoard: (name: string) => Promise<IBoardApiData>;
   moveCard: (destination: IColumn) => void;
   copyCard: (destination: IColumn) => void;
-  addColumn: (side: string, name: string) => void;
+  addColumn: (side: string, name: string) => Promise<IBoard>;
   updateBoardsName: (id: string, name: string, setSubmitting: (isSubmitting: boolean) => void) => void;
   removeCard: (cardId: string) => void;
   updateActiveCard: (data: ICardUpdateData) => void;
