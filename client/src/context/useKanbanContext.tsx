@@ -77,7 +77,7 @@ export const KanbanProvider: FunctionComponent = ({ children }): JSX.Element => 
       return;
     }
     history.push(`/newboard`);
-  }, []);
+  }, [history]);
 
   /** Dragging function for columns/cards */
   const handleDragEnd = async (result: DropResult): Promise<void> => {
