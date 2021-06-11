@@ -68,5 +68,15 @@ columnSchema.methods.swapPosition = async function (
   await this.save();
 };
 
+columnSchema.methods.deleteSelf = async function () {
+  await this.remove({}, function (err, result) {
+    if (err) {
+      console.err(err);
+    }
+
+    return;
+  });
+};
+
 const Column = mongoose.model("column", columnSchema);
 module.exports = Column;

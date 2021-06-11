@@ -1,13 +1,13 @@
-import { IFetchOptions, IBoard } from '../../interface';
+import { IFetchOptions, IBoardApiData } from '../../interface';
 
-const moveFocusedCard = async (columnId: string, cardId: string): Promise<IBoard> => {
+const moveFocusedCard = async (boardId: string, newColumnId: string, cardId: string): Promise<IBoardApiData> => {
   const fetchOptions: IFetchOptions = {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    body: JSON.stringify({ columnId }),
+    body: JSON.stringify({ newColumnId }),
   };
-  return await fetch(`/cards/${cardId}/moveCard`, fetchOptions)
+  return await fetch(`${boardId}/columns/${newColumnId}/cards/${cardId}/moveCard`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },

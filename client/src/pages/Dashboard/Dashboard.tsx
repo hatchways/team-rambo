@@ -16,7 +16,7 @@ const Dashboard = (): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
   const { loggedInUser } = useAuth();
-  const { fetchBoard, activeBoard } = useKanban();
+  const { fetchBoard, activeBoard, fetchingBoard } = useKanban();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const { id } = useParams<IBoardParams>();
 
@@ -24,12 +24,14 @@ const Dashboard = (): JSX.Element => {
 
   useEffect(() => {
     fetchBoard(id);
-  }, []);
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }, [id]);
 
   if (!loggedInUser) {
     history.push('/login');
     return <CircularProgress />;
   }
+
   return (
     <Box>
       <CssBaseline />
@@ -41,13 +43,13 @@ const Dashboard = (): JSX.Element => {
         <AddColumnDialog />
       </Box>
       <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
-        {activeBoard._id != 'Initial' ? (
-          <Grid item xs={10}>
-            <Board activeBoard={activeBoard} />
-          </Grid>
-        ) : (
+        {fetchingBoard ? (
           <Grid item xs={12} className={classes.loading}>
             <CircularProgress size={150} />
+          </Grid>
+        ) : (
+          <Grid item xs={10}>
+            <Board activeBoard={activeBoard} />
           </Grid>
         )}
       </Grid>

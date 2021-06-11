@@ -2,13 +2,8 @@ import { DraggableLocation } from 'react-beautiful-dnd';
 import { Batch } from '../../hooks/useBatchUpdater';
 import { IFetchOptions } from '../../interface';
 
-const swapCardsOutsideColumn = async (
-  batch: Array<
-    Batch<{
-      source: DraggableLocation;
-      destination: DraggableLocation;
-    }>
-  >,
+const swapColumns = async (
+  batch: Array<Batch<{ source: DraggableLocation; destination: DraggableLocation }>>,
 ): Promise<{ message: string }> => {
   const fetchOptions: IFetchOptions = {
     method: 'PATCH',
@@ -17,11 +12,11 @@ const swapCardsOutsideColumn = async (
     body: JSON.stringify(batch),
   };
 
-  return await fetch(`columns/batch/swapCardsOutsideColumn`, fetchOptions)
+  return await fetch(`batch/swapColumns`, fetchOptions)
     .then((res) => res.json())
     .catch((err) => ({
       error: { error: err, message: 'Unable to connect to server. Please try again' },
     }));
 };
 
-export default swapCardsOutsideColumn;
+export default swapColumns;

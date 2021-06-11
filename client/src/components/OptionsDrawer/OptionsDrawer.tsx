@@ -41,7 +41,7 @@ const OptionsDrawer = ({ open, setOpen }: Props): JSX.Element => {
             key={board._id}
             button
             onClick={() => {
-              history.push(`/dashboard/board/${board._id}`);
+              history.push(`/dashboard/boards/${board._id}`);
               setOpen(false);
             }}
           >

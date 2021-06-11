@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const asyncHandler = require("express-async-handler");
 const Board = require("../models/Board");
 const User = require("../models/User");
@@ -16,7 +17,7 @@ exports.getBoard = asyncHandler(async (req, res) => {
     throw new Error("Board not found");
   }
 
-  return res.status(200).json(board);
+  return res.status(200).json({ board });
 });
 
 exports.createBoard = asyncHandler(async (req, res) => {
@@ -34,14 +35,13 @@ exports.createBoard = asyncHandler(async (req, res) => {
 
   await newBoard.createTemplateBoard();
 
-  return res.status(200).json(
-    await Board.populate(newBoard, {
-      path: "columns",
-      populate: {
-        path: "cards",
-      },
-    })
-  );
+  const board = await Board.populate(newBoard, {
+    path: "columns",
+    populate: {
+      path: "cards",
+    },
+  });
+  return res.status(200).json({ board });
 });
 
 exports.updateBoardName = asyncHandler(async (req, res) => {
@@ -89,75 +89,47 @@ exports.deleteBoard = asyncHandler(async (req, res) => {
   );
 });
 
-exports.swapBoardColumns = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { column1, column2 } = req.body;
+exports.swapColumns = asyncHandler(async (req, res) => {
+  const batch = req.body;
+  const bulkOps = [];
 
-  console.log(column1, column2);
-
-  const board = await Board.findById(id);
-
-  await Board.populate(board, {
-    path: "columns",
-    populate: {
-      path: "cards",
-    },
-  });
-
-  await board.swapColumns(column1, column2);
-
-  return res.status(200).json(
-    await Board.populate(board, {
-      path: "columns",
-      populate: {
-        path: "cards",
+  for (const update of batch) {
+    bulkOps.push(
+      {
+        updateOne: {
+          filter: {
+            columns: {
+              $in: [mongoose.Types.ObjectId(update.key)],
+            },
+          },
+          update: {
+            $pull: {
+              columns: mongoose.Types.ObjectId(update.key),
+            },
+          },
+          upsert: true,
+        },
       },
-    })
-  );
-});
-
-exports.createBoardColumn = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { side, name } = req.body;
-
-  const board = await Board.findById(id);
-
-  if (!board) {
-    res.status(404);
-    throw new Error("Board not found");
+      {
+        updateOne: {
+          filter: {
+            _id: mongoose.Types.ObjectId(update.change.destination.droppableId),
+          },
+          update: {
+            $push: {
+              columns: {
+                $each: [mongoose.Types.ObjectId(update.key)],
+                $position: update.change.destination.index,
+              },
+            },
+          },
+          upsert: true,
+        },
+      }
+    );
   }
 
-  await board.addColumn(side, name);
+  Board.collection.bulkWrite(bulkOps);
 
-  return res.status(200).json(
-    await Board.populate(board, {
-      path: "columns",
-      populate: {
-        path: "cards",
-      },
-    })
-  );
-});
-
-exports.deleteBoardColumn = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { columnId } = req.body;
-
-  const board = await Board.findById(id);
-
-  if (!board) {
-    res.status(404);
-    throw new Error("Board not found");
-  }
-
-  await board.deleteColumn(columnId);
-
-  return res.status(200).json(
-    await Board.populate(board, {
-      path: "columns",
-      populate: {
-        path: "cards",
-      },
-    })
-  );
+  return res.status(200).json({ message: "working" });
 });
