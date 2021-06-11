@@ -10,20 +10,21 @@ type Props = {
 };
 
 const DialogActionButton = ({ title, content, icon }: Props): JSX.Element => {
-  const { hasItem, addItem } = useDialog();
+  const { hasItem, addItem, removeItem } = useDialog();
   const classes = dialogActionButtonStyles();
 
   return (
     <Button
       className={hasItem(content) ? classes.columnButtonActive : classes.columnButton}
-      disabled={hasItem(content)}
       onClick={() => {
-        addItem({
-          title: `${title}:`,
-          content: content,
-          icon: icon,
-          id: uuidv4(),
-        });
+        if (!hasItem(content)) {
+          addItem({
+            title: `${title}:`,
+            content: content,
+            icon: icon,
+            id: uuidv4(),
+          });
+        } else removeItem(content);
       }}
     >
       {title}
