@@ -9,7 +9,7 @@ const cardDialogItems: IDialogItem[] = [
   },
   {
     title: 'Deadline:',
-    content: 'deadline',
+    content: 'date',
     icon: 'schedule',
     id: 'item-2',
   },

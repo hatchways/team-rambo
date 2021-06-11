@@ -29,7 +29,7 @@ const NotificationCenter = (): JSX.Element => {
 
   useEffect(() => {
     setUnread(countNotifications);
-  });
+  }, [countNotifications]);
 
   return (
     <div>

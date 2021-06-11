@@ -1,16 +1,17 @@
-import { IFetchOptions, IBoardsApiData } from '../../interface/';
+import { IFetchOptions, IBoard } from '../../interface';
 
-const getUserBoards = async (): Promise<IBoardsApiData> => {
+const deleteBoard = async (id: string): Promise<IBoard[]> => {
   const fetchOptions: IFetchOptions = {
-    method: 'GET',
+    method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
+    body: JSON.stringify({ id }),
   };
-  return await fetch(`/users/board`, fetchOptions)
+  return await fetch(`${id}`, fetchOptions)
     .then((res) => res.json())
     .catch((err) => ({
       error: { error: err, message: 'Unable to connect to server. Please try again' },
     }));
 };
 
-export default getUserBoards;
+export default deleteBoard;

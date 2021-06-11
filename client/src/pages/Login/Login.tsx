@@ -13,8 +13,9 @@ export default function Login(): JSX.Element {
   const { sendToFirstBoard } = useKanban();
 
   useEffect(() => {
+    console.log(loggedInUser);
     if (loggedInUser) sendToFirstBoard();
-  }, [loggedInUser]);
+  }, [loggedInUser, sendToFirstBoard]);
 
   const handleSubmit = (
     { email, password }: { email: string; password: string },
