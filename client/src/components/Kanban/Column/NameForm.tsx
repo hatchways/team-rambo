@@ -33,33 +33,36 @@ const NameForm = ({ id, name, setIsRenaming }: FormProps): JSX.Element => {
     >
       {({ handleSubmit, handleChange, values, isSubmitting }) => (
         <form onSubmit={handleSubmit} noValidate>
-          <Grid container className={classes.formGrid}>
-            <Grid item className={classes.inputBox}>
-              <Input
-                id="name"
-                margin="dense"
-                name="name"
-                autoFocus
-                value={values.name}
-                onChange={handleChange}
-                className={classes.typography}
-              />
+          <Grid container direction="column" spacing={1} className={classes.formGrid}>
+            <Grid container xs={12}>
+              <Grid item className={classes.inputBox}>
+                <Input
+                  id="name"
+                  margin="dense"
+                  name="name"
+                  autoFocus
+                  value={values.name}
+                  onChange={handleChange}
+                  className={classes.typography}
+                />
+              </Grid>
             </Grid>
-            <Grid item>
-              <Button type="submit" size="medium" variant="contained" color="primary" className={classes.confirm}>
-                {isSubmitting ? <CircularProgress size={20} style={{ color: 'white' }} /> : 'Rename'}
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                size="medium"
-                variant="contained"
-                color="primary"
-                className={classes.cancel}
-                onClick={() => setIsRenaming((prev) => !prev)}
-              >
-                Cancel
-              </Button>
+            <Grid container direction="row" xs={12} justify="center" spacing={1} className={classes.buttonGrid}>
+              <Grid item>
+                <Button type="submit" variant="contained" color="primary" className={classes.confirm}>
+                  {isSubmitting ? <CircularProgress size={20} style={{ color: 'white' }} /> : 'Rename'}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.cancel}
+                  onClick={() => setIsRenaming((prev) => !prev)}
+                >
+                  Cancel
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         </form>

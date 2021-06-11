@@ -16,21 +16,22 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.light,
     borderRadius: 8,
   },
-  inputBox: {
-    width: '40%',
-  },
+  inputBox: {},
   formGrid: {
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
     paddingRight: '20px',
   },
   confirm: {
+    width: theme.spacing(5),
     backgroundColor: 'rgb(90, 205, 118)',
     '&:hover': {
       backgroundColor: 'rgb(70, 175, 98)',
     },
   },
   cancel: {
+    width: theme.spacing(5),
     backgroundColor: 'rgb(255, 93, 72)',
     '&:hover': {
       backgroundColor: 'rgb(225, 73, 52)',
@@ -54,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
   dialogTitle: {
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  buttonGrid: {
+    marginTop: theme.spacing(0.5),
   },
 }));
 
