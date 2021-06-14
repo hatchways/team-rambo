@@ -7,10 +7,11 @@ import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 
 interface Props {
   open: boolean;
-  onClose: Dispatch<SetStateAction<boolean>>;
+  onClose: () => void;
+  setIsBoard: Dispatch<SetStateAction<boolean>>;
 }
 
-const MenuDrawer = ({ open, onClose }: Props): JSX.Element => {
+const MenuDrawer = ({ open, onClose, setIsBoard }: Props): JSX.Element => {
   const classes = useStyles();
 
   return (
@@ -24,13 +25,37 @@ const MenuDrawer = ({ open, onClose }: Props): JSX.Element => {
           <ListItemIcon>
             <DashboardOutlinedIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary={<Typography className={classes.primary}>Dashboard</Typography>} />
+          <ListItemText
+            primary={
+              <Typography
+                className={classes.primary}
+                onClick={() => {
+                  setIsBoard(true);
+                  onClose();
+                }}
+              >
+                Dashboard
+              </Typography>
+            }
+          />
         </ListItem>
         <ListItem button>
           <ListItemIcon>
             <CalendarTodayOutlinedIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary={<Typography className={classes.primary}>Calendar</Typography>} />
+          <ListItemText
+            primary={
+              <Typography
+                className={classes.primary}
+                onClick={() => {
+                  setIsBoard(false);
+                  onClose();
+                }}
+              >
+                Calendar
+              </Typography>
+            }
+          />
         </ListItem>
       </List>
     </Drawer>

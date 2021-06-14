@@ -1,5 +1,5 @@
+import { Dispatch, SetStateAction, useState } from 'react';
 import { AppBar, Toolbar, Typography, Grid, Button, IconButton, Container } from '@material-ui/core/';
-import { useState } from 'react';
 import MenuDrawer from '../../components/MenuDrawer/MenuDrawer';
 import useStyles from './navBarStyles';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -12,9 +12,10 @@ import { useKanban } from '../../context';
 
 interface Props {
   handleDrawerToggle: () => void;
+  setIsBoard: Dispatch<SetStateAction<boolean>>;
 }
 
-const NavBar = ({ handleDrawerToggle }: Props): JSX.Element => {
+const NavBar = ({ handleDrawerToggle, setIsBoard }: Props): JSX.Element => {
   const classes = useStyles();
   const { activeBoard } = useKanban();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -38,12 +39,17 @@ const NavBar = ({ handleDrawerToggle }: Props): JSX.Element => {
         <Grid item xs={9} sm={1} md={9} lg={9}>
           <Grid container spacing={2} alignItems="center" justify="flex-end">
             <Grid item className={classes.navBarButtons}>
-              <Button size="large" color="secondary" startIcon={<DashboardOutlined />}>
+              <Button size="large" color="secondary" startIcon={<DashboardOutlined />} onClick={() => setIsBoard(true)}>
                 Dashboard
               </Button>
             </Grid>
             <Grid item className={classes.navBarButtons}>
-              <Button size="large" color="secondary" startIcon={<CalendarTodayOutlined />}>
+              <Button
+                size="large"
+                color="secondary"
+                startIcon={<CalendarTodayOutlined />}
+                onClick={() => setIsBoard(false)}
+              >
                 Calendar
               </Button>
             </Grid>
@@ -82,7 +88,7 @@ const NavBar = ({ handleDrawerToggle }: Props): JSX.Element => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <MenuDrawer open={openDrawer} onClose={handleClose} />
+      <MenuDrawer open={openDrawer} onClose={handleClose} setIsBoard={setIsBoard} />
     </Container>
   );
 };

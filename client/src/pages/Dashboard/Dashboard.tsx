@@ -6,7 +6,6 @@ import AddColumnDialog from '../../components/AddColumnDialog/AddColumnDialog';
 import NavBar from '../../components/NavBar/NavBar';
 import OptionsDrawer from '../../components/OptionsDrawer/OptionsDrawer';
 import MyCalendar from '../../components/Calendar/Calendar';
-import Menu from '../../components/Kanban/ChangeDisplay/Menu';
 import LoadingBoard from '../../components/LoadingBoard/LoadingBoard';
 import { useAuth, useKanban } from '../../context/';
 import useStyles from './dashboardStyles';
@@ -41,44 +40,31 @@ const Dashboard = (): JSX.Element => {
     <Box>
       <CssBaseline />
       <Box>
-        <NavBar handleDrawerToggle={toggleDrawer} />
+        <NavBar handleDrawerToggle={toggleDrawer} setIsBoard={setIsBoard} />
         <OptionsDrawer open={openDrawer} setOpen={toggleDrawer} />
       </Box>
-      <Box className={classes.buttonOverlay}>
-        <AddColumnDialog />
-      </Box>
-      <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
-        {fetchingBoard ? (
-          <Grid item xs={12} className={classes.loading}>
-            <CircularProgress size={150} />
+      {fetchingBoard ? (
+        <Grid item xs={12} className={classes.loading}>
+          <CircularProgress size={150} />
+        </Grid>
+      ) : isBoard ? (
+        <>
+          <Box className={classes.buttonOverlay}>
+            <AddColumnDialog />
+          </Box>
+          <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
+            <Grid item xs={10}>
+              <Board activeBoard={activeBoard} />
+            </Grid>
           </Grid>
-        ) : (
-          <Grid item xs={10}>
-            <Board activeBoard={activeBoard} />
-          </Grid>
-        )}
-      </Grid>
+        </>
+      ) : (
+        <Box className={classes.calendarMain}>
+          <MyCalendar />
+        </Box>
+      )}
     </Box>
   );
 };
 
 export default Dashboard;
-
-// {
-//   isBoard ? (
-//     <>
-//       <Box className={classes.buttonOverlay}>
-//         <AddColumnDialog />
-//       </Box>
-//       <Grid container className={classes.board} direction="row" justify="center" alignItems="center">
-//         <Grid item xs={10}>
-//           <Board activeBoard={activeBoard} />
-//         </Grid>
-//       </Grid>
-//     </>
-//   ) : (
-//     <Box className={classes.calendar}>
-//       <MyCalendar />
-//     </Box>
-//   );
-// }

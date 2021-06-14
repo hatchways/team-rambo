@@ -68,5 +68,10 @@ cardSchema.methods.updateColumnId = async function (oldColumn, newColumn) {
   await newColumn.save();
 };
 
+cardSchema.methods.updateDate = async function (/** @type {string} */ newDate) {
+  this.date = newDate;
+
+  await this.save();
+};
 const Card = mongoose.model("card", cardSchema);
 module.exports = Card;

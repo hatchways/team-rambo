@@ -16,5 +16,6 @@ export { default as swapCards } from './APICalls/swapCards';
 export { default as createCard } from './APICalls/createCard';
 export { default as deleteCard } from './APICalls/deleteCard';
 export { default as updateCard } from './APICalls/updateCard';
+export { default as updateCardDate } from './APICalls/updateCardDate';
 export { default as moveFocusedCard } from './APICalls/moveFocusedCard';
 export { default as copyFocusedCard } from './APICalls/copyFocusedCard';

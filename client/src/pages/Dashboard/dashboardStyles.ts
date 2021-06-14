@@ -29,15 +29,43 @@ const useStyles = makeStyles((theme) => ({
     width: '83%',
     margin: '0 auto',
   },
-  calendar: {
-    width: '83%',
+  calendarBox: {
+    display: 'flex',
+    width: '90%',
+    margin: '2% auto',
+    justifyContent: 'space-between',
+  },
+  leftBoxTypo: {
+    fontSize: 20,
+  },
+  leftBox: {
+    width: '90%',
+    border: '1px solid #ccc',
+    marginTop: '8%',
+    minHeight: '200px',
+  },
+  calendarMain: {
+    width: '100%',
     margin: '0 auto',
   },
+  calendar: {
+    width: '85%',
+  },
   calendarEvent: {
-    height: '100px',
+    height: '30px',
   },
   loading: {
     textAlign: 'center',
+  },
+  card: {
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '1px solid black',
+    width: '95%',
+    margin: '2% auto',
+    height: '30px',
   },
 }));
 

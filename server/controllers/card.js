@@ -24,6 +24,24 @@ exports.createCard = asyncHandler(async (req, res) => {
   return res.status(200).json({ board });
 });
 
+exports.updateDate = asyncHandler(async (req, res) => {
+  const { boardId, id } = req.params;
+  const { date } = req.body;
+
+  const card = await Card.findById(id);
+
+  await card.updateDate(date);
+
+  const board = await Board.findById(boardId).populate({
+    path: "columns",
+    populate: {
+      path: "cards",
+    },
+  });
+
+  return res.status(200).json({ board });
+});
+
 exports.updateCard = asyncHandler(async (req, res) => {
   const { boardId, id } = req.params;
   const update = req.body;

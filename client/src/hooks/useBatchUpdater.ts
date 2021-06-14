@@ -34,7 +34,7 @@ export const useBatchUpdater = <T>(
 
   useEffect(() => {
     if (batch.length !== 0) {
-      _triggerBatchUpdateDebounced;
+      _triggerBatchUpdateDebounced(batch);
     }
     return () => {
       _triggerBatchUpdateDebounced.cancel();
