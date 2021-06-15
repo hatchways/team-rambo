@@ -35,8 +35,10 @@ Kanban is a full-stack time-management and planning app that leverages Material-
 
 1. Registration. Users will be able to create a new account using their email and password
 
-![Signup Demo](demo/images/signup.png)
+![image](https://user-images.githubusercontent.com/67977894/122101433-23f03f00-cdc9-11eb-8aca-44e183fa3053.png)
+
 
 2. Dashboard. Here is a description about what a user can expect to see
 
-![Dashboard](demo/images/dashboard.png)
+![image](https://user-images.githubusercontent.com/67977894/122101801-96f9b580-cdc9-11eb-9b23-3c204160297d.png)
+
