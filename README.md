@@ -1,10 +1,10 @@
 ## Project Name
 
-This is a little description about your project.
+Kanban is a full-stack time-management and planning app that leverages Material-UI and React-Beautiful-DnD for a fluid user interface. 
 
 **Tech Stack:** MongoDB, Express.js, React.js, Node.js, Typescript
 
-**Contributors**: [Hatchways](https://github.com/hatchways) (replace)
+**Contributors**: Ethan Moffat (https://github.com/moffatethan), Jon Myers (https://github.com/street-jackal), Ahmed El Mahallawy (https://github.com/amahalwy), Gabriel Dalla Vecchia (https://github.com/eng-dallavecchia)
 
 ---
 
