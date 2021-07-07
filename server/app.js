@@ -9,6 +9,7 @@ const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
+const initializeQueue = require('./queue/initialize');
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
@@ -24,6 +25,14 @@ const { json, urlencoded } = express;
 connectDB();
 const app = express();
 const server = http.createServer(app);
+
+const queue = initializeQueue({
+  name: 'rambo',
+}, [{ name: 'deadlineReminders', jobHandlerPath: './queue/jobs/deadline.js' }]);
+
+// Passing null data as there is no need to track any data from database.
+queue.add('deadlineReminders', null, { cron: '0 0 * * *' }); // everyday at 12am.
+
 
 const io = socketio(server, {
   cors: {
@@ -80,4 +89,4 @@ process.on("unhandledRejection", (err, promise) => {
   server.close(() => process.exit(1));
 });
 
-module.exports = { app, server };
+module.exports = { app, server, queue };
